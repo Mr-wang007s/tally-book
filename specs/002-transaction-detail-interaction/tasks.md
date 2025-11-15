@@ -25,15 +25,15 @@
 
 **Purpose**: Install dependencies and configure Expo project for this feature
 
-- [ ] T001 Install @gorhom/bottom-sheet library (`npx expo install @gorhom/bottom-sheet`)
-- [ ] T002 [P] Install react-native-reanimated v3 (`npx expo install react-native-reanimated`)
-- [ ] T003 [P] Install expo-image-picker (`npx expo install expo-image-picker`)
-- [ ] T004 [P] Verify react-native-gesture-handler is installed (dependency of bottom-sheet)
-- [ ] T005 [P] Verify react-native-safe-area-context is installed
-- [ ] T006 [P] Verify @expo/vector-icons is installed
-- [x] T007 Configure babel.config.js to include react-native-reanimated/plugin as last plugin
-- [x] T008 [P] Add GestureHandlerRootView wrapper in App.tsx root component
-- [x] T009 [P] Add BottomSheetModalProvider wrapper in App.tsx (inside GestureHandlerRootView)
+- [X] T001 Install @gorhom/bottom-sheet library (`npx expo install @gorhom/bottom-sheet`)
+- [X] T002 [P] Install react-native-reanimated v3 (`npx expo install react-native-reanimated`)
+- [X] T003 [P] Install expo-image-picker (`npx expo install expo-image-picker`)
+- [X] T004 [P] Verify react-native-gesture-handler is installed (dependency of bottom-sheet)
+- [X] T005 [P] Verify react-native-safe-area-context is installed
+- [X] T006 [P] Verify @expo/vector-icons is installed
+- [X] T007 Configure babel.config.js to include react-native-reanimated/plugin as last plugin
+- [X] T008 [P] Add GestureHandlerRootView wrapper in App.tsx root component
+- [X] T009 [P] Add BottomSheetModalProvider wrapper in App.tsx (inside GestureHandlerRootView)
 - [ ] T010 Clear Expo cache and restart dev server (`npx expo start -c`)
 
 ---
@@ -134,15 +134,15 @@
 
 - [x] T051 [P] [US3] Create useTransactionFilter hook in src/hooks/useTransactionFilter.ts (useMemo-cached filtering logic per research.md)
 - [x] T052 [P] [US3] Create FilterBottomSheet component in src/components/features/FilterBottomSheet.tsx (type selector, sort selector, category selector, Apply/Reset buttons)
-- [ ] T053 [US3] Integrate @gorhom/bottom-sheet in FilterBottomSheet (snapPoints: ['50%', '80%'], enablePanDownToClose, backdrop)
-- [ ] T054 [US3] Add filter button to app/(tabs)/index.tsx home screen (right navigation header, opens FilterBottomSheet)
-- [ ] T055 [US3] Connect useTransactionFilter to home screen transaction list (apply filtered transactions to FlatList data)
+- [x] T053 [US3] Integrate @gorhom/bottom-sheet in FilterBottomSheet (snapPoints: ['50%', '80%'], enablePanDownToClose, backdrop)
+- [x] T054 [US3] Add filter button to app/(tabs)/index.tsx home screen (right navigation header, opens FilterBottomSheet)
+- [x] T055 [US3] Connect useTransactionFilter to home screen transaction list (apply filtered transactions to FlatList data)
 - [x] T056 [US3] Add accessibilityRole="radio" to type/sort selectors, accessibilityRole="button" to Apply/Reset (Principle IV)
 - [x] T057 [US3] Add accessibilityLabel to filter options ("收入", "支出", "转账", "最高金额", "最低金额", "最新", "最旧")
 - [x] T058 [US3] Add touch target hitSlop to ensure ≥44x44pt for all filter options (Principle IV)
 - [x] T059 [US3] Integrate theme colors for FilterBottomSheet background and text (Light/Dark Mode support)
-- [ ] T060 [US3] Implement Reset functionality: clear all filter criteria, close sheet, update list to show all transactions
-- [ ] T061 [US3] Implement Apply functionality: save filter criteria to state, close sheet, update list with filtered results
+- [x] T060 [US3] Implement Reset functionality: clear all filter criteria, close sheet, update list to show all transactions
+- [x] T061 [US3] Implement Apply functionality: save filter criteria to state, close sheet, update list with filtered results
 - [ ] T062 [US3] Add "Choose Category" navigation to category selection screen (if not already implemented - mark as optional dependency)
 - [ ] T063 [US3] Display selected category count ("0 Selected", "2 Selected") in FilterBottomSheet
 - [ ] T064 [US3] Optimize performance: ensure useMemo caching in useTransactionFilter, verify <500ms response time for 10k transactions
@@ -170,8 +170,8 @@
 - [x] T070 [P] [US4] Create FloatingActionButton component in src/components/ui/FloatingActionButton.tsx (main button + 3 sub-buttons with Reanimated animations)
 - [x] T071 [US4] Implement FAB rotation animation: 0deg → 45deg on expand (Reanimated withSpring, 60fps per Principle V)
 - [x] T072 [US4] Implement sub-button expand animation: translate from main button position upward with stagger effect (Reanimated)
-- [ ] T073 [US4] Add FloatingActionButton to app/(tabs)/index.tsx home screen (position: absolute, bottom with useSafeAreaInsets)
-- [ ] T074 [US4] Connect sub-buttons to navigation: Income → /expense/create?type=income, Expense → /expense/create?type=expense, Transfer → /expense/create?type=transfer
+- [x] T073 [US4] Add FloatingActionButton to app/(tabs)/index.tsx home screen (position: absolute, bottom with useSafeAreaInsets)
+- [x] T074 [US4] Connect sub-buttons to navigation: Income → /expense/create?type=income, Expense → /expense/create?type=expense, Transfer → /expense/create?type=transfer
 - [x] T075 [US4] Add accessibilityLabel to main button ("添加交易") and sub-buttons ("添加收入交易", "添加支出交易", "添加转账交易") (Principle IV)
 - [x] T076 [US4] Ensure FAB touch target ≥56x56pt (main), sub-buttons ≥48x48pt with hitSlop (Principle IV)
 - [x] T077 [US4] Integrate theme colors: main button = primary (purple), income = green accent, expense = red accent, transfer = blue accent

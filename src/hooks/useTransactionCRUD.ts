@@ -101,7 +101,7 @@ export function useTransactionCRUD(): UseTransactionCRUDResult {
    * Update an existing transaction
    */
   const updateTransaction = useCallback(
-    async (input: UpdateTransactionInput): Promise<Transaction> {
+    async (input: UpdateTransactionInput): Promise<Transaction> => {
       setIsLoading(true);
       setError(null);
 
@@ -148,7 +148,7 @@ export function useTransactionCRUD(): UseTransactionCRUDResult {
    * Delete a transaction
    */
   const deleteTransaction = useCallback(
-    async (id: string): Promise<void> {
+    async (id: string): Promise<void> => {
       setIsLoading(true);
       setError(null);
 
