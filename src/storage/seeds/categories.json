@@ -1,0 +1,86 @@
+[
+  {
+    "id": "cat_default_salary",
+    "name": "Salary",
+    "type": "income",
+    "isDefault": true
+  },
+  {
+    "id": "cat_default_freelance",
+    "name": "Freelance",
+    "type": "income",
+    "isDefault": true
+  },
+  {
+    "id": "cat_default_investment",
+    "name": "Investment",
+    "type": "income",
+    "isDefault": true
+  },
+  {
+    "id": "cat_default_gift",
+    "name": "Gift",
+    "type": "income",
+    "isDefault": true
+  },
+  {
+    "id": "cat_default_other_income",
+    "name": "Other Income",
+    "type": "income",
+    "isDefault": true
+  },
+  {
+    "id": "cat_default_food",
+    "name": "Food & Dining",
+    "type": "expense",
+    "isDefault": true
+  },
+  {
+    "id": "cat_default_transport",
+    "name": "Transportation",
+    "type": "expense",
+    "isDefault": true
+  },
+  {
+    "id": "cat_default_shopping",
+    "name": "Shopping",
+    "type": "expense",
+    "isDefault": true
+  },
+  {
+    "id": "cat_default_entertainment",
+    "name": "Entertainment",
+    "type": "expense",
+    "isDefault": true
+  },
+  {
+    "id": "cat_default_bills",
+    "name": "Bills & Utilities",
+    "type": "expense",
+    "isDefault": true
+  },
+  {
+    "id": "cat_default_health",
+    "name": "Health & Fitness",
+    "type": "expense",
+    "isDefault": true
+  },
+  {
+    "id": "cat_default_education",
+    "name": "Education",
+    "type": "expense",
+    "isDefault": true
+  },
+  {
+    "id": "cat_default_travel",
+    "name": "Travel",
+    "type": "expense",
+    "isDefault": true
+  },
+  {
+    "id": "cat_default_other_expense",
+    "name": "Other Expense",
+    "type": "expense",
+    "isDefault": true
+  }
+]
