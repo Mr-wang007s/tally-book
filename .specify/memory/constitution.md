@@ -1,20 +1,22 @@
 <!--
 SYNC IMPACT REPORT
-- Version: 0.0.0 -> 1.0.0
-- Modified Principles: N/A (Initial creation)
-- Added Sections: All
+- Version: 1.0.0 -> 1.1.0
+- Modified Principles: None
+- Added Sections:
+  - Principle 4: Comprehensive Test Coverage
 - Removed Sections: None
 - Templates Requiring Updates:
   - ✅ .specify/templates/plan-template.md
   - ✅ .specify/templates/spec-template.md
   - ✅ .specify/templates/tasks-template.md
+  - ⚠ .specify/templates/checklist-template.md (no change required, reference only)
 - Follow-up TODOs:
   - TODO(RATIFICATION_DATE): Determine the project's official start date.
 -->
 
 # My Tally Book Constitution
 
-**VERSION**: `1.0.0`
+**VERSION**: `1.1.0`
 **RATIFICATION_DATE**: `TODO(RATIFICATION_DATE): Determine the project's official start date.`
 **LAST_AMENDED_DATE**: `2025-11-15`
 
@@ -34,7 +36,7 @@ The application MUST be built using React Native and Expo to ensure it runs on W
 
 ### Principle 2: User-Centric Design
 
-The application's interface and interaction flow MUST be intuitive, simple, and easy to use. Every feature should be designed with the end-user's convenience in mind.
+The application's interface and interaction flow MUST be intuitive, simple, and easy to use. Every feature MUST be designed with the end-user's convenience in mind.
 
 **Rationale**: To ensure high user adoption and satisfaction by creating a frictionless and enjoyable accounting experience.
 
@@ -44,18 +46,26 @@ The application's visual design MUST be beautiful, modern, and clean, drawing in
 
 **Rationale**: A high-quality visual presentation enhances user perception of the app's quality and trustworthiness, making it more engaging.
 
+### Principle 4: Comprehensive Test Coverage
+
+All features MUST include automated tests (unit, component, and critical end-to-end flows) with agreed coverage thresholds. Tests MUST run in CI for Web, iOS, and Android targets.
+
+**Rationale**: Strong test coverage ensures reliability, prevents regressions across platforms, and accelerates safe iteration.
+
 ## 3. Governance
 
 ### Amendment Process
 
-Amendments to this constitution require a proposal and review. The `CONSTITUTION_VERSION` MUST be updated according to semantic versioning.
+Amendments to this constitution require a proposal and review. The version MUST be updated according to semantic versioning.
 
 ### Versioning
 
-- **MAJOR**: Backward-incompatible changes.
-- **MINOR**: New principles or significant expansions.
-- **PATCH**: Clarifications and typo fixes.
+- **MAJOR**: Backward-incompatible changes to governance or removal/redefinition of principles.
+- **MINOR**: New principle or material expansion of guidance.
+- **PATCH**: Clarifications, wording, or non-semantic refinements.
 
-### Compliance
+### Compliance and Review
 
-All project artifacts MUST be compliant with the constitution.
+- All artifacts (code, plans, specs, tasks) MUST comply with the principles.
+- A constitution alignment check MUST occur before merging significant features and before release.
+- A periodic review SHOULD occur at least once per quarter to consider amendments.
