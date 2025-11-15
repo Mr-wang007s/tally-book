@@ -1,0 +1,82 @@
+openapi: 3.0.3
+info:
+  title: Ledger Analytics API (Conceptual)
+  version: 0.1.0
+paths:
+  /transactions:
+    get:
+      summary: List transactions
+      parameters:
+        - in: query
+          name: start
+          schema: { type: string, format: date }
+        - in: query
+          name: end
+          schema: { type: string, format: date }
+      responses:
+        '200': { description: OK }
+    post:
+      summary: Create transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type: { type: string, enum: [income, expense] }
+                amount: { type: number, minimum: 0.01 }
+                date: { type: string, format: date }
+                categoryId: { type: string }
+                note: { type: string }
+                paymentMethod: { type: string }
+              required: [type, amount, date, categoryId]
+      responses:
+        '201': { description: Created }
+  /transactions/{id}:
+    patch:
+      summary: Edit transaction
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Updated }
+    delete:
+      summary: Delete transaction
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '204': { description: Deleted }
+  /summaries:
+    get:
+      summary: Get summary for period
+      parameters:
+        - in: query
+          name: start
+          schema: { type: string, format: date }
+        - in: query
+          name: end
+          schema: { type: string, format: date }
+      responses:
+        '200': { description: OK }
+  /trends:
+    get:
+      summary: Get expense trends
+      parameters:
+        - in: query
+          name: granularity
+          schema: { type: string, enum: [day, week, month] }
+        - in: query
+          name: start
+          schema: { type: string, format: date }
+        - in: query
+          name: end
+          schema: { type: string, format: date }
+      responses:
+        '200': { description: OK }
+components: {}

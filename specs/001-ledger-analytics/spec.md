@@ -81,14 +81,10 @@
 - EC4 Multiple transactions on the same timestamp remain stably ordered (deterministic tie‑break).
 - EC5 Category deleted or renamed (future feature) does not break trends; shows fallback labeling.
 
-### [NEEDS CLARIFICATION: Categories customization]
-Do users need to create/rename/hide categories now, or only use defaults in this phase?
-
-### [NEEDS CLARIFICATION: Data export]
-Is CSV/Excel export of transactions required in this feature, or kept for a later release?
-
-### [NEEDS CLARIFICATION: Privacy and passcode]
-Is a local app lock (PIN/biometric) required for accessing the ledger on device?
+### Decisions from Research
+- Categories customization: Use default categories only in this phase; no create/rename/hide.
+- Data export: Defer CSV/Excel export to later milestone.
+- Privacy/app lock: Defer local PIN/biometric lock to security milestone.
 
 ## 2. Design
 
