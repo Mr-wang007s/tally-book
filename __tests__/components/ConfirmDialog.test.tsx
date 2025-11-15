@@ -273,38 +273,41 @@ describe('ConfirmDialog', () => {
   describe('Light/Dark Mode', () => {
     it('should render in light mode', () => {
       // Note: useColorScheme is mocked in jest.setup.js
-      const { getByText } = render(
+      const { getByText, getByRole } = render(
         <ConfirmDialog
           visible={true}
-          title="Test"
-          message="Test"
+          title="Light Mode Test"
+          message="Test message content"
           onConfirm={mockOnConfirm}
           onCancel={mockOnCancel}
         />
       );
 
-      expect(getByText('Test')).toBeTruthy();
+      expect(getByRole('header')).toBeTruthy();
+      expect(getByText('Test message content')).toBeTruthy();
       // Color values are tested via snapshot
     });
 
     it('should render in dark mode', () => {
       // Mock dark mode
+      const mockUseColorScheme = jest.fn(() => 'dark');
       jest.mock('react-native', () => ({
         ...jest.requireActual('react-native'),
-        useColorScheme: () => 'dark',
+        useColorScheme: mockUseColorScheme,
       }));
 
-      const { getByText } = render(
+      const { getByText, getByRole } = render(
         <ConfirmDialog
           visible={true}
-          title="Test"
-          message="Test"
+          title="Dark Mode Test"
+          message="Dark mode message"
           onConfirm={mockOnConfirm}
           onCancel={mockOnCancel}
         />
       );
 
-      expect(getByText('Test')).toBeTruthy();
+      expect(getByRole('header')).toBeTruthy();
+      expect(getByText('Dark mode message')).toBeTruthy();
     });
   });
 

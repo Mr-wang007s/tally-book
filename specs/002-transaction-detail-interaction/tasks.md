@@ -34,7 +34,7 @@
 - [X] T007 Configure babel.config.js to include react-native-reanimated/plugin as last plugin
 - [X] T008 [P] Add GestureHandlerRootView wrapper in App.tsx root component
 - [X] T009 [P] Add BottomSheetModalProvider wrapper in App.tsx (inside GestureHandlerRootView)
-- [ ] T010 Clear Expo cache and restart dev server (`npx expo start -c`)
+- [X] T010 Clear Expo cache and restart dev server (`npx expo start -c`)
 
 ---
 
@@ -49,7 +49,7 @@
 - [x] T013 [P] Create validation utilities in src/utils/validation.ts (validateTransaction, validateFilterCriteria functions from data-model.md)
 - [x] T014 [P] Add transaction-related theme colors to src/theme/colors.ts (FAB: primary/accent, FilterPanel: cardBackground/border)
 - [x] T015 [P] Create ConfirmDialog reusable component in src/components/ui/ConfirmDialog.tsx (for delete confirmation)
-- [ ] T016 [P] Create mock transaction data generator in src/utils/mockData.ts (for testing, optional)
+- [X] T016 [P] Create mock transaction data generator in src/utils/mockData.ts (for testing, optional)
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
