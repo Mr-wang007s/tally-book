@@ -7,8 +7,9 @@
 (Describe the technical and visual design of the feature)
 
 ## 3. Constitution Alignment
-This specification MUST adhere to the following principles:
-- **Cross-Platform First**: The feature must work consistently on Web, iOS, and Android.
-- **User-Centric Design**: The feature must be intuitive and easy for the user to interact with.
-- **Polished Aesthetics**: The feature's UI must align with the app's high-quality, iOS-inspired visual language.
-- **Comprehensive Test Coverage**: The feature must include unit, component, and critical E2E tests, and run in CI.
+This specification MUST adhere to the following updated principles:
+- **Code Quality**: Follow lint/type rules, maintain readable, well-documented public APIs.
+- **Testing Standards**: Provide unit, integration, and critical E2E tests with CI and coverage thresholds.
+- **Visual Excellence**: Use the shared design system and meet accessibility standards.
+- **UX Consistency**: Align interactions, terminology, and navigation with global patterns.
+- **Performance**: Meet defined SLOs, respect budgets, and avoid regressions.

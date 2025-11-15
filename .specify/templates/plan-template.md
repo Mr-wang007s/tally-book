@@ -7,8 +7,9 @@
 (List the high-level goals for this plan)
 
 ## 3. Constitution Check
-Confirm that this plan adheres to the principles of the My Tally Book constitution.
-- **Cross-Platform First**: Does the plan prioritize a unified codebase for Web, iOS, and Android using React Native & Expo?
-- **User-Centric Design**: Does the plan focus on creating an intuitive and easy-to-use interface?
-- **Polished Aesthetics**: Does the plan account for creating a visually beautiful, iOS-inspired design?
-- **Comprehensive Test Coverage**: Does the plan include unit, component, and critical E2E tests with CI across platforms?
+Confirm that this plan adheres to the updated constitution principles.
+- **Code Quality**: Are linting, typing, code reviews, and documentation part of the plan?
+- **Testing Standards**: Are unit, integration, and E2E tests with coverage thresholds and CI included?
+- **Visual Excellence**: Does the plan include a unified design system, states, and accessibility?
+- **UX Consistency**: Are interaction patterns, terminology, and navigation consistent across modules?
+- **Performance**: Are SLOs, budgets, and regressions monitoring defined and enforced?
