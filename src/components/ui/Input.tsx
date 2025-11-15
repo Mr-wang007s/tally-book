@@ -72,7 +72,7 @@ export function Input({
           style={inputStyles}
           placeholderTextColor={colors.textTertiary}
           accessibilityLabel={label || props.placeholder}
-          accessibilityState={{ disabled: props.editable === false }}
+          accessibilityState={{ disabled: props.editable === false } }
           {...props}
         />
         {rightIcon && <View style={styles.rightIcon}>{rightIcon}</View>}

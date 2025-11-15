@@ -1,7 +1,10 @@
 import { useColorScheme as useRNColorScheme } from 'react-native';
-import { lightTheme, darkTheme, type ThemeColors, type ColorScheme } from '@/theme/colors';
+import { lightTheme, darkTheme } from '@/theme/colors';
 import { typography } from '@/theme/typography';
 import { spacing } from '@/theme/spacing';
+import { animations } from '@/theme/animations';
+import { shadows } from '@/theme/shadows';
+import { ExtendedTheme } from '@/types/theme';
 
 /**
  * useTheme Hook
@@ -9,14 +12,9 @@ import { spacing } from '@/theme/spacing';
  * 提供当前主题（浅色/深色）的完整样式系统
  * 遵循 Constitution Principle VI - Dark Mode
  * 
- * @returns {Object} 当前主题对象
- * @returns {ThemeColors} colors - 颜色系统
- * @returns {Typography} typography - 字体系统
- * @returns {Spacing} spacing - 间距系统
- * @returns {ColorScheme} colorScheme - 当前主题模式
- * @returns {boolean} isDark - 是否为深色模式
+ * @returns {ExtendedTheme} 当前主题对象
  */
-export function useTheme() {
+export function useTheme(): ExtendedTheme {
   const colorScheme = useRNColorScheme() ?? 'light';
   const isDark = colorScheme === 'dark';
   const colors = isDark ? darkTheme : lightTheme;
@@ -25,9 +23,9 @@ export function useTheme() {
     colors,
     typography,
     spacing,
+    animations,
+    shadows,
     colorScheme,
     isDark,
   };
 }
-
-export type Theme = ReturnType<typeof useTheme>;

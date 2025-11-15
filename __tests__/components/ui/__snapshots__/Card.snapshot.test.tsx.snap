@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Card - Snapshot renders correctly in dark mode 1`] = `
+<View
+  style={
+    [
+      {
+        "overflow": "hidden",
+      },
+      {
+        "backgroundColor": "#1C1C1E",
+        "borderRadius": 12,
+        "padding": 16,
+      },
+      {
+        "elevation": 2,
+        "shadowColor": "#000",
+        "shadowOffset": {
+          "height": 2,
+          "width": 0,
+        },
+        "shadowOpacity": 0.4,
+        "shadowRadius": 4,
+      },
+      undefined,
+    ]
+  }
+>
+  Dark Card
+</View>
+`;
+
+exports[`Card - Snapshot renders correctly in light mode 1`] = `
+<View
+  style={
+    [
+      {
+        "overflow": "hidden",
+      },
+      {
+        "backgroundColor": "#FFFFFF",
+        "borderRadius": 12,
+        "padding": 16,
+      },
+      {
+        "elevation": 2,
+        "shadowColor": "#000",
+        "shadowOffset": {
+          "height": 2,
+          "width": 0,
+        },
+        "shadowOpacity": 0.12,
+        "shadowRadius": 4,
+      },
+      undefined,
+    ]
+  }
+>
+  Light Card
+</View>
+`;

@@ -42,27 +42,7 @@ export const spacing = {
     thick: 2,
   },
 
-  // Shadow (elevation)
-  shadow: {
-    sm: {
-      shadowOffset: { width: 0, height: 1 },
-      shadowOpacity: 0.18,
-      shadowRadius: 1,
-      elevation: 1,
-    },
-    md: {
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.22,
-      shadowRadius: 2.5,
-      elevation: 3,
-    },
-    lg: {
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.3,
-      shadowRadius: 4.5,
-      elevation: 5,
-    },
-  },
+
 } as const;
 
 export type Spacing = typeof spacing;

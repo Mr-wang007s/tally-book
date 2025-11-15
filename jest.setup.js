@@ -29,6 +29,19 @@ jest.mock('@react-native-async-storage/async-storage', () =>
 );
 
 // Mock useColorScheme to return light mode by default
+jest.mock('react-native', () => {
+  const RN = jest.requireActual('react-native');
+
+  RN.NativeModules.SettingsManager = {
+    settings: {
+      AppleLocale: 'en_US',
+      AppleLanguages: ['en-US'],
+    },
+  };
+
+  return RN;
+});
+
 jest.mock('react-native/Libraries/Utilities/useColorScheme', () => ({
   default: jest.fn(() => 'light'),
 }));

@@ -8,22 +8,13 @@
  */
 
 import React, { useRef, useMemo, useState, useEffect, useCallback } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  useColorScheme,
-  ScrollView,
-} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { Ionicons } from '@expo/vector-icons';
-import type {
-  FilterBottomSheetProps,
-  TransactionType,
-  SortOption,
-  FilterCriteria,
-} from '@/types/transaction';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import { useTheme } from '@/hooks/useTheme';
+import { useHaptics } from '@/hooks/useHaptics';
+import type { FilterBottomSheetProps, TransactionType, SortOption, FilterCriteria } from '@/types/transaction';
 
 export function FilterBottomSheet({
   filterCriteria,
@@ -33,37 +24,27 @@ export function FilterBottomSheet({
   onDismiss,
   isVisible,
 }: FilterBottomSheetProps) {
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === 'dark';
+  const { colors, animations } = useTheme();
+  const { triggerLight } = useHaptics();
   const bottomSheetRef = useRef<BottomSheet>(null);
+  const animatedPosition = useSharedValue(0);
 
-  // Local state for pending changes
   const [localCriteria, setLocalCriteria] = useState<FilterCriteria>(filterCriteria);
 
-  // Update local state when filterCriteria changes
   useEffect(() => {
     setLocalCriteria(filterCriteria);
   }, [filterCriteria]);
 
-  // Snap points
   const snapPoints = useMemo(() => ['50%', '80%'], []);
 
-  const colors = {
-    background: isDark ? '#1C1C1E' : '#FFFFFF',
-    cardBackground: isDark ? '#2C2C2E' : '#F2F2F7',
-    text: isDark ? '#FFFFFF' : '#000000',
-    secondaryText: isDark ? '#AEAEB2' : '#6C6C70',
-    border: isDark ? '#38383A' : '#E5E5EA',
-    primary: isDark ? '#0A84FF' : '#007AFF',
-    selected: isDark ? '#0A84FF' : '#007AFF',
-  };
-
-  // Expand/collapse sheet based on isVisible
   useEffect(() => {
     if (isVisible) {
       bottomSheetRef.current?.expand();
+      animatedPosition.value = withSpring(1, animations.spring.default);
+      triggerLight();
     } else {
       bottomSheetRef.current?.close();
+      animatedPosition.value = withSpring(0);
     }
   }, [isVisible]);
 

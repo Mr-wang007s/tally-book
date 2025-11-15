@@ -8,18 +8,13 @@
  */
 
 import React, { useEffect } from 'react';
-import {
-  View,
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-  useColorScheme,
-  Pressable,
-} from 'react-native';
-import Animated from 'react-native-reanimated';
+import { View, TouchableOpacity, Text, StyleSheet, Pressable } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring, withDelay, withSequence } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFABAnimation } from '@/hooks/useFABAnimation';
+import { useTheme } from '@/hooks/useTheme';
+import { useHaptics } from '@/hooks/useHaptics';
 import type { FloatingActionButtonProps } from '@/types/transaction';
 
 export function FloatingActionButton({
@@ -29,45 +24,32 @@ export function FloatingActionButton({
   isExpanded: controlledExpanded,
   onExpandChange,
 }: FloatingActionButtonProps) {
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === 'dark';
+  const { colors, animations } = useTheme();
+  const { triggerMedium, triggerLight } = useHaptics();
   const insets = useSafeAreaInsets();
 
-  const {
-    isExpanded,
-    toggleExpanded,
-    mainButtonStyle,
-    subButtonStyles,
-  } = useFABAnimation();
+  const { isExpanded, toggleExpanded, mainButtonStyle, subButtonStyles } = useFABAnimation();
 
-  const colors = {
-    fabPrimary: isDark ? '#5E5CE6' : '#5856D6',
-    fabIncome: isDark ? '#30D158' : '#34C759',
-    fabExpense: isDark ? '#FF453A' : '#FF3B30',
-    fabTransfer: isDark ? '#0A84FF' : '#007AFF',
-    backdrop: 'rgba(0, 0, 0, 0.4)',
-  };
-
-  // Sync with controlled state if provided
   useEffect(() => {
     if (controlledExpanded !== undefined && controlledExpanded !== isExpanded) {
       toggleExpanded();
     }
   }, [controlledExpanded]);
 
-  // Notify parent of expand state changes
   useEffect(() => {
     onExpandChange?.(isExpanded);
   }, [isExpanded, onExpandChange]);
 
   const handleMainPress = () => {
+    triggerMedium();
     toggleExpanded();
   };
 
   const handleSubPress = (callback: () => void) => {
+    triggerLight();
     callback();
     if (isExpanded) {
-      toggleExpanded(); // Collapse after selection
+      toggleExpanded();
     }
   };
 

@@ -9,18 +9,18 @@ import { useTheme } from '@/hooks/useTheme';
 
 export interface CardProps extends ViewProps {
   children: React.ReactNode;
-  variant?: 'default' | 'elevated';
+  elevation?: 'none' | 'sm' | 'md' | 'lg';
   padding?: number;
 }
 
 export function Card({
   children,
-  variant = 'default',
+  elevation = 'md',
   padding,
   style,
   ...props
 }: CardProps) {
-  const { colors, spacing } = useTheme();
+  const { colors, spacing, shadows, isDark } = useTheme();
 
   const cardStyles = [
     styles.card,
@@ -29,10 +29,7 @@ export function Card({
       borderRadius: spacing.borderRadius.lg,
       padding: padding !== undefined ? padding : spacing.cardPadding,
     },
-    variant === 'elevated' && {
-      ...spacing.shadow.md,
-      shadowColor: colors.shadow,
-    },
+    shadows[isDark ? 'dark' : 'light'][elevation],
     style,
   ];
 
