@@ -32,6 +32,23 @@ export const lightTheme = {
   warning: '#FF9500', // iOS Orange
   info: '#5856D6', // iOS Purple
 
+  // Transaction colors
+  income: '#34C759', // Green
+  expense: '#FF3B30', // Red
+  transfer: '#007AFF', // Blue
+
+  // FAB colors
+  fabPrimary: '#5856D6', // Purple
+  fabIncome: '#34C759', // Green
+  fabExpense: '#FF3B30', // Red
+  fabTransfer: '#007AFF', // Blue
+
+  // Filter panel
+  filterBackground: '#FFFFFF',
+  filterCard: '#F2F2F7',
+  filterBorder: '#C6C6C8',
+  filterSelected: '#007AFF',
+
   // Category colors (8 default categories)
   categoryColors: {
     food: '#FF6B6B', // 餐饮 - Red
@@ -73,6 +90,23 @@ export const darkTheme = {
   error: '#FF453A', // iOS Red (Dark Mode)
   warning: '#FF9F0A', // iOS Orange (Dark Mode)
   info: '#5E5CE6', // iOS Purple (Dark Mode)
+
+  // Transaction colors
+  income: '#30D158', // Green (Dark Mode)
+  expense: '#FF453A', // Red (Dark Mode)
+  transfer: '#0A84FF', // Blue (Dark Mode)
+
+  // FAB colors
+  fabPrimary: '#5E5CE6', // Purple (Dark Mode)
+  fabIncome: '#30D158', // Green (Dark Mode)
+  fabExpense: '#FF453A', // Red (Dark Mode)
+  fabTransfer: '#0A84FF', // Blue (Dark Mode)
+
+  // Filter panel
+  filterBackground: '#1C1C1E',
+  filterCard: '#2C2C2E',
+  filterBorder: '#38383A',
+  filterSelected: '#0A84FF',
 
   // Category colors (8 default categories - adjusted for dark mode)
   categoryColors: {

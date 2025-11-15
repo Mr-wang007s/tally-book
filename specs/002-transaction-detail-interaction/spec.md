@@ -1,127 +1,165 @@
-# Feature Specification: [FEATURE NAME]
+# Feature Specification: Transaction Detail and Filter Interactions
 
-**Feature Branch**: `[###-feature-name]`  
-**Created**: [DATE]  
+**Feature Branch**: `002-transaction-detail-interaction`  
+**Created**: 2025-11-15  
 **Status**: Draft  
-**Input**: User description: "$ARGUMENTS"
+**Input**: User description: "参照上图帮我设计交互实现"
 
 ## User Scenarios & Testing *(mandatory)*
 
-<!--
-  IMPORTANT: User stories should be PRIORITIZED as user journeys ordered by importance.
-  Each user story/journey must be INDEPENDENTLY TESTABLE - meaning if you implement just ONE of them,
-  you should still have a viable MVP (Minimum Viable Product) that delivers value.
-  
-  Assign priorities (P1, P2, P3, etc.) to each story, where P1 is the most critical.
-  Think of each story as a standalone slice of functionality that can be:
-  - Developed independently
-  - Tested independently
-  - Deployed independently
-  - Demonstrated to users independently
--->
+### User Story 1 - View Transaction Details (Priority: P1)
 
-### User Story 1 - [Brief Title] (Priority: P1)
+用户需要查看交易的完整详细信息,包括金额、日期、类型、账户来源/目的地、描述和附件。用户可以从主页的交易列表点击任意交易条目进入详情页面。
 
-[Describe this user journey in plain language]
+**Why this priority**: 这是核心功能,用户必须能够查看交易详情才能进行后续的编辑或删除操作。没有此功能,应用无法满足基本的信息查看需求。
 
-**Why this priority**: [Explain the value and why it has this priority level]
-
-**Independent Test**: [Describe how this can be tested independently - e.g., "Can be fully tested by [specific action] and delivers [specific value]"]
+**Independent Test**: 用户打开应用,从主页交易列表点击一笔交易,可以看到完整的交易详情页面,包括所有必要信息(金额、时间、类型、账户、描述、附件)。
 
 **Acceptance Scenarios**:
 
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
-2. **Given** [initial state], **When** [action], **Then** [expected outcome]
+1. **Given** 用户在主页看到交易列表, **When** 点击任意一笔交易, **Then** 进入交易详情页面,显示该交易的完整信息
+2. **Given** 用户在交易详情页面, **When** 查看金额区域, **Then** 清晰显示金额数字、交易日期和时间
+3. **Given** 用户在交易详情页面, **When** 查看交易类型信息, **Then** 显示类型(收入/支出/转账)、来源账户和目的账户
+4. **Given** 交易包含描述文本, **When** 用户查看详情, **Then** 在描述区域完整显示文本内容
+5. **Given** 交易包含附件(如收据照片), **When** 用户查看详情, **Then** 在附件区域显示图片缩略图
+6. **Given** 用户在交易详情页面, **When** 点击返回按钮, **Then** 返回到之前的交易列表页面
+7. **Given** 用户在交易详情页面, **When** 点击删除按钮(垃圾桶图标), **Then** 显示确认删除对话框
 
 ---
 
-### User Story 2 - [Brief Title] (Priority: P2)
+### User Story 2 - Edit Transaction Information (Priority: P1)
 
-[Describe this user journey in plain language]
+用户需要能够修改已创建的交易信息,包括金额、日期、类型、账户、描述和附件。用户在详情页面点击"Edit"按钮进入编辑模式。
 
-**Why this priority**: [Explain the value and why it has this priority level]
+**Why this priority**: 用户经常需要修正输入错误或更新交易信息,这是基本的数据管理功能,与查看详情同等重要。
 
-**Independent Test**: [Describe how this can be tested independently]
+**Independent Test**: 用户进入交易详情页面,点击"Edit"按钮,可以修改交易的任意字段,保存后更改立即生效并反映在列表中。
 
 **Acceptance Scenarios**:
 
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
+1. **Given** 用户在交易详情页面, **When** 点击底部紫色"Edit"按钮, **Then** 进入编辑模式,所有字段变为可编辑状态
+2. **Given** 用户在编辑模式, **When** 修改金额、日期、类型、账户或描述, **Then** 更改实时反映在界面上
+3. **Given** 用户完成编辑, **When** 点击保存, **Then** 更改被持久化,返回详情页面显示更新后的信息
+4. **Given** 用户在编辑模式, **When** 点击取消或返回, **Then** 放弃所有更改,返回到详情页面显示原始信息
+5. **Given** 用户在编辑模式, **When** 尝试保存无效数据(如空金额), **Then** 显示验证错误提示,阻止保存
 
 ---
 
-### User Story 3 - [Brief Title] (Priority: P3)
+### User Story 3 - Filter and Sort Transactions (Priority: P2)
 
-[Describe this user journey in plain language]
+用户需要在交易列表中按类型(收入/支出/转账)、排序方式(最高/最低/最新/最旧)和分类筛选交易,以快速找到特定的交易记录。
 
-**Why this priority**: [Explain the value and why it has this priority level]
+**Why this priority**: 随着交易数量增加,筛选和排序功能变得必要,但用户仍可以通过滚动浏览来查看交易,因此优先级低于查看和编辑。
 
-**Independent Test**: [Describe how this can be tested independently]
+**Independent Test**: 用户从主页点击筛选按钮,设置筛选条件(如"支出"类型、"最高"排序),点击"Apply",交易列表根据条件更新显示。
 
 **Acceptance Scenarios**:
 
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
+1. **Given** 用户在主页交易列表, **When** 点击筛选按钮(右上角图标), **Then** 从底部弹出筛选面板
+2. **Given** 筛选面板打开, **When** 选择"Expense"类型, **Then** 该选项高亮显示为选中状态
+3. **Given** 筛选面板打开, **When** 在"Sort By"区域选择"Highest", **Then** 该排序选项被选中
+4. **Given** 筛选面板打开, **When** 点击"Choose Category", **Then** 进入分类选择页面,显示所有可用分类
+5. **Given** 用户设置筛选条件, **When** 点击紫色"Apply"按钮, **Then** 筛选面板关闭,交易列表根据条件更新
+6. **Given** 用户设置筛选条件, **When** 点击"Reset"按钮, **Then** 所有筛选条件清除,恢复默认状态
+7. **Given** 筛选面板打开, **When** 向下拖动面板或点击背景, **Then** 面板关闭且不应用任何更改
+8. **Given** 用户应用筛选条件, **When** 查看交易列表, **Then** 只显示符合所有筛选条件的交易
 
 ---
 
-[Add more user stories as needed, each with an assigned priority]
+### User Story 4 - Quick Add Transaction via Floating Action Button (Priority: P2)
+
+用户需要快速添加新交易,通过点击底部中央的浮动按钮(FAB)展开菜单,选择添加收入、支出或转账。
+
+**Why this priority**: 这是便捷的快捷操作,提升用户体验,但用户仍可以通过其他方式添加交易,因此不是最高优先级。
+
+**Independent Test**: 用户在主页点击紫色圆形浮动按钮,展开显示三个选项(收入/支出/转账),点击任意选项进入对应的添加交易表单。
+
+**Acceptance Scenarios**:
+
+1. **Given** 用户在主页, **When** 点击底部中央紫色圆形"+"按钮, **Then** 按钮动画旋转45度变为"×",同时弹出三个快捷按钮
+2. **Given** FAB菜单展开, **When** 查看快捷按钮, **Then** 显示三个圆形按钮:蓝色(转账)、绿色(收入)、红色(支出)
+3. **Given** FAB菜单展开, **When** 点击绿色收入按钮, **Then** 进入收入添加表单页面,FAB菜单收起
+4. **Given** FAB菜单展开, **When** 点击红色支出按钮, **Then** 进入支出添加表单页面,FAB菜单收起
+5. **Given** FAB菜单展开, **When** 点击蓝色转账按钮, **Then** 进入转账添加表单页面,FAB菜单收起
+6. **Given** FAB菜单展开, **When** 点击紫色"×"按钮或点击空白区域, **Then** 快捷按钮收回,主按钮恢复为"+"
+7. **Given** FAB菜单展开, **When** 快捷按钮出现, **Then** 按钮从主按钮位置以动画方式向上扩散
+
+---
+
+### User Story 5 - Delete Transaction (Priority: P3)
+
+用户需要能够删除不需要的交易记录。用户在交易详情页面点击删除按钮,确认后删除该交易。
+
+**Why this priority**: 删除是数据管理的一部分,但使用频率较低,用户通常更多进行查看和编辑操作。
+
+**Independent Test**: 用户进入交易详情页面,点击右上角删除按钮,确认删除,交易从列表中移除且无法恢复。
+
+**Acceptance Scenarios**:
+
+1. **Given** 用户在交易详情页面, **When** 点击右上角垃圾桶图标, **Then** 显示确认删除对话框
+2. **Given** 删除确认对话框显示, **When** 用户点击"确认"按钮, **Then** 交易被删除,返回到交易列表页面
+3. **Given** 删除确认对话框显示, **When** 用户点击"取消"按钮, **Then** 对话框关闭,交易不被删除,停留在详情页面
+4. **Given** 交易被删除, **When** 用户返回交易列表, **Then** 该交易不再显示在列表中
+5. **Given** 交易被删除, **When** 查看统计数据, **Then** 账户余额和统计图表相应更新
+
+---
 
 ### Edge Cases
 
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right edge cases.
--->
-
-- What happens when [boundary condition]?
-- How does system handle [error scenario]?
+- 用户在编辑模式时网络中断或应用崩溃,如何处理未保存的更改?
+- 当筛选条件导致没有匹配的交易时,如何显示空状态?
+- 用户快速连续点击FAB按钮时,如何防止动画冲突?
+- 删除交易后,如果这是最后一笔交易,列表如何显示?
+- 交易附件图片加载失败时,如何显示错误状态?
+- 用户在低端设备上操作时,如何确保动画流畅度?
+- 当描述文本超过显示区域时,如何处理文本截断和滚动?
 
 ## Requirements *(mandatory)*
 
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right functional requirements.
-  
-  IMPORTANT: All requirements must align with Tally Book Constitution.
-  Include requirements for: HIG compliance, accessibility, performance, Dark Mode.
--->
-
 ### Functional Requirements
 
-- **FR-001**: System MUST [specific capability, e.g., "allow users to create expense entries"]
-- **FR-002**: System MUST support Dynamic Type for all text elements (Constitution Principle I)
-- **FR-003**: System MUST support VoiceOver with accurate labels for all interactive elements (Principle IV)
-- **FR-004**: System MUST render at ≥60fps during scrolling and animations (Principle V)
-- **FR-005**: System MUST support both Light and Dark Mode appearances (Principle VI)
-- **FR-006**: All interactive elements MUST be ≥44x44pt touch targets (Principle IV)
-- **FR-007**: System MUST use Safe Area layout guides for all content (Principle VII)
-- **FR-008**: System MUST [data requirement, e.g., "persist user entries to local storage"]
-- **FR-009**: System MUST [behavior, e.g., "validate currency amounts before saving"]
+- **FR-001**: 系统必须在交易详情页面显示完整的交易信息,包括金额、日期时间、交易类型、来源/目的账户、描述和附件
+- **FR-002**: 系统必须支持Dynamic Type,所有文本元素根据用户系统设置自动调整大小
+- **FR-003**: 系统必须支持VoiceOver,所有交互元素(按钮、卡片、输入框)具有准确的可访问性标签
+- **FR-004**: 系统必须在滚动、动画和界面切换时保持≥60fps的渲染帧率
+- **FR-005**: 系统必须同时支持Light Mode和Dark Mode,所有颜色和图标自动适配
+- **FR-006**: 所有可点击元素(按钮、列表项)的触摸目标必须≥44x44pt
+- **FR-007**: 系统必须使用Safe Area布局,确保内容不被刘海、Home Indicator等遮挡
+- **FR-008**: 系统必须在用户点击交易列表项时导航到详情页面,显示该交易的完整信息
+- **FR-009**: 系统必须在详情页面提供"Edit"按钮,点击后进入编辑模式允许修改所有字段
+- **FR-010**: 系统必须在用户保存编辑前验证数据有效性(如金额不为空、日期有效)
+- **FR-011**: 系统必须持久化编辑后的交易数据到本地存储
+- **FR-012**: 系统必须提供筛选功能,支持按类型(Income/Expense/Transfer)、排序(Highest/Lowest/Newest/Oldest)和分类筛选交易
+- **FR-013**: 系统必须在应用筛选条件后实时更新交易列表显示
+- **FR-014**: 系统必须提供"Reset"功能,一键清除所有筛选条件
+- **FR-015**: 系统必须在主页底部提供浮动操作按钮(FAB),点击后展开收入/支出/转账快捷入口
+- **FR-016**: 系统必须为FAB展开/收起提供流畅的动画效果(旋转、扩散动画)
+- **FR-017**: 系统必须在详情页面提供删除按钮,点击后显示确认对话框
+- **FR-018**: 系统必须在用户确认删除后永久移除交易记录并更新列表和统计数据
+- **FR-019**: 系统必须使用SF Symbols作为图标(返回、删除、筛选、添加等),或记录使用自定义图标的理由
+- **FR-020**: 系统必须在筛选面板使用底部抽屉(Bottom Sheet)交互模式,支持拖动关闭
+- **FR-021**: 系统必须在筛选面板显示当前选中的筛选条件数量(如"0 Selected")
+- **FR-022**: 系统必须为交易附件提供图片预览功能
+- **FR-023**: 系统必须在编辑模式下允许用户添加、替换或删除交易附件
 
-*Example of marking unclear requirements:*
+### Key Entities
 
-- **FR-010**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - Face ID, passcode, or none?]
-- **FR-011**: System MUST use SF Symbols for icons or document justification for custom icons (Principle I)
-
-### Key Entities *(include if feature involves data)*
-
-- **[Entity 1]**: [What it represents, key attributes without implementation]
-- **[Entity 2]**: [What it represents, relationships to other entities]
+- **Transaction(交易)**: 代表单笔财务交易记录,包含属性:金额(amount)、日期时间(timestamp)、类型(type: Income/Expense/Transfer)、来源账户(fromAccount)、目的账户(toAccount)、分类(category)、描述(description)、附件(attachments)
+- **FilterCriteria(筛选条件)**: 代表用户设置的筛选参数,包含:类型过滤(typeFilter)、排序方式(sortBy)、选中的分类列表(selectedCategories)
+- **Account(账户)**: 代表资金账户,如Paypal、Chase等,用于交易的来源和目的地
+- **Category(分类)**: 代表交易分类,如Shopping、Food、Subscription等,用于组织和筛选交易
 
 ## Success Criteria *(mandatory)*
 
-<!--
-  ACTION REQUIRED: Define measurable success criteria.
-  These must be technology-agnostic and measurable.
-  
-  IMPORTANT: Include accessibility, performance, and UX metrics per Constitution.
--->
-
 ### Measurable Outcomes
 
-- **SC-001**: [User task completion, e.g., "Users can complete expense entry in under 30 seconds"]
-- **SC-002**: [Performance metric, e.g., "App launches to first interactive screen in <2 seconds on iPhone 8"]
-- **SC-003**: [Accessibility metric, e.g., "100% VoiceOver navigation success for P1 user flows"]
-- **SC-004**: [UX metric, e.g., "90% of users successfully complete primary task on first attempt"]
-- **SC-005**: [Quality metric, e.g., "≥90% test coverage for all ViewModels and Services"]
-- **SC-006**: [HIG compliance, e.g., "0 color contrast violations in Accessibility Inspector"]
-- **SC-007**: [Business metric, e.g., "Reduce manual entry time by 50% compared to current process"]
+- **SC-001**: 用户可在3秒内从主页导航到交易详情页面并查看完整信息
+- **SC-002**: 用户可在30秒内完成一笔交易的编辑和保存
+- **SC-003**: 应用在iPhone 8及以上设备启动到首页可交互状态的时间<2秒
+- **SC-004**: 使用VoiceOver的用户可100%完成P1优先级的用户流程(查看详情、编辑交易)
+- **SC-005**: 所有动画(FAB展开、筛选面板、页面切换)在60fps帧率下流畅运行,无明显卡顿
+- **SC-006**: 通过Accessibility Inspector检测,颜色对比度0违规,所有交互元素满足WCAG AA标准
+- **SC-007**: 90%的用户在首次使用时无需指导即可成功使用筛选功能找到特定交易
+- **SC-008**: 用户可在15秒内通过FAB快捷按钮创建新交易(从点击FAB到进入表单页面)
+- **SC-009**: 所有UI组件在Light和Dark Mode下对比度和可读性评分≥4.5:1
+- **SC-010**: 筛选操作响应时间<500ms,用户点击Apply后立即看到更新的列表

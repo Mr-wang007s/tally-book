@@ -3,6 +3,8 @@
 Auto-generated from feature plans. Last updated: 2025-11-15
 
 ## Active Technologies
+- TypeScript 5.0+ (strict mode enabled), Expo SDK 50+ (002-transaction-detail-interaction)
+- AsyncStorage (交易数据持久化)或SQLite (如需复杂查询和筛选) (002-transaction-detail-interaction)
 
 **Language/Version**: TypeScript 5.0+ (strict mode enabled), Expo SDK 51
 
@@ -408,29 +410,17 @@ describe('ExpenseForm', () => {
 ---
 
 ## Recent Changes
+- 002-transaction-detail-interaction: Added TypeScript 5.0+ (strict mode enabled), Expo SDK 50+
 
 ### 2025-11-15: Feature 001 - 家庭支出统计应用（初始版本）
 
 **新增技术栈**:
 - Expo SDK 51 + React Native
 - Zustand (状态管理)
-- Victory Native (图表库)
-- SQLite (数据存储)
-- 百度 OCR API (拍照识别)
 
 **新增核心功能**:
-- 三种输入方式：键盘、语音、拍照
-- 支出记录管理（CRUD）
-- 统计分析和图表可视化
-- 类别管理
-- 离线任务队列
 
 **架构决策**:
-- 组件分离（展示/容器）
-- 业务逻辑封装在 Hooks 中
-- 数据层通过 Services 封装
-- TDD 工作流强制执行
-- 完整的无障碍支持
 
 ---
 

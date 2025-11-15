@@ -1,219 +1,238 @@
 /**
  * Validation Utilities
- * 验证工具函数
+ * 
+ * Provides validation functions for transactions and filter criteria
+ * based on business rules defined in data-model.md
+ * 
+ * @module ValidationUtils
  */
 
-import type { CreateExpenseDTO, UpdateExpenseDTO } from '@/types/expense';
-import type { CreateCategoryDTO, UpdateCategoryDTO } from '@/types/category';
-
-/**
- * 金额范围常量
- */
-export const AMOUNT_LIMITS = {
-  MIN: 0.01,
-  MAX: 1_000_000,
-  LARGE_THRESHOLD: 10_000, // 异常大额阈值
-} as const;
-
-/**
- * 字符串长度限制
- */
-export const STRING_LIMITS = {
-  NOTE_MAX_LENGTH: 200,
-  CATEGORY_NAME_MAX_LENGTH: 20,
-} as const;
+import type {
+  Transaction,
+  CreateTransactionInput,
+  UpdateTransactionInput,
+  FilterCriteria,
+  ValidationResult,
+  TransactionType,
+} from '@/types/transaction';
 
 /**
- * 类别数量限制
+ * Validate a complete transaction object
  */
-export const CATEGORY_LIMITS = {
-  MAX_CUSTOM_CATEGORIES: 12, // 用户最多可创建 12 个自定义类别 (8默认 + 12自定义 = 20总数)
-  MAX_TOTAL_CATEGORIES: 20,
-} as const;
-
-/**
- * 验证金额是否有效
- * @param amount 金额
- * @returns {boolean} 是否有效
- */
-export function isValidAmount(amount: number): boolean {
-  return (
-    typeof amount === 'number' &&
-    !isNaN(amount) &&
-    amount >= AMOUNT_LIMITS.MIN &&
-    amount <= AMOUNT_LIMITS.MAX
-  );
-}
-
-/**
- * 验证金额是否为异常大额
- * @param amount 金额
- * @returns {boolean} 是否为异常大额
- */
-export function isLargeAmount(amount: number): boolean {
-  return amount >= AMOUNT_LIMITS.LARGE_THRESHOLD;
-}
-
-/**
- * 验证备注长度
- * @param note 备注
- * @returns {boolean} 是否有效
- */
-export function isValidNote(note: string): boolean {
-  return note.length <= STRING_LIMITS.NOTE_MAX_LENGTH;
-}
-
-/**
- * 验证类别名称
- * @param name 类别名称
- * @returns {boolean} 是否有效
- */
-export function isValidCategoryName(name: string): boolean {
-  return (
-    name.trim().length > 0 &&
-    name.length <= STRING_LIMITS.CATEGORY_NAME_MAX_LENGTH
-  );
-}
-
-/**
- * 验证颜色格式 (Hex)
- * @param color 颜色字符串
- * @returns {boolean} 是否为有效的 Hex 颜色
- */
-export function isValidColor(color: string): boolean {
-  const hexColorRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
-  return hexColorRegex.test(color);
-}
-
-/**
- * 验证日期格式 (ISO 8601)
- * @param dateStr 日期字符串
- * @returns {boolean} 是否为有效日期
- */
-export function isValidDate(dateStr: string): boolean {
-  const date = new Date(dateStr);
-  return !isNaN(date.getTime());
-}
-
-/**
- * 验证 UUID 格式
- * @param uuid UUID 字符串
- * @returns {boolean} 是否为有效的 UUID
- */
-export function isValidUUID(uuid: string): boolean {
-  const uuidRegex =
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-  return uuidRegex.test(uuid);
-}
-
-/**
- * 验证创建支出 DTO
- * @param dto CreateExpenseDTO
- * @returns {string[]} 错误信息数组 (空数组表示验证通过)
- */
-export function validateCreateExpenseDTO(dto: CreateExpenseDTO): string[] {
+export function validateTransaction(transaction: Partial<Transaction>): ValidationResult {
   const errors: string[] = [];
 
-  if (!isValidAmount(dto.amount)) {
-    errors.push(
-      `金额必须在 ${AMOUNT_LIMITS.MIN} 到 ${AMOUNT_LIMITS.MAX.toLocaleString()} 之间`
-    );
+  // Amount validation
+  if (transaction.amount === undefined || transaction.amount === null) {
+    errors.push('Amount is required');
+  } else if (transaction.amount <= 0) {
+    errors.push('Amount must be greater than 0');
+  } else if (!Number.isFinite(transaction.amount)) {
+    errors.push('Amount must be a valid number');
+  } else {
+    // Check decimal places (max 2)
+    const decimalPlaces = (transaction.amount.toString().split('.')[1] || '').length;
+    if (decimalPlaces > 2) {
+      errors.push('Amount cannot have more than 2 decimal places');
+    }
   }
 
-  if (!dto.categoryId || !isValidUUID(dto.categoryId)) {
-    errors.push('无效的类别ID');
+  // Type validation
+  if (!transaction.type) {
+    errors.push('Transaction type is required');
+  } else if (!['income', 'expense', 'transfer'].includes(transaction.type)) {
+    errors.push('Invalid transaction type');
   }
 
-  if (dto.note && !isValidNote(dto.note)) {
-    errors.push(`备注不能超过 ${STRING_LIMITS.NOTE_MAX_LENGTH} 个字符`);
+  // Account validation based on type
+  if (transaction.type) {
+    switch (transaction.type) {
+      case 'income':
+        if (!transaction.toAccount) {
+          errors.push('Income transactions require a destination account (toAccount)');
+        }
+        if (transaction.fromAccount) {
+          errors.push('Income transactions should not have a source account (fromAccount)');
+        }
+        break;
+      case 'expense':
+        if (!transaction.fromAccount) {
+          errors.push('Expense transactions require a source account (fromAccount)');
+        }
+        if (transaction.toAccount) {
+          errors.push('Expense transactions should not have a destination account (toAccount)');
+        }
+        break;
+      case 'transfer':
+        if (!transaction.fromAccount || !transaction.toAccount) {
+          errors.push('Transfer transactions require both source and destination accounts');
+        }
+        if (transaction.fromAccount === transaction.toAccount) {
+          errors.push('Transfer source and destination accounts must be different');
+        }
+        break;
+    }
   }
 
-  if (dto.date && !isValidDate(dto.date)) {
-    errors.push('无效的日期格式');
+  // Category validation
+  if (!transaction.category) {
+    errors.push('Category is required');
+  } else if (typeof transaction.category !== 'string' || transaction.category.trim() === '') {
+    errors.push('Category must be a non-empty string');
   }
 
-  return errors;
+  // Description validation (optional, but if provided must be valid)
+  if (transaction.description !== undefined && transaction.description !== null) {
+    if (typeof transaction.description !== 'string') {
+      errors.push('Description must be a string');
+    } else if (transaction.description.length > 500) {
+      errors.push('Description cannot exceed 500 characters');
+    }
+  }
+
+  // Attachments validation (optional)
+  if (transaction.attachments !== undefined && transaction.attachments !== null) {
+    if (!Array.isArray(transaction.attachments)) {
+      errors.push('Attachments must be an array');
+    } else {
+      transaction.attachments.forEach((uri, index) => {
+        if (typeof uri !== 'string' || uri.trim() === '') {
+          errors.push(`Attachment at index ${index} must be a non-empty string`);
+        }
+      });
+    }
+  }
+
+  // Timestamp validation (optional, but if provided must be valid)
+  if (transaction.timestamp !== undefined && transaction.timestamp !== null) {
+    if (!Number.isInteger(transaction.timestamp) || transaction.timestamp < 0) {
+      errors.push('Timestamp must be a positive integer (Unix epoch in milliseconds)');
+    }
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+  };
 }
 
 /**
- * 验证更新支出 DTO
- * @param dto UpdateExpenseDTO
- * @returns {string[]} 错误信息数组
+ * Validate create transaction input
  */
-export function validateUpdateExpenseDTO(dto: UpdateExpenseDTO): string[] {
-  const errors: string[] = [];
-
-  if (dto.amount !== undefined && !isValidAmount(dto.amount)) {
-    errors.push(
-      `金额必须在 ${AMOUNT_LIMITS.MIN} 到 ${AMOUNT_LIMITS.MAX.toLocaleString()} 之间`
-    );
-  }
-
-  if (dto.categoryId && !isValidUUID(dto.categoryId)) {
-    errors.push('无效的类别ID');
-  }
-
-  if (dto.note !== undefined && !isValidNote(dto.note)) {
-    errors.push(`备注不能超过 ${STRING_LIMITS.NOTE_MAX_LENGTH} 个字符`);
-  }
-
-  if (dto.date && !isValidDate(dto.date)) {
-    errors.push('无效的日期格式');
-  }
-
-  return errors;
+export function validateCreateInput(input: CreateTransactionInput): ValidationResult {
+  return validateTransaction({
+    ...input,
+    id: 'temp', // Dummy ID for validation
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+    timestamp: input.timestamp || Date.now(),
+  });
 }
 
 /**
- * 验证创建类别 DTO
- * @param dto CreateCategoryDTO
- * @returns {string[]} 错误信息数组
+ * Validate update transaction input
  */
-export function validateCreateCategoryDTO(dto: CreateCategoryDTO): string[] {
+export function validateUpdateInput(input: UpdateTransactionInput): ValidationResult {
   const errors: string[] = [];
 
-  if (!isValidCategoryName(dto.name)) {
-    errors.push(
-      `类别名称长度必须在 1-${STRING_LIMITS.CATEGORY_NAME_MAX_LENGTH} 个字符之间`
-    );
+  // ID is required for updates
+  if (!input.id || typeof input.id !== 'string' || input.id.trim() === '') {
+    errors.push('Transaction ID is required for updates');
   }
 
-  if (!dto.icon || dto.icon.trim().length === 0) {
-    errors.push('必须选择一个图标');
+  // Validate only the fields that are being updated
+  // We'll construct a partial transaction with only the provided fields
+  const partialTransaction: Partial<Transaction> = {
+    id: input.id,
+  };
+
+  // Add fields if they're being updated
+  if (input.amount !== undefined) partialTransaction.amount = input.amount;
+  if (input.type !== undefined) partialTransaction.type = input.type;
+  if (input.fromAccount !== undefined) partialTransaction.fromAccount = input.fromAccount;
+  if (input.toAccount !== undefined) partialTransaction.toAccount = input.toAccount;
+  if (input.category !== undefined) partialTransaction.category = input.category;
+  if (input.description !== undefined) partialTransaction.description = input.description;
+  if (input.attachments !== undefined) partialTransaction.attachments = input.attachments;
+  if (input.timestamp !== undefined) partialTransaction.timestamp = input.timestamp;
+
+  // If at least one field is being updated, validate those fields
+  // But skip validation if no fields are provided (except ID)
+  const fieldsToUpdate = Object.keys(input).filter(key => key !== 'id');
+  if (fieldsToUpdate.length === 0) {
+    errors.push('At least one field must be provided for update');
   }
 
-  if (!isValidColor(dto.color)) {
-    errors.push('无效的颜色格式 (必须为 Hex 格式，如 #FF6B6B)');
+  // Partial validation - only validate fields that are present
+  // Note: We need the full transaction for proper account validation,
+  // so this is a simplified validation. Full validation should happen
+  // after merging with the existing transaction.
+  if (input.amount !== undefined) {
+    if (input.amount <= 0) errors.push('Amount must be greater than 0');
+    if (!Number.isFinite(input.amount)) errors.push('Amount must be a valid number');
+    const decimalPlaces = (input.amount.toString().split('.')[1] || '').length;
+    if (decimalPlaces > 2) errors.push('Amount cannot have more than 2 decimal places');
   }
 
-  if (dto.budget !== undefined && dto.budget < 0) {
-    errors.push('预算不能为负数');
+  if (input.type !== undefined && !['income', 'expense', 'transfer'].includes(input.type)) {
+    errors.push('Invalid transaction type');
   }
 
-  return errors;
+  if (input.category !== undefined) {
+    if (typeof input.category !== 'string' || input.category.trim() === '') {
+      errors.push('Category must be a non-empty string');
+    }
+  }
+
+  if (input.description !== undefined && input.description !== null) {
+    if (typeof input.description !== 'string') {
+      errors.push('Description must be a string');
+    } else if (input.description.length > 500) {
+      errors.push('Description cannot exceed 500 characters');
+    }
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+  };
 }
 
 /**
- * 验证更新类别 DTO
- * @param dto UpdateCategoryDTO
- * @returns {string[]} 错误信息数组
+ * Validate filter criteria
  */
-export function validateUpdateCategoryDTO(dto: UpdateCategoryDTO): string[] {
+export function validateFilterCriteria(criteria: FilterCriteria): ValidationResult {
   const errors: string[] = [];
 
-  if (dto.name !== undefined && !isValidCategoryName(dto.name)) {
-    errors.push(
-      `类别名称长度必须在 1-${STRING_LIMITS.CATEGORY_NAME_MAX_LENGTH} 个字符之间`
-    );
+  // Type filter validation (optional)
+  if (criteria.typeFilter !== null && criteria.typeFilter !== undefined) {
+    if (!['income', 'expense', 'transfer'].includes(criteria.typeFilter)) {
+      errors.push('Invalid type filter');
+    }
   }
 
-  if (dto.color && !isValidColor(dto.color)) {
-    errors.push('无效的颜色格式 (必须为 Hex 格式，如 #FF6B6B)');
+  // Sort option validation (required)
+  if (!criteria.sortBy) {
+    errors.push('Sort option is required');
+  } else if (!['highest', 'lowest', 'newest', 'oldest'].includes(criteria.sortBy)) {
+    errors.push('Invalid sort option');
   }
 
-  if (dto.budget !== undefined && dto.budget < 0) {
-    errors.push('预算不能为负数');
+  // Selected categories validation (optional)
+  if (criteria.selectedCategories !== undefined && criteria.selectedCategories !== null) {
+    if (!Array.isArray(criteria.selectedCategories)) {
+      errors.push('Selected categories must be an array');
+    } else {
+      criteria.selectedCategories.forEach((categoryId, index) => {
+        if (typeof categoryId !== 'string' || categoryId.trim() === '') {
+          errors.push(`Category ID at index ${index} must be a non-empty string`);
+        }
+      });
+    }
   }
 
-  return errors;
+  return {
+    isValid: errors.length === 0,
+    errors,
+  };
 }
