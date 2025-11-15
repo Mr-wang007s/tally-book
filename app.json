@@ -1,0 +1,53 @@
+{
+  "expo": {
+    "name": "记账本",
+    "slug": "my-tally-book",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "scheme": "tallybook",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.tallybook.app",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "需要访问麦克风以支持语音输入记账功能",
+        "NSCameraUsageDescription": "需要访问相机以支持拍照识别账单功能",
+        "NSPhotoLibraryUsageDescription": "需要访问相册以保存和查看账单照片"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.tallybook.app",
+      "permissions": [
+        "CAMERA",
+        "RECORD_AUDIO",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "需要访问相机以支持拍照识别账单功能"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
