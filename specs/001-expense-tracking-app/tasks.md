@@ -66,14 +66,14 @@
 
 - [X] T018 初始化 SQLite 数据库 src/services/database.ts (创建 expenses, categories 表)
 - [X] T019 [P] 插入默认类别数据（8个默认类别：餐饮、交通、购物、娱乐、医疗、教育、住房、其他）
-- [ ] T020 [P] 创建 AsyncStorage 服务 src/services/storage.ts (设置、离线队列)
-- [ ] T021 [P] 创建文件系统服务 src/services/fileSystem.ts (照片存储管理)
+- [X] T020 [P] 创建 AsyncStorage 服务 src/services/storage.ts (设置、离线队列)
+- [X] T021 [P] 创建文件系统服务 src/services/fileSystem.ts (照片存储管理)
 
 ### 状态管理 (Zustand)
 
-- [ ] T022 [P] 创建 expenseStore src/store/expenseStore.ts (支出状态管理)
-- [ ] T023 [P] 创建 categoryStore src/store/categoryStore.ts (类别状态管理)
-- [ ] T024 [P] 创建 settingsStore src/store/settingsStore.ts (应用设置)
+- [X] T022 [P] 创建 expenseStore src/store/expenseStore.ts (支出状态管理)
+- [X] T023 [P] 创建 categoryStore src/store/categoryStore.ts (类别状态管理)
+- [X] T024 [P] 创建 settingsStore src/store/settingsStore.ts (应用设置)
 
 ### TypeScript 类型定义
 
@@ -123,15 +123,39 @@
 
 #### 数据层
 
-- [ ] T041 [P] [US1] 实现 database.ts 中 Expense CRUD 操作 (insertExpense, updateExpense, deleteExpense, getExpenseById, getAllExpenses, getExpensesByDateRange)
-- [ ] T042 [P] [US1] 实现 database.ts 中 Category 查询操作 (getAllCategories, getCategoryById)
+- [X] T041 [P] [US1] 实现 database.ts 中 Expense CRUD 操作 (insertExpense, updateExpense, deleteExpense, getExpenseById, getAllExpenses, getExpensesByDateRange)
+- [X] T042 [P] [US1] 实现 database.ts 中 Category 查询操作 (getAllCategories, getCategoryById)
 
 #### Hooks
 
-- [ ] T043 [US1] 实现 useExpenses Hook src/hooks/useExpenses.ts (封装 database 调用，提供 expenses 状态和 CRUD 方法)
-- [ ] T044 [US1] 实现 useCategories Hook src/hooks/useCategories.ts (提供 categories 列表)
+- [X] T043 [US1] 实现 useExpenses Hook src/hooks/useExpenses.ts (封装 database 调用，提供 expenses 状态和 CRUD 方法)
+- [X] T044 [US1] 实现 useCategories Hook src/hooks/useCategories.ts (提供 categories 列表)
 
 #### UI 组件
+
+- [X] T045 [P] [US1] 创建 ExpenseForm 组件 src/components/features/ExpenseForm.tsx (金额输入、类别选择器、备注输入)
+- [X] T046 [P] [US1] 创建 CategoryPicker 组件 src/components/features/CategoryPicker.tsx (类别选择、搜索过滤 FR-022)
+- [X] T047 [P] [US1] 创建 ExpenseListItem 组件 src/components/features/ExpenseListItem.tsx (列表项展示)
+
+#### 屏幕
+
+- [X] T048 [US1] 创建 HomeScreen app/(tabs)/index.tsx (记账主页，包含 ExpenseForm 和今日支出总计)
+- [X] T049 [US1] 创建 ExpenseListScreen app/(tabs)/list.tsx (支出列表，按时间倒序 FR-006)
+
+#### 辅助功能和性能 (Constitution Compliance)
+
+- [X] T050 [US1] 为所有交互元素添加 accessibilityLabel 和 accessibilityRole (Principle IV)
+- [X] T051 [US1] 实现金额输入框数字键盘 (keyboardType="decimal-pad", FR-023)
+- [X] T052 [US1] 实现 KeyboardAvoidingView 避免键盘遮挡 (FR-021, Principle VII)
+- [X] T053 [US1] 使用 FlatList 虚拟化支出列表 (Principle V)
+- [X] T054 [US1] 集成 theme (useTheme hook) 和深色模式支持 (Principle VI)
+- [X] T055 [US1] 添加 SafeAreaView 包装 (Principle VII)
+
+#### 验证和错误处理
+
+- [X] T056 [US1] 实现金额验证（范围 0.01-1,000,000，格式化 FR-010）
+- [X] T057 [US1] 实现异常大额确认提示（≥10,000 元）
+- [X] T058 [US1] 实现空字段验证和错误提示
 
 - [ ] T045 [P] [US1] 创建 ExpenseForm 组件 src/components/features/ExpenseForm.tsx (金额输入、类别选择器、备注输入)
 - [ ] T046 [P] [US1] 创建 CategoryPicker 组件 src/components/features/CategoryPicker.tsx (类别选择、搜索过滤 FR-022)
@@ -178,33 +202,33 @@
 
 #### 数据层和 API
 
-- [ ] T063 [P] [US2] 实现 voiceApi.ts src/services/voiceApi.ts (Expo Speech API 集成，requestMicrophonePermission, startRecording, stopRecording, recognizeSpeech)
-- [ ] T064 [P] [US2] 实现 nlpService.ts src/services/nlpService.ts (extractExpenseInfo, extractAmount, extractCategory 使用 utils/extractors.ts)
+- [X] T063 [P] [US2] 实现 voiceApi.ts src/services/voiceApi.ts (Expo Speech API 集成，requestMicrophonePermission, startRecording, stopRecording, recognizeSpeech)
+- [X] T064 [P] [US2] 实现 nlpService.ts src/services/nlpService.ts (extractExpenseInfo, extractAmount, extractCategory 使用 utils/extractors.ts)
 
 #### Hooks
 
-- [ ] T065 [US2] 实现 useVoiceRecognition Hook src/hooks/useVoiceRecognition.ts (封装语音识别流程，提供 isRecording, recognizedText, extractExpenseInfo)
+- [X] T065 [US2] 实现 useVoiceRecognition Hook src/hooks/useVoiceRecognition.ts (封装语音识别流程，提供 isRecording, recognizedText, extractExpenseInfo)
 
 #### UI 组件
 
-- [ ] T066 [P] [US2] 创建 VoiceRecorder 组件 src/components/features/VoiceRecorder.tsx (录音按钮、动画、识别结果展示)
-- [ ] T067 [P] [US2] 创建 RecognitionResultModal 组件 src/components/features/RecognitionResultModal.tsx (显示识别结果，允许用户修正 FR-009)
+- [X] T066 [P] [US2] 创建 VoiceRecorder 组件 src/components/features/VoiceRecorder.tsx (录音按钮、动画、识别结果展示)
+- [X] T067 [P] [US2] 创建 RecognitionResultModal 组件 src/components/features/RecognitionResultModal.tsx (显示识别结果，允许用户修正 FR-009)
 
 #### 集成到主页
 
-- [ ] T068 [US2] 在 HomeScreen 集成语音输入按钮和 VoiceRecorder 组件
-- [ ] T069 [US2] 实现识别结果 → ExpenseForm 自动填充流程
+- [X] T068 [US2] 在 HomeScreen 集成语音输入按钮和 VoiceRecorder 组件
+- [X] T069 [US2] 实现识别结果 → ExpenseForm 自动填充流程
 
 #### 辅助功能和性能
 
-- [ ] T070 [US2] 为语音按钮添加 accessibilityLabel "语音输入支出" (Principle IV)
-- [ ] T071 [US2] 实现权限请求 UI（麦克风权限拒绝时的友好提示）
-- [ ] T072 [US2] 集成 theme 和深色模式 (Principle VI)
+- [X] T070 [US2] 为语音按钮添加 accessibilityLabel "语音输入支出" (Principle IV)
+- [X] T071 [US2] 实现权限请求 UI（麦克风权限拒绝时的友好提示）
+- [X] T072 [US2] 集成 theme 和深色模式 (Principle VI)
 
 #### 错误处理
 
-- [ ] T073 [US2] 实现识别失败处理（显示错误提示，允许重试或手动输入）
-- [ ] T074 [US2] 实现低置信度结果处理（<0.8 时提示用户确认）
+- [X] T073 [US2] 实现识别失败处理（显示错误提示，允许重试或手动输入）
+- [X] T074 [US2] 实现低置信度结果处理（<0.8 时提示用户确认）
 
 **Checkpoint**: ✅ US2 完成 - 用户可以通过语音输入记账
 

@@ -1,22 +1,38 @@
 /**
  * Database Service
- * SQLite 数据库操作服务
+ * SQLite 数据库操作服务 (支持 Web 平台降级)
  * 遵循 Constitution Principle V (Performance - 查询优化, 索引)
  */
 
 import * as SQLite from 'expo-sqlite';
+import { Platform } from 'react-native';
 import type { Expense, CreateExpenseDTO, UpdateExpenseDTO, ExpenseQueryParams } from '@/types/expense';
 import type { Category } from '@/types/category';
 import { DEFAULT_CATEGORIES, CategoryType } from '@/types/category';
+import * as WebStorage from './webStorage';
 
 const DB_NAME = 'tallybook.db';
 
 let db: SQLite.SQLiteDatabase | null = null;
 
 /**
+ * 检查是否支持 SQLite
+ */
+function isSQLiteSupported(): boolean {
+  return Platform.OS !== 'web';
+}
+
+/**
  * 初始化数据库并创建表
  */
 export async function initDatabase(): Promise<void> {
+  // Web 平台使用 webStorage
+  if (!isSQLiteSupported()) {
+    console.warn('SQLite is not supported on web platform. Using localStorage.');
+    await WebStorage.initWebStorage();
+    return;
+  }
+  
   db = await SQLite.openDatabaseAsync(DB_NAME);
 
   // 创建 expenses 表
@@ -90,6 +106,11 @@ async function insertDefaultCategories(): Promise<void> {
  * 插入新支出记录
  */
 export async function insertExpense(dto: CreateExpenseDTO): Promise<Expense> {
+  // Web 平台使用 webStorage
+  if (!isSQLiteSupported()) {
+    return await WebStorage.createExpense(dto);
+  }
+  
   if (!db) throw new Error('Database not initialized');
 
   const id = generateUUID();
@@ -116,6 +137,14 @@ export async function insertExpense(dto: CreateExpenseDTO): Promise<Expense> {
  * 更新支出记录
  */
 export async function updateExpense(id: string, dto: UpdateExpenseDTO): Promise<Expense> {
+  // Web 平台使用 webStorage
+  if (!isSQLiteSupported()) {
+    await WebStorage.updateExpense(id, dto);
+    const expense = await WebStorage.getExpenseById(id);
+    if (!expense) throw new Error('Expense not found');
+    return expense;
+  }
+  
   if (!db) throw new Error('Database not initialized');
 
   const updates: string[] = [];
@@ -160,6 +189,12 @@ export async function updateExpense(id: string, dto: UpdateExpenseDTO): Promise<
  * 删除支出记录
  */
 export async function deleteExpense(id: string): Promise<void> {
+  // Web 平台使用 webStorage
+  if (!isSQLiteSupported()) {
+    await WebStorage.deleteExpense(id);
+    return;
+  }
+  
   if (!db) throw new Error('Database not initialized');
   await db.runAsync('DELETE FROM expenses WHERE id = ?', [id]);
 }
@@ -168,6 +203,11 @@ export async function deleteExpense(id: string): Promise<void> {
  * 根据ID获取支出记录
  */
 export async function getExpenseById(id: string): Promise<Expense | null> {
+  // Web 平台使用 webStorage
+  if (!isSQLiteSupported()) {
+    return await WebStorage.getExpenseById(id);
+  }
+  
   if (!db) throw new Error('Database not initialized');
   return await db.getFirstAsync<Expense>('SELECT * FROM expenses WHERE id = ?', [id]);
 }
@@ -176,6 +216,11 @@ export async function getExpenseById(id: string): Promise<Expense | null> {
  * 获取所有支出记录 (分页)
  */
 export async function getAllExpenses(params?: ExpenseQueryParams): Promise<Expense[]> {
+  // Web 平台使用 webStorage
+  if (!isSQLiteSupported()) {
+    return await WebStorage.queryExpenses(params);
+  }
+  
   if (!db) throw new Error('Database not initialized');
 
   let query = 'SELECT * FROM expenses WHERE 1=1';
@@ -229,6 +274,11 @@ export async function getExpensesByDateRange(startDate: string, endDate: string)
  * 获取所有类别
  */
 export async function getAllCategories(): Promise<Category[]> {
+  // Web 平台使用 webStorage
+  if (!isSQLiteSupported()) {
+    return await WebStorage.getAllCategories();
+  }
+  
   if (!db) throw new Error('Database not initialized');
   return await db.getAllAsync<Category>(
     'SELECT * FROM categories WHERE isActive = 1 ORDER BY sortOrder ASC'
@@ -239,6 +289,11 @@ export async function getAllCategories(): Promise<Category[]> {
  * 根据ID获取类别
  */
 export async function getCategoryById(id: string): Promise<Category | null> {
+  // Web 平台使用 webStorage
+  if (!isSQLiteSupported()) {
+    return await WebStorage.getCategoryById(id);
+  }
+  
   if (!db) throw new Error('Database not initialized');
   return await db.getFirstAsync<Category>('SELECT * FROM categories WHERE id = ?', [id]);
 }
