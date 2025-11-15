@@ -13,14 +13,14 @@ This document breaks down the work required for a specific feature or milestone,
 ---
 
 ## Phase 1: Setup
-- [ ] T001 Create feature directories in /data/workspace/my-tally-book/specs/001-expense-income-analytics
-- [ ] T002 Add initial README in /data/workspace/my-tally-book/specs/001-expense-income-analytics/README.md
-- [ ] T003 [P] Add default categories seed file in /data/workspace/my-tally-book/specs/001-expense-income-analytics/seeds/categories.json
+- [x] T001 Create feature directories in /data/workspace/my-tally-book/specs/001-expense-income-analytics
+- [x] T002 Add initial README in /data/workspace/my-tally-book/specs/001-expense-income-analytics/README.md
+- [x] T003 [P] Add default categories seed file in /data/workspace/my-tally-book/specs/001-expense-income-analytics/seeds/categories.json
 
 ## Phase 2: Foundational
-- [ ] T004 Establish data validation rules doc in /data/workspace/my-tally-book/specs/001-expense-income-analytics/validation.md
-- [ ] T005 Define i18n copy doc in /data/workspace/my-tally-book/specs/001-expense-income-analytics/i18n.md
-- [ ] T006 [P] Prepare design tokens doc (spacing, color, type) in /data/workspace/my-tally-book/specs/001-expense-income-analytics/design-tokens.md
+- [x] T004 Establish data validation rules doc in /data/workspace/my-tally-book/specs/001-expense-income-analytics/validation.md
+- [x] T005 Define i18n copy doc in /data/workspace/my-tally-book/specs/001-expense-income-analytics/i18n.md
+- [x] T006 [P] Prepare design tokens doc (spacing, color, type) in /data/workspace/my-tally-book/specs/001-expense-income-analytics/design-tokens.md
 
 ## Phase 3: User Stories (Priority Order)
 
