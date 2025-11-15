@@ -93,12 +93,6 @@
 
 - [X] T033 [P] 创建错误边界组件 src/components/ui/ErrorBoundary.tsx
 - [X] T034 [P] 创建 Toast 通知组件 src/components/ui/Toast.tsx
-- [ ] T032 [P] 创建 NLP 提取器 src/utils/extractors.ts (正则表达式金额提取、类别关键词匹配)
-
-### 性能和错误处理
-
-- [ ] T033 [P] 创建错误边界组件 src/components/ui/ErrorBoundary.tsx
-- [ ] T034 [P] 创建 Toast 通知组件 src/components/ui/Toast.tsx
 
 **Checkpoint**: ✅ 基础架构完成 - 用户故事实现可以并行开始
 
