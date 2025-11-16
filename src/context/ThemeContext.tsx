@@ -8,7 +8,7 @@ import React, { createContext, useContext, ReactNode } from 'react';
 import { ColorPalette, getColors, lightColors, darkColors } from '../theme/colors';
 import { typography } from '../theme/typography';
 import { spacing } from '../theme/spacing';
-import { shadows } from '../theme/shadows';
+import { elevation } from '../theme/elevation';
 import { radius } from '../theme/radius';
 
 export type ThemeMode = 'light' | 'dark' | 'system';
@@ -19,7 +19,7 @@ export interface Theme {
   colors: ColorPalette;
   typography: typeof typography;
   spacing: typeof spacing;
-  shadows: typeof shadows;
+  elevation: typeof elevation;
   radius: typeof radius;
 }
 
@@ -68,7 +68,7 @@ export function ThemeProvider({
     colors: getColors(resolvedMode),
     typography,
     spacing,
-    shadows,
+    elevation,
     radius,
   };
 
