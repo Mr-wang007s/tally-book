@@ -1,14 +1,10 @@
-/**
- * Form Context: Manages form-wide state (touched fields, errors, values)
- */
-
 import React, { createContext, useContext, useState } from 'react';
 
 export interface FormContextValue {
-  values: Record<string, any>;
+  values: Record<string, unknown>;
   errors: Record<string, string>;
   touched: Record<string, boolean>;
-  setFieldValue: (field: string, value: any) => void;
+  setFieldValue: (field: string, value: unknown) => void;
   setFieldError: (field: string, error: string) => void;
   setFieldTouched: (field: string, touched: boolean) => void;
   reset: () => void;
@@ -26,27 +22,25 @@ export function useFormContext() {
 
 export interface FormProviderProps {
   children: React.ReactNode;
-  initialValues?: Record<string, any>;
+  initialValues?: Record<string, unknown>;
 }
 
-export function FormProvider({ children, initialValues = {} }: FormProviderProps) {
+export function FormProvider(props: FormProviderProps) {
+  const { children, initialValues = {} } = props;
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
-  const setFieldValue = (field: string, value: any) => {
-    setValues(prev => ({ ...prev, [field]: value }));
+  const setFieldValue = (field: string, value: unknown) => {
+    setValues((prev) => ({ ...prev, [field]: value }));
   };
 
   const setFieldError = (field: string, error: string) => {
-    setErrors(prev => ({
-      ...prev,
-      [field]: error || undefined
-    }));
+    setErrors((prev) => ({ ...prev, [field]: error }));
   };
 
   const setFieldTouched = (field: string, isTouched: boolean) => {
-    setTouched(prev => ({ ...prev, [field]: isTouched }));
+    setTouched((prev) => ({ ...prev, [field]: isTouched }));
   };
 
   const reset = () => {
@@ -55,19 +49,19 @@ export function FormProvider({ children, initialValues = {} }: FormProviderProps
     setTouched({});
   };
 
-  return (
-    <FormContext.Provider
-      value={{
-        values,
-        errors,
-        touched,
-        setFieldValue,
-        setFieldError,
-        setFieldTouched,
-        reset
-      }}
-    >
-      {children}
-    </FormContext.Provider>
+  const contextValue: FormContextValue = {
+    values,
+    errors,
+    touched,
+    setFieldValue,
+    setFieldError,
+    setFieldTouched,
+    reset,
+  };
+
+  return React.createElement(
+    FormContext.Provider,
+    { value: contextValue },
+    children
   );
 }

@@ -1,124 +1,212 @@
 /**
- * Form validation schemas and utilities
- * Provides type-safe validation with i18n error messages
+ * Form Validation Schemas
+ * 
+ * Zod-based validation schemas for all forms in the application.
+ * Integrates with i18n for localized error messages.
+ * 
+ * @module src/components/forms/FormValidation
  */
 
-import { useTranslation } from '@/src/i18n/useTranslation';
+import { z } from 'zod';
 
-export interface ValidationResult {
-  isValid: boolean;
-  error?: string;
-}
+/**
+ * Transaction validation schema
+ * 
+ * Validates transaction data including:
+ * - Type (income/expense)
+ * - Amount (positive number)
+ * - Date (valid ISO date string)
+ * - Category ID (required string)
+ * - Note (optional, max 500 chars)
+ * - Payment method (optional)
+ */
+export const transactionSchema = z.object({
+  type: z.enum(['income', 'expense'], {
+    required_error: 'transactions.validation.typeRequired',
+    invalid_type_error: 'transactions.validation.typeRequired',
+  }),
+  
+  amount: z
+    .number({
+      required_error: 'transactions.validation.amountRequired',
+      invalid_type_error: 'transactions.validation.amountInvalid',
+    })
+    .positive({
+      message: 'transactions.validation.amountPositive',
+    }),
+  
+  date: z
+    .string({
+      required_error: 'transactions.validation.dateRequired',
+    })
+    .datetime({
+      message: 'transactions.validation.dateInvalid',
+    })
+    .or(
+      z.date({
+        required_error: 'transactions.validation.dateRequired',
+        invalid_type_error: 'transactions.validation.dateInvalid',
+      })
+    ),
+  
+  categoryId: z
+    .string({
+      required_error: 'transactions.validation.categoryRequired',
+    })
+    .min(1, {
+      message: 'transactions.validation.categoryRequired',
+    }),
+  
+  note: z
+    .string()
+    .max(500, {
+      message: 'transactions.validation.noteMaxLength',
+    })
+    .optional(),
+  
+  paymentMethod: z.string().optional(),
+});
 
-export interface ValidationSchema {
-  required?: boolean;
-  minLength?: number;
-  maxLength?: number;
-  pattern?: RegExp;
-  custom?: (value: any) => ValidationResult;
+/**
+ * Type inference from schema
+ */
+export type TransactionFormData = z.infer<typeof transactionSchema>;
+
+/**
+ * Partial schema for step-by-step validation
+ * Use when validating individual fields
+ */
+export const transactionPartialSchema = transactionSchema.partial();
+
+/**
+ * String amount schema for form input (converts to number)
+ * Use this for text input fields that need to be converted to numbers
+ */
+export const transactionStringAmountSchema = transactionSchema.extend({
+  amount: z
+    .string({
+      required_error: 'transactions.validation.amountRequired',
+    })
+    .min(1, {
+      message: 'transactions.validation.amountRequired',
+    })
+    .refine(
+      (val) => !isNaN(Number(val)) && Number(val) > 0,
+      {
+        message: 'transactions.validation.amountPositive',
+      }
+    )
+    .transform((val) => Number(val)),
+});
+
+/**
+ * Validate a single field
+ * Returns error message (i18n key) or undefined if valid
+ * 
+ * @example
+ * const amountError = validateField('amount', formData.amount, transactionSchema);
+ * if (amountError) {
+ *   setErrors({ ...errors, amount: amountError });
+ * }
+ */
+export function validateField<T extends z.ZodType>(
+  fieldName: string,
+  value: any,
+  schema: T
+): string | undefined {
+  try {
+    // Extract the field schema
+    if (schema instanceof z.ZodObject) {
+      const fieldSchema = schema.shape[fieldName];
+      if (fieldSchema) {
+        fieldSchema.parse(value);
+      }
+    }
+    return undefined;
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      // Return first error message (i18n key)
+      return error.errors[0]?.message;
+    }
+    return 'messages.error.invalidInput';
+  }
 }
 
 /**
- * Validate amount field (positive number, max 2 decimals)
+ * Validate entire form
+ * Returns object with field errors or empty object if valid
+ * 
+ * @example
+ * const errors = validateForm(formData, transactionSchema);
+ * if (Object.keys(errors).length > 0) {
+ *   setErrors(errors);
+ *   return;
+ * }
  */
-export function validateAmount(value: string | number): ValidationResult {
-  const { t } = useTranslation();
-  const num = parseFloat(String(value));
-
-  if (!value || isNaN(num)) {
-    return { isValid: false, error: t('transactions.validation.amountRequired') };
+export function validateForm<T extends z.ZodType>(
+  data: any,
+  schema: T
+): Record<string, string> {
+  try {
+    schema.parse(data);
+    return {};
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      const errors: Record<string, string> = {};
+      error.errors.forEach((err) => {
+        const field = err.path.join('.');
+        errors[field] = err.message;
+      });
+      return errors;
+    }
+    return { _form: 'messages.error.invalidInput' };
   }
-
-  if (num <= 0) {
-    return { isValid: false, error: t('transactions.validation.amountPositive') };
-  }
-
-  if (!/^\d+(\.\d{0,2})?$/.test(String(value))) {
-    return { isValid: false, error: t('transactions.validation.amountDecimal') };
-  }
-
-  return { isValid: true };
 }
 
 /**
- * Validate date field
+ * Safe parse with detailed error information
+ * Returns { success: true, data } or { success: false, errors }
+ * 
+ * @example
+ * const result = safeValidate(formData, transactionSchema);
+ * if (!result.success) {
+ *   console.error(result.errors);
+ * } else {
+ *   await submitTransaction(result.data);
+ * }
  */
-export function validateDate(value: Date | null): ValidationResult {
-  const { t } = useTranslation();
-
-  if (!value) {
-    return { isValid: false, error: t('transactions.validation.dateRequired') };
+export function safeValidate<T extends z.ZodType>(
+  data: any,
+  schema: T
+): 
+  | { success: true; data: z.infer<T> }
+  | { success: false; errors: Record<string, string> } 
+{
+  const result = schema.safeParse(data);
+  
+  if (result.success) {
+    return { success: true, data: result.data };
+  } else {
+    const errors: Record<string, string> = {};
+    result.error.errors.forEach((err) => {
+      const field = err.path.join('.');
+      errors[field] = err.message;
+    });
+    return { success: false, errors };
   }
-
-  if (!(value instanceof Date) || isNaN(value.getTime())) {
-    return { isValid: false, error: t('transactions.validation.dateInvalid') };
-  }
-
-  const now = new Date();
-  if (value > now) {
-    return { isValid: false, error: t('transactions.validation.dateFuture') };
-  }
-
-  return { isValid: true };
 }
 
 /**
- * Validate category field
+ * Custom error formatter
+ * Formats Zod errors for display in forms
  */
-export function validateCategory(value: string | null): ValidationResult {
-  const { t } = useTranslation();
-
-  if (!value || value.trim() === '') {
-    return { isValid: false, error: t('transactions.validation.categoryRequired') };
-  }
-
-  return { isValid: true };
-}
-
-/**
- * Validate type field (income or expense)
- */
-export function validateType(value: 'income' | 'expense' | null): ValidationResult {
-  const { t } = useTranslation();
-
-  if (!value || !['income', 'expense'].includes(value)) {
-    return { isValid: false, error: t('transactions.validation.typeRequired') };
-  }
-
-  return { isValid: true };
-}
-
-/**
- * Generic field validation
- */
-export function validateField(value: any, schema: ValidationSchema): ValidationResult {
-  const { t } = useTranslation();
-
-  if (schema.required && (!value || (typeof value === 'string' && value.trim() === ''))) {
-    return { isValid: false, error: t('validation.required') };
-  }
-
-  if (schema.minLength && String(value).length < schema.minLength) {
-    return {
-      isValid: false,
-      error: t('validation.tooShort', { min: schema.minLength })
-    };
-  }
-
-  if (schema.maxLength && String(value).length > schema.maxLength) {
-    return {
-      isValid: false,
-      error: t('validation.tooLong', { max: schema.maxLength })
-    };
-  }
-
-  if (schema.pattern && !schema.pattern.test(String(value))) {
-    return { isValid: false, error: t('validation.pattern') };
-  }
-
-  if (schema.custom) {
-    return schema.custom(value);
-  }
-
-  return { isValid: true };
+export function formatValidationError(error: z.ZodError): Record<string, string> {
+  const formatted: Record<string, string> = {};
+  
+  error.errors.forEach((err) => {
+    const field = err.path.join('.');
+    formatted[field] = err.message;
+  });
+  
+  return formatted;
 }

@@ -1,103 +1,174 @@
 /**
  * Button Component (shadcn-like pattern)
  * Reusable button primitive with variants, sizes, and haptic feedback
+ * 
+ * @module src/components/ui/Button
  */
 
 import React from 'react';
-import { TouchableOpacity, Text, ViewStyle, TextStyle, StyleSheet } from 'react-native';
+import { TouchableOpacity, Text, ViewStyle, TextStyle, ActivityIndicator } from 'react-native';
 import * as Haptics from 'expo-haptics';
-import { useTheme } from '@/src/hooks/useTheme';
+import { colors, spacing, typography } from '@/tokens';
+import { useColorScheme } from '@/hooks/useColorScheme';
 
 export interface ButtonProps {
+  /** Button text */
   title: string;
+  
+  /** Press handler */
   onPress: () => void | Promise<void>;
+  
+  /** Visual variant */
   variant?: 'primary' | 'secondary' | 'ghost' | 'destructive';
+  
+  /** Size preset */
   size?: 'sm' | 'md' | 'lg';
-  isLoading?: boolean;
-  isDisabled?: boolean;
-  hapticFeedback?: 'light' | 'medium' | 'heavy';
+  
+  /** Loading state */
+  loading?: boolean;
+  
+  /** Disabled state */
+  disabled?: boolean;
+  
+  /** Haptic feedback intensity */
+  hapticFeedback?: 'light' | 'medium' | 'heavy' | false;
+  
+  /** Custom style */
   style?: ViewStyle;
+  
+  /** Test ID for testing */
   testID?: string;
+  
+  /** Accessibility label */
   accessibilityLabel?: string;
 }
 
+/**
+ * Primary button component with haptic feedback
+ * 
+ * @example
+ * ```tsx
+ * <Button
+ *   title="Save"
+ *   onPress={handleSave}
+ *   variant="primary"
+ *   loading={isSaving}
+ *   hapticFeedback="medium"
+ * />
+ * ```
+ */
 export function Button({
   title,
   onPress,
   variant = 'primary',
   size = 'md',
-  isLoading = false,
-  isDisabled = false,
+  loading = false,
+  disabled = false,
   hapticFeedback = 'medium',
   style,
   testID,
-  accessibilityLabel
+  accessibilityLabel,
 }: ButtonProps) {
-  const { colors } = useTheme();
-  const [isPressed, setIsPressed] = React.useState(false);
+  const { colorScheme } = useColorScheme();
+  const themeColors = colorScheme === 'dark' ? colors.dark : colors.light;
 
   const handlePress = async () => {
-    if (isDisabled || isLoading) return;
+    if (disabled || loading) return;
 
-    // Haptic feedback
+    // Trigger haptic feedback
     if (hapticFeedback) {
       try {
-        const style =
+        const feedbackStyle =
           hapticFeedback === 'light'
             ? Haptics.ImpactFeedbackStyle.Light
             : hapticFeedback === 'heavy'
               ? Haptics.ImpactFeedbackStyle.Heavy
               : Haptics.ImpactFeedbackStyle.Medium;
-        await Haptics.impactAsync(style);
+        await Haptics.impactAsync(feedbackStyle);
       } catch (e) {
-        // Graceful fallback
+        // Graceful fallback if haptics not supported
+        console.warn('Haptic feedback not supported:', e);
       }
     }
 
     await onPress();
   };
 
+  // Size-based styling
+  const sizeStyles = {
+    sm: {
+      paddingVertical: spacing.xs,
+      paddingHorizontal: spacing.sm,
+      fontSize: typography.callout.fontSize,
+    },
+    md: {
+      paddingVertical: spacing.sm,
+      paddingHorizontal: spacing.md,
+      fontSize: typography.body.fontSize,
+    },
+    lg: {
+      paddingVertical: spacing.md,
+      paddingHorizontal: spacing.lg,
+      fontSize: typography.headline.fontSize,
+    },
+  }[size];
+
+  // Variant-based styling
+  const variantStyles = {
+    primary: {
+      backgroundColor: themeColors.primary,
+      textColor: themeColors.textInverted,
+    },
+    secondary: {
+      backgroundColor: themeColors.surface,
+      textColor: themeColors.primary,
+      borderWidth: 1,
+      borderColor: themeColors.border,
+    },
+    ghost: {
+      backgroundColor: 'transparent',
+      textColor: themeColors.primary,
+    },
+    destructive: {
+      backgroundColor: themeColors.error,
+      textColor: themeColors.textInverted,
+    },
+  }[variant];
+
   const containerStyle: ViewStyle = {
-    paddingVertical: size === 'sm' ? 8 : size === 'lg' ? 16 : 12,
-    paddingHorizontal: size === 'sm' ? 12 : size === 'lg' ? 24 : 16,
+    paddingVertical: sizeStyles.paddingVertical,
+    paddingHorizontal: sizeStyles.paddingHorizontal,
     borderRadius: 8,
-    opacity: isDisabled || isLoading ? 0.5 : 1,
-    ...style
+    opacity: disabled || loading ? 0.5 : 1,
+    backgroundColor: variantStyles.backgroundColor,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 44, // Accessibility: minimum touch target
+    ...('borderWidth' in variantStyles && { borderWidth: variantStyles.borderWidth }),
+    ...('borderColor' in variantStyles && { borderColor: variantStyles.borderColor }),
+    ...style,
   };
 
-  const backgroundColor = {
-    primary: colors.primary,
-    secondary: colors.secondary,
-    ghost: 'transparent',
-    destructive: colors.error
-  }[variant];
-
-  const textColor = {
-    primary: 'white',
-    secondary: colors.primary,
-    ghost: colors.primary,
-    destructive: 'white'
-  }[variant];
-
   const textStyle: TextStyle = {
-    fontSize: size === 'sm' ? 14 : size === 'lg' ? 18 : 16,
+    fontSize: sizeStyles.fontSize,
     fontWeight: '600',
-    color: textColor,
-    textAlign: 'center'
+    color: variantStyles.textColor,
+    textAlign: 'center',
   };
 
   return (
     <TouchableOpacity
-      style={[containerStyle, { backgroundColor }]}
+      style={containerStyle}
       onPress={handlePress}
-      disabled={isDisabled || isLoading}
+      disabled={disabled || loading}
       testID={testID}
       accessibilityLabel={accessibilityLabel || title}
       accessibilityRole="button"
+      accessibilityState={{ disabled: disabled || loading }}
       activeOpacity={0.7}
     >
-      {isLoading ? (
-        <Text style={textStyle}>加载中...</Text>
+      {loading ? (
+        <ActivityIndicator color={variantStyles.textColor} />
       ) : (
         <Text style={textStyle}>{title}</Text>
       )}

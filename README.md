@@ -9,6 +9,7 @@ A multi-platform personal finance tracker built with React Native and Expo, targ
 - **Spending Trends**: Analyze spending patterns over time with interactive charts
 - **Category Analytics**: Break down expenses by category to understand spending habits
 - **Edit & Delete**: Manage transactions with full edit and delete capabilities
+- **Multi-language Support**: Chinese (zh-CN) and English localization with automatic device locale detection
 
 ## Tech Stack
 
@@ -16,7 +17,8 @@ A multi-platform personal finance tracker built with React Native and Expo, targ
 - **Language**: TypeScript
 - **Storage**: AsyncStorage for local persistence
 - **Navigation**: Expo Router (file-based routing)
-- **Design**: iOS-inspired visual language with design tokens
+- **Internationalization**: i18next with react-i18next and react-native-localize
+- **Design**: iOS-inspired visual language with design tokens (shadcn-inspired components)
 
 ## Getting Started
 
@@ -53,6 +55,32 @@ npm run format     # Run Prettier
 npm run type-check # Run TypeScript compiler check
 ```
 
+## Language Support
+
+The app supports **Chinese (zh-CN)** as the primary language with **English (en)** fallback. Language is automatically detected from device settings using `react-native-localize`.
+
+### Available Languages
+
+- **中文 (Chinese)**: Default language with full coverage
+- **English**: Complete fallback translation
+
+### Changing Language in Development
+
+To test different languages during development, modify your device/emulator language settings, or use the language switcher in app settings (if implemented).
+
+### Translation Structure
+
+Translations are organized by feature namespace:
+- `common`: Shared UI elements (OK, Cancel, Save, etc.)
+- `transactions`: Transaction-related screens and forms
+- `home`: Home dashboard content
+- `summary`: Financial summary screens
+- `trends`: Trend analysis screens
+- `categories`: Category management
+- `messages`: Success/error messages
+
+Translation files are located in `src/i18n/locales/` and use the type-safe `useTranslation()` hook for autocomplete and validation.
+
 ## Project Structure
 
 ```
@@ -66,12 +94,39 @@ my-tally-book/
 │   ├── models/            # Data models (Transaction, Category, etc.)
 │   ├── services/          # Business logic (aggregates, validation, etc.)
 │   ├── storage/           # Persistence layer
-│   ├── components/        # Reusable UI components
-│   ├── theme/             # Design tokens (colors, typography, spacing)
-│   └── constants/         # App constants (performance SLOs, etc.)
-├── specs/                 # Feature specifications
-└── .specify/              # Project templates and workflows
+│   ├── components/        # Reusable UI components (feature-based organization)
+│   │   ├── ui/           # Design system primitives (Button, Input, Card, etc.)
+│   │   ├── forms/        # Form components and validation
+│   │   ├── surfaces/     # Layout and container components
+│   │   ├── charts/       # Data visualization
+│   │   ├── animations/   # Animation wrappers
+│   │   ├── layouts/      # Screen-level layouts
+│   │   └── screens/      # Full-screen feature components
+│   ├── i18n/             # Internationalization configuration and translations
+│   │   ├── config.ts     # i18next configuration with locale detection
+│   │   ├── locales/      # Translation files (zh-CN.json, en.json)
+│   │   └── useTranslation.ts  # Type-safe translation hook
+│   ├── tokens/           # Design tokens (colors, typography, spacing, elevation, animations)
+│   ├── contracts/        # TypeScript type definitions for navigation and i18n
+│   ├── theme/            # Theme provider and context
+│   └── constants/        # App constants (performance SLOs, etc.)
+├── specs/                # Feature specifications
+└── .specify/             # Project templates and workflows
 ```
+
+## Component Organization
+
+Components follow a **feature-based structure** inspired by shadcn design patterns:
+
+- **ui/**: Reusable primitives that can be copied and customized
+- **forms/**: Form-specific components with unified validation
+- **surfaces/**: Layout containers and cards
+- **charts/**: Data visualization components
+- **animations/**: Animation wrappers and transitions
+- **layouts/**: Screen-level layout components
+- **screens/**: Full-screen components for each feature
+
+See `src/components/README.md` for detailed component patterns and usage guidelines.
 
 ## Terminology
 

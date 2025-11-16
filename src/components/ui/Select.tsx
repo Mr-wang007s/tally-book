@@ -1,64 +1,185 @@
+/**
+ * Select Component (shadcn-like pattern)
+ * Reusable dropdown/picker component with options array
+ * 
+ * @module src/components/ui/Select
+ */
+
 import React from 'react';
-import { View, Text, TouchableOpacity, ViewStyle, TextStyle } from 'react-native';
-import { useTheme } from '@/src/hooks/useTheme';
+import { View, Text, TouchableOpacity, ViewStyle, TextStyle, Modal, ScrollView } from 'react-native';
+import { colors, spacing, typography } from '@/tokens';
+import { useColorScheme } from '@/hooks/useColorScheme';
 
-export interface SelectOption {
+export interface SelectOption<T = any> {
+  /** Display label */
   label: string;
-  value: any;
+  /** Option value */
+  value: T;
+  /** Whether option is disabled */
+  disabled?: boolean;
 }
 
-export interface SelectProps {
-  options: SelectOption[];
-  value?: any;
-  onValueChange: (value: any) => void;
+export interface SelectProps<T = any> {
+  /** Available options */
+  options: SelectOption<T>[];
+  
+  /** Currently selected value */
+  value?: T;
+  
+  /** Change handler */
+  onValueChange: (value: T) => void;
+  
+  /** Placeholder text when no value selected */
   placeholder?: string;
+  
+  /** Error state */
+  error?: boolean;
+  
+  /** Disabled state */
+  disabled?: boolean;
+  
+  /** Custom style */
+  style?: ViewStyle;
+  
+  /** Test ID */
   testID?: string;
+  
+  /** Accessibility label */
+  accessibilityLabel?: string;
 }
 
-export function Select({
+/**
+ * Dropdown select component
+ * 
+ * @example
+ * ```tsx
+ * <Select
+ *   options={[
+ *     { label: 'Income', value: 'income' },
+ *     { label: 'Expense', value: 'expense' },
+ *   ]}
+ *   value={type}
+ *   onValueChange={setType}
+ *   placeholder="Select type"
+ *   error={!!errors.type}
+ * />
+ * ```
+ */
+export function Select<T = any>({
   options,
   value,
   onValueChange,
-  placeholder = '选择...',
-  testID
-}: SelectProps) {
-  const { colors } = useTheme();
+  placeholder = 'Select...',
+  error,
+  disabled,
+  style,
+  testID,
+  accessibilityLabel,
+}: SelectProps<T>) {
+  const { colorScheme } = useColorScheme();
+  const themeColors = colorScheme === 'dark' ? colors.dark : colors.light;
   const [isOpen, setIsOpen] = React.useState(false);
 
-  const selectedLabel = options.find(o => o.value === value)?.label || placeholder;
+  const selectedOption = options.find(o => o.value === value);
+  const displayLabel = selectedOption?.label || placeholder;
+
+  const triggerStyle: ViewStyle = {
+    borderWidth: 1,
+    borderColor: error ? themeColors.error : themeColors.border,
+    borderRadius: 8,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    backgroundColor: disabled ? themeColors.disabledBackground : themeColors.surface,
+    minHeight: 44, // Accessibility: minimum touch target
+    justifyContent: 'center',
+    ...style,
+  };
+
+  const triggerTextStyle: TextStyle = {
+    ...typography.body,
+    color: selectedOption 
+      ? themeColors.textPrimary 
+      : themeColors.textPlaceholder,
+  };
+
+  const optionStyle = (isSelected: boolean, isDisabled?: boolean): ViewStyle => ({
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    backgroundColor: isSelected ? themeColors.primaryLight : 'transparent',
+    opacity: isDisabled ? 0.5 : 1,
+  });
+
+  const optionTextStyle = (isSelected: boolean): TextStyle => ({
+    ...typography.body,
+    color: isSelected ? themeColors.primary : themeColors.textPrimary,
+    fontWeight: isSelected ? '600' : '400',
+  });
 
   return (
     <View testID={testID}>
+      {/* Trigger Button */}
       <TouchableOpacity
-        onPress={() => setIsOpen(!isOpen)}
-        style={{
-          borderWidth: 1,
-          borderColor: colors.border,
-          borderRadius: 8,
-          paddingHorizontal: 12,
-          paddingVertical: 10,
-          backgroundColor: colors.surface
-        }}
+        onPress={() => !disabled && setIsOpen(!isOpen)}
+        style={triggerStyle}
+        disabled={disabled}
+        accessibilityLabel={accessibilityLabel || `Select ${displayLabel}`}
+        accessibilityRole="button"
+        accessibilityState={{ disabled: disabled || false }}
       >
-        <Text style={{ color: colors.text, fontSize: 16 }}>{selectedLabel}</Text>
+        <Text style={triggerTextStyle}>{displayLabel}</Text>
       </TouchableOpacity>
 
-      {isOpen && (
-        <View style={{ marginTop: 4, backgroundColor: colors.surface, borderRadius: 8 }}>
-          {options.map(option => (
-            <TouchableOpacity
-              key={option.value}
-              onPress={() => {
-                onValueChange(option.value);
-                setIsOpen(false);
-              }}
-              style={{ padding: 12, borderBottomWidth: 1, borderColor: colors.border }}
-            >
-              <Text style={{ color: colors.text }}>{option.label}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      )}
+      {/* Options Modal */}
+      <Modal
+        visible={isOpen}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setIsOpen(false)}
+      >
+        <TouchableOpacity 
+          style={{
+            flex: 1,
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            justifyContent: 'center',
+            paddingHorizontal: spacing.lg,
+          }}
+          activeOpacity={1}
+          onPress={() => setIsOpen(false)}
+        >
+          <View 
+            style={{
+              backgroundColor: themeColors.surface,
+              borderRadius: 12,
+              maxHeight: '70%',
+              overflow: 'hidden',
+            }}
+            onStartShouldSetResponder={() => true}
+          >
+            <ScrollView>
+              {options.map((option, index) => {
+                const isSelected = option.value === value;
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => {
+                      if (!option.disabled) {
+                        onValueChange(option.value);
+                        setIsOpen(false);
+                      }
+                    }}
+                    style={optionStyle(isSelected, option.disabled)}
+                    disabled={option.disabled}
+                  >
+                    <Text style={optionTextStyle(isSelected)}>
+                      {option.label}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+          </View>
+        </TouchableOpacity>
+      </Modal>
     </View>
   );
 }
