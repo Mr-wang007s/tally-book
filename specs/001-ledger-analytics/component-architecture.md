@@ -1,623 +1,734 @@
-# Component Architecture: Restructuring & Organization
+# Component Architecture: Ledger Analytics
 
-**Version**: 1.0  
-**Date**: 2025-11-16  
-**Feature**: 001-ledger-analytics Optimization
-
----
-
-## 1. Overview
-
-This document defines the new component organization structure following **shadcn philosophy**: copyable, composable, non-opinionated components with clear type definitions and minimal abstractions.
-
-**Goals**:
-- Support 50+ components without clutter
-- Enable developers to quickly locate and customize components
-- Reduce cognitive load through consistent patterns
-- Leverage existing design tokens from theme system
+**Feature**: 001-ledger-analytics  
+**Pattern**: Feature-based organization following shadcn design system  
+**Last Updated**: 2025-11-16  
 
 ---
 
-## 2. Folder Structure & Responsibilities
+## Overview
+
+This document defines the component organization strategy for the Ledger Analytics feature. Components are organized into logical groupings by responsibility, enabling scalability to 50+ components without clutter.
+
+**Key Principles**:
+1. **Feature-based structure**: Organize by function, not by type
+2. **Atomic design**: Build complex components from simpler primitives
+3. **Reusability**: UI primitives used across multiple features
+4. **Testability**: Each component independently testable
+5. **Performance**: Lazy loading and memoization where appropriate
+
+---
+
+## Folder Structure
 
 ```
 src/components/
-├── ui/                          # Reusable UI primitives (shadcn-like)
-│   ├── Button.tsx               # Multi-variant button with states
-│   ├── Input.tsx                # Text input field
-│   ├── Select.tsx               # Dropdown selector
+├── ui/                           # Reusable design system primitives
+│   ├── Button.tsx               # Base button with haptic feedback
+│   ├── Input.tsx                # Text input with validation state
+│   ├── Select.tsx               # Picker/dropdown component
 │   ├── Card.tsx                 # Container with shadow/radius
-│   ├── Badge.tsx                # Label/tag component
-│   ├── Sheet.tsx                # Bottom sheet modal
-│   ├── Checkbox.tsx             # Checkbox input
-│   ├── Radio.tsx                # Radio button group
-│   ├── Switch.tsx               # Toggle switch
-│   ├── Divider.tsx              # Visual separator
-│   ├── Skeleton.tsx             # Loading placeholder
-│   ├── Spinner.tsx              # Loading indicator
-│   └── Modal.tsx                # Dialog/modal wrapper
+│   ├── Badge.tsx                # Category/tag display
+│   ├── Sheet.tsx                # Bottom sheet (modal container)
+│   └── index.ts                 # Re-export all UI primitives
 │
-├── forms/                       # Form-specific components & logic
-│   ├── FormField.tsx            # Unified input field wrapper (NEW)
-│   ├── FormContainer.tsx        # Form wrapper with context (NEW)
-│   ├── FormValidation.ts        # Validation schemas & error messages
-│   ├── TransactionForm.tsx      # Add/Edit transaction form (UPDATED)
-│   ├── useForm.ts               # Form state management hook
-│   └── FormContext.ts           # Form context provider
+├── forms/                        # Form-related components
+│   ├── FormField.tsx            # Unified form input wrapper (CRITICAL)
+│   ├── FormValidation.ts        # Zod/Yup validation schemas
+│   ├── FormTypes.ts             # TypeScript types for forms
+│   ├── TransactionForm.tsx      # Add/Edit transaction form
+│   ├── DatePicker.tsx           # Date selection component
+│   ├── CategoryPicker.tsx       # Category selection component
+│   ├── FormContext.ts           # Form state management (optional)
+│   └── index.ts                 # Re-export form components
 │
-├── surfaces/                    # Containers & layout surfaces
-│   ├── SummaryCard.tsx          # Single summary metric card
+├── surfaces/                     # Layout and container components
+│   ├── SummaryCard.tsx          # Income/expense/balance card
 │   ├── SummaryCards.tsx         # Grid of summary cards
 │   ├── CardGrid.tsx             # Reusable grid layout
-│   ├── Container.tsx            # Screen-level padding wrapper
-│   ├── Header.tsx               # Screen header component
-│   └── Footer.tsx               # Screen footer/action bar
+│   ├── Container.tsx            # Screen padding/margins wrapper
+│   ├── TransactionCard.tsx      # Single transaction item
+│   ├── TransactionList.tsx      # Virtualized transaction list
+│   └── index.ts                 # Re-export surface components
 │
-├── charts/                      # Data visualization
-│   ├── CategoryPie.tsx          # Pie chart (by category)
-│   ├── TimeSeries.tsx           # Line chart (by time)
-│   ├── ChartContainer.tsx       # Chart wrapper (existing)
-│   └── ChartLegend.tsx          # Legend for charts
+├── charts/                       # Data visualization
+│   ├── CategoryPie.tsx          # Category breakdown pie chart
+│   ├── TimeSeries.tsx           # Time-series line/bar chart
+│   ├── ChartSkeleton.tsx        # Loading placeholder for charts
+│   └── index.ts                 # Re-export chart components
 │
-├── animations/                  # Animation wrappers & effects
-│   ├── FadeIn.tsx               # Fade-in entrance
-│   ├── SlideIn.tsx              # Slide-in entrance
-│   ├── ScaleIn.tsx              # Scale-in entrance
-│   ├── CountUp.tsx              # Number counter animation
+├── animations/                   # Animation wrappers
+│   ├── FadeIn.tsx               # Fade in animation wrapper
+│   ├── SlideIn.tsx              # Slide in animation wrapper
 │   ├── SuccessCheck.tsx         # Success checkmark animation
-│   ├── Skeleton.tsx             # Loading skeleton
-│   └── useAnimation.ts          # Animation utilities
+│   ├── LoadingIndicator.tsx     # Spinner/loading animation
+│   └── index.ts                 # Re-export animation components
 │
-├── layouts/                     # Layout & navigation wrappers
-│   ├── TabLayout.tsx            # Wrapper for (tabs)/_layout.tsx
-│   ├── ScreenLayout.tsx         # Standard screen with header + safe area
-│   ├── ModalLayout.tsx          # Modal/dialog layout wrapper
-│   └── StackLayout.tsx          # Stack navigation wrapper
+├── layouts/                      # Screen-level layout components
+│   ├── TabLayout.tsx            # Tab navigation wrapper
+│   ├── ScreenLayout.tsx         # Standard screen padding + header
+│   └── index.ts                 # Re-export layout components
 │
-├── inputs/                      # Form input components (detailed)
-│   ├── TextInput.tsx            # Text field
-│   ├── NumberInput.tsx          # Number/currency input
-│   ├── DateInput.tsx            # Date picker
-│   ├── TimeInput.tsx            # Time picker
-│   ├── CategoryPicker.tsx       # Category dropdown
-│   ├── PaymentMethodPicker.tsx  # Payment method picker
-│   └── NotesInput.tsx           # Multi-line text input
+├── screens/                      # Full-screen feature components
+│   ├── HomeScreen.tsx           # Home dashboard screen
+│   ├── TransactionsScreen.tsx   # Transactions list screen
+│   ├── SummaryScreen.tsx        # Financial summary screen
+│   ├── TrendsScreen.tsx         # Trends analysis screen
+│   ├── AddTransactionScreen.tsx # Add/edit transaction screen
+│   └── index.ts                 # Re-export screen components
 │
-├── feedback/                    # User feedback components (NEW)
-│   ├── Toast.tsx                # Toast notification
-│   ├── Alert.tsx                # Alert message
-│   ├── Loading.tsx              # Loading indicator with message
-│   ├── EmptyState.tsx           # Empty state placeholder
-│   └── ConfirmDialog.tsx        # Confirmation dialog
-│
-├── lists/                       # List & table components (NEW)
-│   ├── TransactionList.tsx      # Transaction FlatList wrapper
-│   ├── ListItem.tsx             # Reusable list item
-│   ├── ListSection.tsx          # Grouped list section
-│   └── ListEmpty.tsx            # Empty list placeholder
-│
-├── controls/                    # User controls & inputs (NEW)
-│   ├── PeriodFilter.tsx         # Date range/period selector
-│   ├── CategoryFilter.tsx       # Category multi-select
-│   ├── SortControl.tsx          # Sort order control
-│   ├── ViewModeToggle.tsx       # View mode switcher (list/grid)
-│   └── TrendControls.tsx        # Trend granularity control
-│
-├── screens/                     # Full-screen components (NEW location)
-│   ├── HomeScreen.tsx           # Home/Dashboard (extracted from (tabs)/home.tsx)
-│   ├── TransactionsScreen.tsx   # Transaction list (extracted from (tabs)/transactions.tsx)
-│   ├── SummaryScreen.tsx        # Summary view (extracted from (tabs)/summary.tsx)
-│   ├── TrendsScreen.tsx         # Trends view (extracted from (tabs)/trends.tsx)
-│   ├── AddTransactionScreen.tsx # Add transaction form (extracted from /transactions/add.tsx)
-│   └── EditTransactionScreen.tsx# Edit transaction form (extracted from /transactions/[id]/edit.tsx)
-│
-├── README.md                    # Component pattern guide
-└── index.ts                     # Barrel export (optional)
+└── README.md                     # Component patterns & usage guide
 ```
 
 ---
 
-## 3. Component Patterns & Examples
+## Component Categories & Responsibilities
 
-### 3.1 UI Primitives (shadcn-like)
+### 1. UI Primitives (`/ui`)
 
-**Philosophy**: Copyable, not installable. Components should be easy to understand and modify.
+**Purpose**: Foundational, reusable design system components matching shadcn patterns
 
+#### Button.tsx
 ```typescript
-// src/components/ui/Button.tsx
-import React from 'react';
-import { TouchableOpacity, Text, ViewStyle, TextStyle } from 'react-native';
-import { useTheme } from '@/src/hooks/useTheme';
-import * as Haptics from 'expo-haptics';
-
-export interface ButtonProps {
+// Wraps React Native Button with haptic feedback and loading state
+interface ButtonProps {
   title: string;
   onPress: () => void | Promise<void>;
-  variant?: 'primary' | 'secondary' | 'ghost' | 'destructive';
+  variant?: 'primary' | 'secondary' | 'destructive';
   size?: 'sm' | 'md' | 'lg';
-  isLoading?: boolean;
-  isDisabled?: boolean;
+  disabled?: boolean;
+  loading?: boolean;
   hapticFeedback?: 'light' | 'medium' | 'heavy';
-  testID?: string;
-}
-
-export function Button({
-  title,
-  onPress,
-  variant = 'primary',
-  size = 'md',
-  isLoading = false,
-  isDisabled = false,
-  hapticFeedback = 'medium',
-  testID
-}: ButtonProps) {
-  const { colors } = useTheme();
-
-  const containerStyle: ViewStyle = {
-    paddingVertical: size === 'sm' ? 8 : size === 'lg' ? 16 : 12,
-    paddingHorizontal: size === 'sm' ? 12 : size === 'lg' ? 24 : 16,
-    borderRadius: 8,
-    opacity: isDisabled || isLoading ? 0.5 : 1
-  };
-
-  const backgroundColor = {
-    primary: colors.primary,
-    secondary: colors.secondary,
-    ghost: 'transparent',
-    destructive: colors.error
-  }[variant];
-
-  const textColor = {
-    primary: 'white',
-    secondary: colors.primary,
-    ghost: colors.primary,
-    destructive: 'white'
-  }[variant];
-
-  const textStyle: TextStyle = {
-    fontSize: size === 'sm' ? 14 : size === 'lg' ? 18 : 16,
-    fontWeight: '600',
-    color: textColor
-  };
-
-  const handlePress = async () => {
-    if (hapticFeedback && !isDisabled && !isLoading) {
-      try {
-        const style = {
-          light: Haptics.ImpactFeedbackStyle.Light,
-          medium: Haptics.ImpactFeedbackStyle.Medium,
-          heavy: Haptics.ImpactFeedbackStyle.Heavy
-        }[hapticFeedback];
-        await Haptics.impactAsync(style);
-      } catch (e) {
-        // Graceful fallback for devices without haptics
-      }
-    }
-    await onPress();
-  };
-
-  return (
-    <TouchableOpacity
-      style={[containerStyle, { backgroundColor }]}
-      onPress={handlePress}
-      disabled={isDisabled || isLoading}
-      testID={testID}
-      activeOpacity={0.8}
-    >
-      {isLoading ? (
-        <Spinner size="small" color={textColor} />
-      ) : (
-        <Text style={textStyle}>{title}</Text>
-      )}
-    </TouchableOpacity>
-  );
 }
 ```
+- **Features**: Haptic feedback on press, loading state, accessibility
+- **Usage**: CTA buttons, form submissions, navigation
+- **Props**: title, onPress, variant, size, disabled, loading
 
-**Key Characteristics**:
-- Minimal dependencies (only theme hook + haptics)
-- Clear prop interface with defaults
-- Copyable and easy to customize
-- Type-safe with TypeScript
-- Haptic feedback built-in
-
-### 3.2 Form Components (Unified Pattern)
-
+#### Input.tsx
 ```typescript
-// src/components/forms/FormField.tsx
-import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { useTheme } from '@/src/hooks/useTheme';
-import * as Haptics from 'expo-haptics';
-import { Input } from '@/src/components/ui/Input';
-import { Button } from '@/src/components/ui/Button';
-
-export interface FormFieldProps {
-  label: string;
-  value: string | number;
+// Text input with focus ring, error state, and accessibility
+interface InputProps {
+  value: string;
   onChangeText: (text: string) => void;
   placeholder?: string;
+  keyboardType?: 'numeric' | 'email-address' | 'phone-pad' | 'default';
   error?: string;
-  helperText?: string;
-  keyboardType?: 'default' | 'decimal-pad' | 'email-address' | 'phone-pad';
-  isRequired?: boolean;
-  isDisabled?: boolean;
+  editable?: boolean;
   multiline?: boolean;
-  maxLength?: number;
-  testID?: string;
+}
+```
+- **Features**: Focus indicator, error display, keyboard types
+- **Usage**: Form fields, search inputs
+- **Props**: value, onChangeText, placeholder, keyboardType, error
+
+#### Select.tsx
+```typescript
+// Picker/dropdown for selecting from options
+interface SelectProps {
+  options: Array<{ label: string; value: string }>;
+  value?: string;
+  onValueChange: (value: string) => void;
+  placeholder?: string;
+  error?: string;
+}
+```
+- **Features**: Customizable options, error state
+- **Usage**: Category selection, type selection, period filtering
+- **Props**: options, value, onValueChange, placeholder, error
+
+#### Card.tsx
+```typescript
+// Container with shadow, border radius, and elevation
+interface CardProps {
+  children: React.ReactNode;
+  onPress?: () => void;
+  elevation?: 0 | 1 | 2 | 3 | 4 | 5;
+  bordered?: boolean;
+  padding?: keyof typeof spacing;
+}
+```
+- **Features**: Elevation system, press handling, flexible styling
+- **Usage**: Summary cards, transaction items, data containers
+- **Props**: children, onPress, elevation, bordered, padding
+
+#### Badge.tsx
+```typescript
+// Tag/badge for category or status display
+interface BadgeProps {
+  text: string;
+  variant?: 'default' | 'success' | 'warning' | 'error';
+  size?: 'sm' | 'md';
+}
+```
+- **Features**: Semantic color variants, size options
+- **Usage**: Category labels, status indicators
+- **Props**: text, variant, size
+
+#### Sheet.tsx
+```typescript
+// Bottom sheet modal (already exists, document interface)
+interface SheetProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+  title?: string;
+}
+```
+- **Features**: Snap points, gesture handling
+- **Usage**: Add/edit transaction modal, date picker
+- **Props**: isOpen, onClose, children, title
+
+---
+
+### 2. Form Components (`/forms`)
+
+**Purpose**: Complex form handling with validation and state management
+
+#### FormField.tsx (CRITICAL - USE EVERYWHERE)
+```typescript
+// Unified wrapper for all form inputs with validation and i18n
+interface FormFieldProps<T> {
+  name: keyof T;
+  label: string;
+  value: string;
+  onChangeText: (text: string) => void;
+  error?: string;
+  touched?: boolean;
+  onBlur?: () => void;
+  required?: boolean;
+  hint?: string;
+  component: 'input' | 'select' | 'datepicker';
+  componentProps?: Record<string, any>;
+  hapticOnError?: boolean;
+}
+```
+- **Features**: 
+  - Unified error display with i18n
+  - Touched field tracking
+  - Haptic feedback on validation error
+  - Required field indication
+  - Hint text support
+- **Usage**: Every form field in TransactionForm
+- **Key Pattern**: Always wrap form inputs with FormField
+
+#### TransactionForm.tsx
+```typescript
+// Add/Edit transaction form using FormField components
+interface TransactionFormProps {
+  initialValues?: Partial<Transaction>;
+  onSubmit: (data: Transaction) => Promise<void>;
+  loading?: boolean;
+}
+```
+- **Features**:
+  - Type selection (income/expense)
+  - Amount input with currency formatting
+  - Date picker
+  - Category selector (income-aware/expense-aware)
+  - Note optional field
+  - Payment method optional field
+  - Form-level validation
+  - Haptic feedback on submit
+- **Usage**: Add transaction flow, Edit transaction flow
+- **Dependencies**: FormField, DatePicker, CategoryPicker, validation schemas
+
+#### DatePicker.tsx
+```typescript
+// Date selection component wrapping native or custom picker
+interface DatePickerProps {
+  value: Date;
+  onChange: (date: Date) => void;
+  minDate?: Date;
+  maxDate?: Date;
+  error?: string;
+}
+```
+- **Features**: Min/max date constraints, error state
+- **Usage**: Transaction date field
+- **Platform**: Native picker on iOS, custom on Android/Web
+
+#### CategoryPicker.tsx
+```typescript
+// Category selection component with income/expense awareness
+interface CategoryPickerProps {
+  type: 'income' | 'expense';
+  value?: string;
+  onChange: (categoryId: string) => void;
+  error?: string;
+}
+```
+- **Features**: Type-aware categories, filtered list
+- **Usage**: Transaction category field
+- **Dependencies**: categories.json translations
+
+---
+
+### 3. Surface Components (`/surfaces`)
+
+**Purpose**: Layout containers and data display surfaces
+
+#### SummaryCard.tsx
+```typescript
+// Single metric card (income/expense/balance)
+interface SummaryCardProps {
+  title: string;
+  value: number;
+  format?: 'currency' | 'percentage';
+  trendArrow?: 'up' | 'down' | 'neutral';
+}
+```
+- **Usage**: Income card, expense card, balance card
+- **Features**: Currency formatting, trend arrow
+- **Dependencies**: Card UI primitive
+
+#### SummaryCards.tsx
+```typescript
+// Grid container for summary metrics
+interface SummaryCardsProps {
+  period: Period;
+  data: SummaryData;
+}
+```
+- **Usage**: Summary screen layout
+- **Features**: Responsive grid (2-3 columns)
+- **Dependencies**: SummaryCard × 3
+
+#### TransactionCard.tsx
+```typescript
+// Single transaction item in list
+interface TransactionCardProps {
+  transaction: Transaction;
+  onPress?: () => void;
+  onDelete?: () => void;
+  highlighted?: boolean;
+}
+```
+- **Usage**: Transaction list items
+- **Features**: Swipe to delete, press to edit, highlight animation
+- **Dependencies**: Card, Badge, animations
+
+#### TransactionList.tsx
+```typescript
+// Virtualized list of transactions
+interface TransactionListProps {
+  transactions: Transaction[];
+  onItemPress: (id: string) => void;
+  onItemDelete: (id: string) => void;
+  highlightedId?: string;
+  scrollToId?: string;
+}
+```
+- **Usage**: Transactions screen
+- **Features**: 
+  - Virtualization (FlashList)
+  - Estimated item size optimization
+  - Scroll-to-item with animation
+  - Swipe actions
+- **Performance**: Handles 5000+ items at 60fps
+
+---
+
+### 4. Chart Components (`/charts`)
+
+**Purpose**: Data visualization using Skia for performance
+
+#### TimeSeries.tsx
+```typescript
+// Time-series chart (line or bar)
+interface TimeSeriesProps {
+  data: Array<{ date: string; value: number }>;
+  granularity: 'day' | 'week' | 'month';
+  height?: number;
+  loading?: boolean;
+}
+```
+- **Usage**: Trends → By Time screen
+- **Features**: GPU-accelerated (Skia), animated transitions
+- **Lazy Load**: Only load when Trends screen is active
+
+#### CategoryPie.tsx
+```typescript
+// Pie/donut chart for category breakdown
+interface CategoryPieProps {
+  data: Array<{ category: string; amount: number }>;
+  height?: number;
+  showLegend?: boolean;
+  loading?: boolean;
+}
+```
+- **Usage**: Trends → By Category screen
+- **Features**: Animated segments, tap to highlight
+- **Lazy Load**: Only load when Trends screen is active
+
+#### ChartSkeleton.tsx
+```typescript
+// Loading skeleton for charts
+interface ChartSkeletonProps {
+  height?: number;
+}
+```
+- **Usage**: Chart loading state
+- **Features**: Animated shimmer effect
+
+---
+
+### 5. Animation Components (`/animations`)
+
+**Purpose**: Animation wrappers using React Native Reanimated 3
+
+#### FadeIn.tsx
+```typescript
+// Fade in animation wrapper
+interface FadeInProps {
+  children: React.ReactNode;
+  duration?: number;
+  delay?: number;
+}
+```
+- **Usage**: Screen entrance, data load
+- **Features**: Customizable duration and delay
+
+#### SlideIn.tsx
+```typescript
+// Slide in animation wrapper
+interface SlideInProps {
+  children: React.ReactNode;
+  direction?: 'up' | 'down' | 'left' | 'right';
+  duration?: number;
+}
+```
+- **Usage**: Modal entrance, navigation
+- **Features**: Directional slide, spring physics
+
+#### SuccessCheck.tsx
+```typescript
+// Success checkmark animation
+interface SuccessCheckProps {
+  onComplete?: () => void;
+  duration?: number;
+}
+```
+- **Usage**: Form submission success feedback
+- **Features**: Animated checkmark, haptic integration
+
+#### LoadingIndicator.tsx
+```typescript
+// Spinner/loading animation
+interface LoadingIndicatorProps {
+  size?: 'sm' | 'md' | 'lg';
+  color?: string;
+}
+```
+- **Usage**: Data loading states
+- **Features**: Smooth rotation, size variants
+
+---
+
+### 6. Layout Components (`/layouts`)
+
+**Purpose**: Screen-level container logic
+
+#### ScreenLayout.tsx
+```typescript
+// Standard screen wrapper with padding and header
+interface ScreenLayoutProps {
+  title?: string;
+  children: React.ReactNode;
+  action?: React.ReactNode;
+  onBack?: () => void;
+}
+```
+- **Usage**: Every screen (home, transactions, summary, trends)
+- **Features**: 
+  - Standard padding (lg = 24pt)
+  - Safe area handling
+  - Header with back button
+  - Header action slot
+- **Subcomponent**: Contains Container
+
+#### Container.tsx
+```typescript
+// Padding wrapper matching design tokens
+interface ContainerProps {
+  children: React.ReactNode;
+  padding?: keyof typeof spacing;
+  horizontal?: boolean;
+  vertical?: boolean;
+}
+```
+- **Usage**: Inner content padding
+- **Features**: Responsive padding using token system
+- **Example**: All children of ScreenLayout wrapped in Container
+
+#### TabLayout.tsx
+```typescript
+// Tab navigation wrapper
+interface TabLayoutProps {
+  tabs: Array<{ label: string; icon?: string }>;
+  activeTab: number;
+  onTabChange: (index: number) => void;
+  children: React.ReactNode;
+}
+```
+- **Usage**: Main app layout (Home, Transactions, Summary, Trends)
+- **Features**: Tab switching, haptic on change, smooth transitions
+
+---
+
+### 7. Screen Components (`/screens`)
+
+**Purpose**: Full-screen feature implementations (logic heavy)
+
+#### HomeScreen.tsx
+```typescript
+// Home dashboard
+// Features:
+// - Current balance display
+// - Recent 5 transactions
+// - Top spending category
+// - Spending breakdown (top 4 categories)
+// - Quick action buttons
+```
+- **Dependencies**: SummaryCard, TransactionCard, CategoryPie
+- **Data**: useTransactionStore(), useCategoryStore()
+
+#### TransactionsScreen.tsx
+```typescript
+// Transactions list with filtering
+// Features:
+// - Full transaction list (virtualized)
+// - Period filter (month/week/custom)
+// - Category filter
+// - Swipe to delete
+// - Tap to edit
+// - Scroll-to-item animation (post-add flow)
+```
+- **Dependencies**: TransactionList, TransactionCard, FilterBar
+- **Data**: useTransactionStore(), useFilterStore()
+
+#### SummaryScreen.tsx
+```typescript
+// Financial summary with period selection
+// Features:
+// - Income/Expense/Balance cards
+// - Period selector
+// - Category breakdown
+// - Comparison to previous period
+```
+- **Dependencies**: SummaryCards, CategoryBreakdown
+- **Data**: useSummaryStore()
+
+#### TrendsScreen.tsx
+```typescript
+// Spending trends analysis
+// Features:
+// - By Time chart (line/bar)
+// - By Category chart (pie/donut)
+// - Granularity selector (day/week/month)
+// - Period selector
+// - Legend interaction
+```
+- **Dependencies**: TimeSeries, CategoryPie, SelectionControls
+- **Data**: useTrendsStore()
+
+#### AddTransactionScreen.tsx
+```typescript
+// Add or edit transaction screen
+// Features:
+// - TransactionForm component
+// - Form validation with i18n errors
+// - Haptic feedback on validation error
+// - Success animation on submit
+// - Post-add navigation (return to transactions with scrollToId param)
+```
+- **Dependencies**: TransactionForm, SuccessCheck
+- **Navigation**: router.push('/(tabs)/transactions', { scrollToId, highlight: true })
+
+---
+
+## Component Communication Patterns
+
+### Props Drilling (Allowed for <3 Levels)
+```typescript
+// ✅ Good: Direct props for simple cases
+<Screen>
+  <Card>
+    <Text>{value}</Text>
+  </Card>
+</Screen>
+```
+
+### Context API (For Global State)
+```typescript
+// ✅ Use for: Theme, Language, Authentication
+<ThemeProvider>
+  <LanguageProvider>
+    <AppContent />
+  </LanguageProvider>
+</ThemeProvider>
+```
+
+### State Management (For Feature State)
+```typescript
+// ✅ Use Zustand stores for transaction, summary, trends data
+const { transactions } = useTransactionStore();
+const { summary } = useSummaryStore();
+```
+
+---
+
+## Import Organization
+
+### Absolute Imports (Configure in tsconfig.json)
+```typescript
+// ✅ Preferred
+import { Button } from '@/components/ui';
+import { TransactionForm } from '@/components/forms';
+import { Container } from '@/components/surfaces';
+
+// ❌ Avoid
+import Button from '../../../components/ui/Button';
+```
+
+### Index Files for Clean Exports
+```typescript
+// src/components/ui/index.ts
+export { Button } from './Button';
+export { Input } from './Input';
+export { Select } from './Select';
+export { Card } from './Card';
+export { Badge } from './Badge';
+export { Sheet } from './Sheet';
+```
+
+---
+
+## Performance Guidelines
+
+### Memoization Strategy
+```typescript
+// Use React.memo for expensive renders
+export const TransactionCard = React.memo(
+  ({ transaction, onPress }) => {
+    // Only re-render if transaction.id changes
+    return <Card onPress={onPress}>...</Card>;
+  },
+  (prev, next) => prev.transaction.id === next.transaction.id
+);
+```
+
+### Lazy Loading
+```typescript
+// Lazy load chart components (loaded only on Trends screen)
+const TimeSeries = lazy(() => import('@/components/charts/TimeSeries'));
+
+<Suspense fallback={<ChartSkeleton />}>
+  <TimeSeries data={data} />
+</Suspense>
+```
+
+### Virtualization for Lists
+```typescript
+// Use FlashList for large lists (TransactionList)
+<FlashList
+  data={transactions}
+  renderItem={renderTransaction}
+  estimatedItemSize={72}  // Height of each item
+/>
+```
+
+---
+
+## Adding New Components
+
+### 1. Determine Category
+- **Reusable & Simple** → `/ui`
+- **Form-related** → `/forms`
+- **Layout/Container** → `/surfaces` or `/layouts`
+- **Visualization** → `/charts`
+- **Animation wrapper** → `/animations`
+- **Full screen** → `/screens`
+
+### 2. Create Component File
+```typescript
+// src/components/ui/NewButton.tsx
+import React from 'react';
+import { View, Pressable } from 'react-native';
+import { colors, spacing, typography } from '@/tokens';
+
+interface NewButtonProps {
+  title: string;
+  onPress: () => void;
+  // ... more props
 }
 
-export function FormField({
-  label,
-  value,
-  onChangeText,
-  placeholder,
-  error,
-  helperText,
-  keyboardType = 'default',
-  isRequired = false,
-  isDisabled = false,
-  multiline = false,
-  maxLength,
-  testID
-}: FormFieldProps) {
-  const { colors, spacing } = useTheme();
-  const [isFocused, setIsFocused] = useState(false);
-
-  const handleChangeText = (text: string) => {
-    // Haptic feedback on input (optional)
-    onChangeText(text);
-  };
-
-  const handleBlur = async () => {
-    setIsFocused(false);
-    if (error) {
-      // Haptic feedback on error
-      try {
-        await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
-      } catch (e) {
-        // Graceful fallback
-      }
-    }
-  };
-
+export const NewButton: React.FC<NewButtonProps> = ({ title, onPress }) => {
   return (
-    <View style={styles.container}>
-      <View style={styles.labelRow}>
-        <Text style={[styles.label, { color: colors.text }]}>
-          {label}
-          {isRequired && <Text style={{ color: colors.error }}> *</Text>}
-        </Text>
-        {error && <Text style={[styles.error, { color: colors.error }]}>{error}</Text>}
-      </View>
-
-      <Input
-        value={String(value)}
-        onChangeText={handleChangeText}
-        placeholder={placeholder}
-        keyboardType={keyboardType}
-        editable={!isDisabled}
-        multiline={multiline}
-        maxLength={maxLength}
-        onFocus={() => setIsFocused(true)}
-        onBlur={handleBlur}
-        testID={testID}
-        style={{
-          borderColor: error ? colors.error : isFocused ? colors.primary : colors.border,
-          borderWidth: 1
-        }}
-      />
-
-      {helperText && !error && (
-        <Text style={[styles.helperText, { color: colors.textSecondary }]}>
-          {helperText}
-        </Text>
-      )}
-    </View>
+    <Pressable style={styles.button} onPress={onPress}>
+      <Text>{title}</Text>
+    </Pressable>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: { marginBottom: 16 },
-  labelRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 8
-  },
-  label: { fontSize: 14, fontWeight: '600' },
-  error: { fontSize: 12 },
-  helperText: { fontSize: 12, marginTop: 4 }
+  button: {
+    padding: spacing.md,
+    backgroundColor: colors.primary,
+  }
 });
 ```
 
-### 3.3 Form with Context
-
+### 3. Add to Index File
 ```typescript
-// src/components/forms/FormContainer.tsx
-import React from 'react';
-import { ScrollView } from 'react-native';
-import { FormProvider } from './FormContext';
-
-export interface FormContainerProps {
-  children: React.ReactNode;
-  onSubmit?: () => void;
-  testID?: string;
-}
-
-export function FormContainer({ children, onSubmit, testID }: FormContainerProps) {
-  return (
-    <FormProvider>
-      <ScrollView style={{ flex: 1 }} testID={testID}>
-        {children}
-      </ScrollView>
-    </FormProvider>
-  );
-}
+// src/components/ui/index.ts
+export { NewButton } from './NewButton';
 ```
 
-### 3.4 Surface Components (Cards & Grids)
+### 4. Update README.md
+Document the new component's purpose, props, and usage example
 
-```typescript
-// src/components/surfaces/SummaryCard.tsx
-import React from 'react';
-import { View, Text } from 'react-native';
-import { useTheme } from '@/src/hooks/useTheme';
-import { Card } from '@/src/components/ui/Card';
-
-export interface SummaryCardProps {
-  title: string;
-  value: string | number;
-  subtitle?: string;
-  icon?: React.ReactNode;
-  type?: 'income' | 'expense' | 'balance';
-  testID?: string;
-}
-
-export function SummaryCard({
-  title,
-  value,
-  subtitle,
-  icon,
-  type = 'balance',
-  testID
-}: SummaryCardProps) {
-  const { colors } = useTheme();
-
-  const iconColor = {
-    income: colors.success,
-    expense: colors.error,
-    balance: colors.primary
-  }[type];
-
-  return (
-    <Card testID={testID}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-        {icon && <View style={{ tintColor: iconColor }}>{icon}</View>}
-        <View style={{ flex: 1 }}>
-          <Text style={{ fontSize: 12, color: colors.textSecondary }}>{title}</Text>
-          <Text style={{ fontSize: 20, fontWeight: '700', color: colors.text }}>
-            {value}
-          </Text>
-          {subtitle && <Text style={{ fontSize: 10, color: colors.textSecondary }}>{subtitle}</Text>}
-        </View>
-      </View>
-    </Card>
-  );
-}
-```
+### 5. Add TypeScript Types to `/contracts`
+If component has complex props, add types to `/src/contracts/components.ts`
 
 ---
 
-## 4. Migration Path from Existing Structure
+## Testing Strategy
 
-### Current → New Mapping
-
-| Current File | New Location | Status |
-|--------------|--------------|--------|
-| primitives/* | ui/* | Reorganize |
-| animations/* | animations/* | Keep (organized) |
-| charts/* | charts/* | Keep (organized) |
-| home/* | screens/HomeScreen.tsx | Extract + consolidate |
-| FormField.tsx | forms/FormField.tsx | Move |
-| TransactionForm.tsx | forms/TransactionForm.tsx | Move |
-| SummaryCards.tsx | surfaces/SummaryCards.tsx | Move |
-| PeriodFilter.tsx | controls/PeriodFilter.tsx | Move |
-| ChartContainer.tsx | charts/ChartContainer.tsx | Move |
-| EmptyStates.tsx | feedback/EmptyState.tsx | Rename + move |
-| Confirm.tsx | feedback/ConfirmDialog.tsx | Rename + move |
-| TrendControls.tsx | controls/TrendControls.tsx | Move |
-| (tabs)/home.tsx | screens/HomeScreen.tsx | Extract |
-| (tabs)/transactions.tsx | screens/TransactionsScreen.tsx | Extract |
-| (tabs)/summary.tsx | screens/SummaryScreen.tsx | Extract |
-| (tabs)/trends.tsx | screens/TrendsScreen.tsx | Extract |
-| /transactions/add.tsx | screens/AddTransactionScreen.tsx | Extract |
-| /transactions/[id]/edit.tsx | screens/EditTransactionScreen.tsx | Extract |
-
-### Import Updates Required
+### Unit Tests (Per Component)
 ```typescript
-// BEFORE
-import { Button } from '@/src/components/primitives/Button';
-import { TransactionForm } from '@/src/components/TransactionForm';
-
-// AFTER
-import { Button } from '@/src/components/ui/Button';
-import { TransactionForm } from '@/src/components/forms/TransactionForm';
-```
-
----
-
-## 5. Component Export Pattern
-
-### Barrel Export (Optional)
-```typescript
-// src/components/index.ts
-export * from './ui/Button';
-export * from './ui/Input';
-export * from './ui/Card';
-// ... etc
-
-// Usage
-import { Button, Input, Card } from '@/src/components';
-```
-
-### Or Direct Import (Recommended)
-```typescript
-// Preferred: Direct imports for better tree-shaking
-import { Button } from '@/src/components/ui/Button';
-import { TransactionForm } from '@/src/components/forms/TransactionForm';
-```
-
----
-
-## 6. Type Definitions
-
-### Shared UI Props Interface
-```typescript
-// src/components/types.ts
-export interface BaseComponentProps {
-  testID?: string;
-  style?: StyleProp<ViewStyle>;
-}
-
-export interface FormControlProps extends BaseComponentProps {
-  isDisabled?: boolean;
-  isRequired?: boolean;
-  error?: string;
-}
-
-export interface LayoutProps extends BaseComponentProps {
-  children: React.ReactNode;
-}
-```
-
----
-
-## 7. Accessibility Guidelines
-
-### Each Component MUST Include
-- [ ] Semantic labels (`accessibilityLabel`)
-- [ ] Proper focus order (`accessible`, `accessibilityRole`)
-- [ ] Screen reader hints for images/icons
-- [ ] Keyboard navigation support
-- [ ] Sufficient color contrast (4.5:1 for text, 3:1 for UI components)
-
-### Example
-```typescript
-<Button
-  title="Delete"
-  accessibilityLabel="Delete transaction (requires confirmation)"
-  onPress={handleDelete}
-/>
-```
-
----
-
-## 8. Testing Strategy
-
-### Unit Tests Per Component
-```typescript
-// src/components/ui/__tests__/Button.test.ts
-import { render, screen } from '@testing-library/react-native';
-import { Button } from '../Button';
-
+// src/components/ui/__tests__/Button.test.tsx
 describe('Button', () => {
-  it('renders with title', () => {
-    render(<Button title="Click me" onPress={() => {}} />);
-    expect(screen.getByText('Click me')).toBeTruthy();
-  });
-
-  it('triggers haptic feedback on press', async () => {
-    const { getByRole } = render(
-      <Button title="Press" onPress={() => {}} hapticFeedback="medium" />
-    );
-    fireEvent.press(getByRole('button'));
-    // Assert haptic was called
+  it('calls onPress when pressed', () => {
+    const onPress = jest.fn();
+    const { getByText } = render(<Button title="Click" onPress={onPress} />);
+    fireEvent.press(getByText('Click'));
+    expect(onPress).toHaveBeenCalled();
   });
 });
 ```
 
-### Snapshot Tests
+### Integration Tests (Features)
 ```typescript
-// src/components/forms/__tests__/FormField.snapshot.test.ts
-it('matches snapshot with error state', () => {
-  const { toJSON } = render(
-    <FormField
-      label="Amount"
-      value=""
-      onChangeText={() => {}}
-      error="Amount is required"
-    />
-  );
-  expect(toJSON()).toMatchSnapshot();
+// tests/integration/AddTransaction.test.tsx
+describe('Add Transaction Flow', () => {
+  it('submits form and navigates to transactions list', async () => {
+    // Complete user flow test
+  });
 });
 ```
 
 ---
 
-## 9. Documentation Requirements
+## Accessibility Requirements
 
-### Component README Template
-```markdown
-# Component: Button
-
-## Props
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| title | string | - | Button label |
-| onPress | () => void | - | Press handler |
-| variant | 'primary' \| 'secondary' \| 'ghost' \| 'destructive' | 'primary' | Button style |
-| size | 'sm' \| 'md' \| 'lg' | 'md' | Button size |
-| isLoading | boolean | false | Show loading state |
-| hapticFeedback | 'light' \| 'medium' \| 'heavy' | 'medium' | Haptic pattern |
-
-## Usage
-
-```typescript
-<Button
-  title="Save"
-  onPress={handleSave}
-  variant="primary"
-  isLoading={isSubmitting}
-/>
-```
-
-## Accessibility
-
-- Announced as button by screen readers
-- Full keyboard support
-- Clear focus indicator
-```
+- **Color Contrast**: WCAG AA minimum (4.5:1 for text)
+- **Touch Targets**: 44pt × 44pt minimum (iOS HIG)
+- **Focus Order**: Logical tab order through FormField components
+- **Labels**: All inputs have accessible labels (via FormField)
+- **Reduced Motion**: Respect `prefers-reduced-motion` system setting
+- **Screen Reader**: All interactive elements have accessibilityLabel
 
 ---
 
-## 10. Code Style & Conventions
-
-### Naming
-- **Components**: PascalCase (Button, FormField, TransactionList)
-- **Props**: camelCase (isLoading, onPress, testID)
-- **Internal functions**: camelCase (handlePress, formatValue)
-- **Constants**: UPPER_SNAKE_CASE (MAX_LENGTH, DEFAULT_PADDING)
-
-### File Organization
-- One component per file (unless tightly coupled)
-- Co-locate styles and types in same file
-- Use barrel exports for feature folders
-- Keep test files next to components (`__tests__` folder)
-
-### Props Order
-1. Children (if applicable)
-2. Data props (value, label, etc.)
-3. Event handlers (onPress, onChange, etc.)
-4. State props (isLoading, isDisabled, etc.)
-5. Style props (variant, size, etc.)
-6. Accessibility/Testing props (testID, accessibilityLabel, etc.)
-
----
-
-## 11. Related Documents
-
-- **Implementation Plan**: `/data/workspace/my-tally-book/specs/001-ledger-analytics/plan.md`
-- **Data Model (i18n)**: `/data/workspace/my-tally-book/specs/001-ledger-analytics/data-model-i18n.md`
-- **Research**: `/data/workspace/my-tally-book/specs/001-ledger-analytics/research-optimization.md`
-- **Spec**: `/data/workspace/my-tally-book/specs/001-ledger-analytics/spec.md`
+**Next Step**: Create `src/contracts/navigation.ts` and `src/contracts/i18n.ts` with TypeScript interfaces

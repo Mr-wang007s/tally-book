@@ -1,12 +1,22 @@
 /**
- * Design Tokens - iOS 18 Inspired
+ * Design Tokens - iOS 18 Compliant
  * Core design constants for spacing, typography, and visual hierarchy
+ * Aligned with Apple's latest iOS 18 design guidelines and SF Pro typography
  */
 
-import { lightColors } from './colors';
+import { lightColors, darkColors } from './colors';
+import { radius } from './radius';
+import { shadows } from './elevation';
 
 // Re-export colors for backward compatibility
 export const colors = lightColors;
+export const colorSchemes = {
+  light: lightColors,
+  dark: darkColors,
+};
+
+// Re-export radius and shadows from dedicated modules
+export { radius, shadows };
 
 // Spacing System - 8pt grid
 export const spacing = {

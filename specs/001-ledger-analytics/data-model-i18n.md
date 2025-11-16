@@ -1,491 +1,381 @@
-# Data Model: Internationalization (i18n) Structure
+# Data Model: i18n Translation Structure
 
-**Version**: 1.0  
-**Date**: 2025-11-16  
-**Feature**: 001-ledger-analytics Optimization
-
----
-
-## 1. Translation Entity Model
-
-### Translation Structure
-
-**Namespace Organization** (by feature domain):
-```
-translations/
-├── common/               # UI chrome (buttons, dialogs, etc.)
-├── transactions/         # Transaction-specific (income, expense, category, etc.)
-├── home/                # Dashboard/home screen
-├── summary/             # Summary & aggregates
-├── trends/              # Trends & analytics
-├── validation/          # Error/validation messages
-└── settings/            # Settings & preferences (future)
-```
-
-### Common Namespace
-```json
-{
-  "ok": "确定",
-  "cancel": "取消",
-  "close": "关闭",
-  "delete": "删除",
-  "edit": "编辑",
-  "save": "保存",
-  "add": "添加",
-  "back": "返回",
-  "next": "下一步",
-  "previous": "上一步",
-  "loading": "加载中...",
-  "error": "错误",
-  "success": "成功",
-  "warning": "警告",
-  "info": "信息",
-  "noData": "暂无数据",
-  "tryAgain": "重试",
-  "confirm": "确认"
-}
-```
-
-### Transactions Namespace
-```json
-{
-  "title": "交易",
-  "add": "添加交易",
-  "edit": "编辑交易",
-  "delete": "删除交易",
-  "view": "查看交易",
-  "list": "交易列表",
-  
-  "fields": {
-    "type": "类型",
-    "amount": "金额",
-    "date": "日期",
-    "category": "分类",
-    "note": "备注",
-    "paymentMethod": "支付方式",
-    "description": "描述"
-  },
-  
-  "types": {
-    "income": "收入",
-    "expense": "支出"
-  },
-  
-  "categories": {
-    "income": {
-      "salary": "工资",
-      "bonus": "奖金",
-      "investment": "投资收益",
-      "other": "其他收入"
-    },
-    "expense": {
-      "food": "食物",
-      "transport": "交通",
-      "shopping": "购物",
-      "entertainment": "娱乐",
-      "utilities": "生活费",
-      "healthcare": "医疗",
-      "education": "教育",
-      "other": "其他支出"
-    }
-  },
-  
-  "paymentMethods": {
-    "cash": "现金",
-    "creditCard": "信用卡",
-    "debitCard": "借记卡",
-    "bankTransfer": "银行转账",
-    "mobilePayment": "移动支付",
-    "other": "其他"
-  },
-  
-  "messages": {
-    "created": "交易已添加",
-    "updated": "交易已更新",
-    "deleted": "交易已删除",
-    "deleteConfirm": "确定要删除此交易吗？此操作无法撤销。",
-    "emptyState": "还没有交易记录，点击下方按钮开始添加"
-  },
-  
-  "validation": {
-    "amountRequired": "请输入金额",
-    "amountPositive": "金额必须大于 0",
-    "amountDecimal": "金额最多可以有两位小数",
-    "categoryRequired": "请选择分类",
-    "dateRequired": "请选择日期",
-    "dateInvalid": "日期无效",
-    "dateFuture": "日期不能超过今天",
-    "typeRequired": "请选择交易类型"
-  }
-}
-```
-
-### Home Namespace
-```json
-{
-  "title": "首页",
-  "greeting": "你好",
-  "balance": "余额",
-  "income": "收入",
-  "expense": "支出",
-  "rate": "储蓄率",
-  
-  "sections": {
-    "overview": "概览",
-    "recentTransactions": "最近交易",
-    "topCategories": "分类排行"
-  },
-  
-  "messages": {
-    "noTransactions": "暂无交易，点击下方按钮开始记账",
-    "loadingFailed": "加载失败，请重试"
-  },
-  
-  "actions": {
-    "addTransaction": "添加交易",
-    "viewAll": "查看全部",
-    "viewTrends": "查看趋势"
-  }
-}
-```
-
-### Summary Namespace
-```json
-{
-  "title": "统计",
-  "period": "时期",
-  "selectPeriod": "选择时期",
-  
-  "periods": {
-    "today": "今天",
-    "week": "本周",
-    "month": "本月",
-    "year": "本年",
-    "custom": "自定义"
-  },
-  
-  "metrics": {
-    "totalIncome": "总收入",
-    "totalExpense": "总支出",
-    "balance": "余额",
-    "savingsRate": "储蓄率"
-  },
-  
-  "messages": {
-    "noData": "选定时期内暂无数据",
-    "selectCustomRange": "请选择日期范围"
-  }
-}
-```
-
-### Trends Namespace
-```json
-{
-  "title": "趋势",
-  "viewBy": "查看方式",
-  
-  "views": {
-    "byTime": "按时间",
-    "byCategory": "按分类"
-  },
-  
-  "granularity": {
-    "daily": "按天",
-    "weekly": "按周",
-    "monthly": "按月"
-  },
-  
-  "periods": {
-    "last7Days": "最近 7 天",
-    "last30Days": "最近 30 天",
-    "currentMonth": "本月",
-    "last3Months": "最近 3 个月",
-    "custom": "自定义"
-  },
-  
-  "messages": {
-    "noData": "所选时期内暂无数据",
-    "selectOption": "请选择查看方式"
-  },
-  
-  "labels": {
-    "expense": "支出",
-    "income": "收入",
-    "trend": "趋势",
-    "average": "平均值"
-  }
-}
-```
-
-### Validation Namespace
-```json
-{
-  "required": "此字段为必填项",
-  "invalid": "此字段格式无效",
-  "tooLong": "输入过长（最多 {max} 个字符）",
-  "tooShort": "输入过短（至少 {min} 个字符）",
-  "pattern": "格式不符合要求",
-  "network": "网络连接失败，请检查并重试",
-  "unknown": "发生了一个错误，请重试"
-}
-```
+**Feature**: 001-ledger-analytics  
+**Language Support**: Chinese (zh-CN) primary, English (en) fallback  
+**Last Updated**: 2025-11-16  
 
 ---
 
-## 2. Language Configuration Entity
+## Translation Architecture
 
-### LocalizationConfig Type
+### Namespace Organization
+
+Translations are organized by feature/domain into logical namespaces for easier maintenance and selective loading:
+
+```
+locales/
+├── zh-CN.json          # Chinese (Simplified)
+└── en.json             # English
+```
+
+**Namespaces**:
+- `common`: Universal UI labels (OK, Cancel, Delete, Edit, Close, Save, etc.)
+- `transactions`: Transaction CRUD, form fields, validation messages
+- `home`: Home dashboard, balance display, recent items
+- `summary`: Summary period view, aggregate totals
+- `trends`: Trends analysis, time-series labels, category breakdown
+- `categories`: Category names for both income and expense types
+- `messages`: Notification and feedback messages (success, error, warning)
+
+---
+
+## Translation Keys Specification
+
+### 1. Common Namespace
+
+Universal UI elements and actions used across all screens.
+
 ```typescript
-interface LocalizationConfig {
-  id: string;                    // "localization-config"
-  currentLanguage: 'zh-CN' | 'en'; // Current active language
-  systemLanguageFollow: boolean;  // Follow system locale if true
-  supportedLanguages: Language[];
-  dateFormat: string;            // e.g., "YYYY-MM-DD"
-  timeFormat: string;            // e.g., "HH:mm"
-  numberFormat: 'en-US' | 'zh-CN'; // Decimal and thousands separator
-  currencySymbol: string;        // Default: "¥"
-}
-
-interface Language {
-  code: 'zh-CN' | 'en';
-  name: string;              // e.g., "中文", "English"
-  nativeName: string;        // e.g., "中文", "English"
-  direction: 'ltr' | 'rtl';  // Left-to-right or right-to-left
+common: {
+  ok: string;                    // "好的" / "OK"
+  cancel: string;                // "取消" / "Cancel"
+  save: string;                  // "保存" / "Save"
+  delete: string;                // "删除" / "Delete"
+  edit: string;                  // "编辑" / "Edit"
+  close: string;                 // "关闭" / "Close"
+  confirm: string;               // "确认" / "Confirm"
+  back: string;                  // "返回" / "Back"
+  clear: string;                 // "清除" / "Clear"
+  add: string;                   // "添加" / "Add"
+  create: string;                // "创建" / "Create"
+  update: string;                // "更新" / "Update"
+  remove: string;                // "移除" / "Remove"
+  loading: string;               // "加载中..." / "Loading..."
+  noData: string;                // "暂无数据" / "No Data"
+  error: string;                 // "错误" / "Error"
+  success: string;               // "成功" / "Success"
+  warning: string;               // "警告" / "Warning"
+  info: string;                  // "信息" / "Info"
 }
 ```
-
-### Persistence
-- **Storage**: AsyncStorage with key `@localization-config`
-- **Default**: System locale detection via `react-native-localize`
-- **Fallback**: English (en) if system locale not supported
 
 ---
 
-## 3. Translation File Structure
+### 2. Transactions Namespace
 
-### File Layout
-```
-src/i18n/
-├── config.ts                          # i18next initialization
-├── types.ts                           # TypeScript interfaces for translations
-├── hooks.ts                           # Custom hooks (useTranslation, useI18n)
-├── locales/
-│   ├── zh-CN.json                     # Simplified Chinese
-│   └── en.json                        # English
-└── resources/
-    ├── common.ts                      # Shared translation keys (constants)
-    └── keys.ts                        # Typed translation key enums
-```
+Core transaction management including CRUD operations and form fields.
 
-### zh-CN.json Structure (Example)
-```json
-{
-  "common": { ... },
-  "transactions": { ... },
-  "home": { ... },
-  "summary": { ... },
-  "trends": { ... },
-  "validation": { ... }
+```typescript
+transactions: {
+  // Screen title and actions
+  title: string;                 // "交易记录" / "Transactions"
+  addTransaction: string;        // "添加交易" / "Add Transaction"
+  editTransaction: string;       // "编辑交易" / "Edit Transaction"
+  deleteTransaction: string;     // "删除交易" / "Delete Transaction"
+  
+  // Transaction types
+  income: string;                // "收入" / "Income"
+  expense: string;               // "支出" / "Expense"
+  
+  // Form field labels
+  type: string;                  // "类型" / "Type"
+  amount: string;                // "金额" / "Amount"
+  date: string;                  // "日期" / "Date"
+  category: string;              // "分类" / "Category"
+  note: string;                  // "备注" / "Note"
+  paymentMethod: string;         // "支付方式" / "Payment Method"
+  
+  // Form actions
+  saveTransaction: string;       // "保存交易" / "Save Transaction"
+  updateTransaction: string;     // "更新交易" / "Update Transaction"
+  cancelTransaction: string;     // "取消" / "Cancel"
+  confirmDelete: string;         // "确认删除?" / "Confirm Delete?"
+  
+  // Transaction status/feedback
+  addSuccess: string;            // "交易已添加" / "Transaction added"
+  updateSuccess: string;         // "交易已更新" / "Transaction updated"
+  deleteSuccess: string;         // "交易已删除" / "Transaction deleted"
+  
+  // Validation errors
+  validation: {
+    amountRequired: string;      // "金额必填" / "Amount is required"
+    amountPositive: string;      // "金额必须大于0" / "Amount must be greater than 0"
+    amountInvalid: string;       // "金额格式不正确" / "Invalid amount format"
+    categoryRequired: string;    // "分类必选" / "Category is required"
+    categoryInvalid: string;     // "分类不存在" / "Invalid category"
+    dateRequired: string;        // "日期必填" / "Date is required"
+    dateInvalid: string;         // "日期格式不正确" / "Invalid date format"
+    typeRequired: string;        // "类型必选" / "Type is required"
+    noteMaxLength: string;       // "备注不超过500字" / "Note must be <= 500 characters"
+  }
 }
 ```
 
-### Type Safety Pattern
+---
+
+### 3. Home Namespace
+
+Home dashboard and overview screen.
+
 ```typescript
-// src/i18n/types.ts
-export interface Translations {
-  common: {
-    ok: string;
-    cancel: string;
-    // ...
+home: {
+  title: string;                 // "首页" / "Home"
+  balance: string;               // "余额" / "Balance"
+  income: string;                // "收入" / "Income"
+  expense: string;               // "支出" / "Expense"
+  recentTransactions: string;    // "最近交易" / "Recent Transactions"
+  insights: string;              // "洞察" / "Insights"
+  topCategory: string;           // "热门分类" / "Top Category"
+  savingsRate: string;           // "储蓄率" / "Savings Rate"
+  spendingBreakdown: string;     // "支出分布" / "Spending Breakdown"
+  viewAll: string;               // "查看全部" / "View All"
+  empty: string;                 // "暂无交易，点击+添加第一笔交易" / "No transactions. Tap + to add your first transaction"
+}
+```
+
+---
+
+### 4. Summary Namespace
+
+Financial summary and period filtering.
+
+```typescript
+summary: {
+  title: string;                 // "统计" / "Summary"
+  period: string;                // "时期" / "Period"
+  totalIncome: string;           // "总收入" / "Total Income"
+  totalExpense: string;          // "总支出" / "Total Expense"
+  balance: string;               // "余额" / "Balance"
+  
+  // Period filters
+  today: string;                 // "今天" / "Today"
+  thisWeek: string;              // "本周" / "This Week"
+  thisMonth: string;             // "本月" / "This Month"
+  last7Days: string;             // "过去7天" / "Last 7 Days"
+  last30Days: string;            // "过去30天" / "Last 30 Days"
+  last3Months: string;           // "过去3个月" / "Last 3 Months"
+  customRange: string;           // "自定义范围" / "Custom Range"
+  
+  // Summary actions
+  selectPeriod: string;          // "选择时期" / "Select Period"
+  startDate: string;             // "开始日期" / "Start Date"
+  endDate: string;               // "结束日期" / "End Date"
+  
+  // Empty state
+  empty: string;                 // "此时期无交易" / "No transactions in this period"
+}
+```
+
+---
+
+### 5. Trends Namespace
+
+Spending trends analysis and visualization.
+
+```typescript
+trends: {
+  title: string;                 // "趋势" / "Trends"
+  byTime: string;                // "按时间" / "By Time"
+  byCategory: string;            // "按分类" / "By Category"
+  
+  // Granularity options
+  granularity: string;           // "粒度" / "Granularity"
+  daily: string;                 // "日" / "Daily"
+  weekly: string;                // "周" / "Weekly"
+  monthly: string;               // "月" / "Monthly"
+  
+  // Period filters
+  period: string;                // "时期" / "Period"
+  last7Days: string;             // "过去7天" / "Last 7 Days"
+  last30Days: string;            // "过去30天" / "Last 30 Days"
+  last3Months: string;           // "过去3个月" / "Last 3 Months"
+  thisYear: string;              // "本年" / "This Year"
+  
+  // Chart labels
+  totalExpense: string;          // "总支出" / "Total Expense"
+  expenseByCategory: string;     // "按分类支出" / "Expense by Category"
+  topCategories: string;         // "热门分类" / "Top Categories"
+  
+  // Actions
+  selectGranularity: string;     // "选择粒度" / "Select Granularity"
+  selectPeriod: string;          // "选择时期" / "Select Period"
+  
+  // Empty state
+  empty: string;                 // "此时期无数据" / "No data for this period"
+}
+```
+
+---
+
+### 6. Categories Namespace
+
+Pre-defined income and expense categories.
+
+```typescript
+categories: {
+  income: {
+    salary: string;              // "工资" / "Salary"
+    bonus: string;               // "奖金" / "Bonus"
+    investment: string;          // "投资收益" / "Investment Returns"
+    rental: string;              // "租金收入" / "Rental Income"
+    freelance: string;           // "自由职业" / "Freelance"
+    gifts: string;               // "礼物" / "Gifts"
+    other: string;               // "其他收入" / "Other Income"
+  },
+  expense: {
+    food: string;                // "食物" / "Food"
+    transportation: string;      // "交通" / "Transportation"
+    utilities: string;           // "公用事业" / "Utilities"
+    entertainment: string;       // "娱乐" / "Entertainment"
+    shopping: string;            // "购物" / "Shopping"
+    healthcare: string;          // "医疗" / "Healthcare"
+    education: string;           // "教育" / "Education"
+    housing: string;             // "住房" / "Housing"
+    insurance: string;           // "保险" / "Insurance"
+    subscriptions: string;       // "订阅" / "Subscriptions"
+    other: string;               // "其他支出" / "Other Expense"
+  }
+}
+```
+
+---
+
+### 7. Messages Namespace
+
+Feedback notifications and system messages.
+
+```typescript
+messages: {
+  // Success messages
+  success: {
+    transactionCreated: string;       // "交易已创建" / "Transaction created"
+    transactionUpdated: string;       // "交易已更新" / "Transaction updated"
+    transactionDeleted: string;       // "交易已删除" / "Transaction deleted"
+    dataSaved: string;                // "数据已保存" / "Data saved"
+    operationComplete: string;        // "操作完成" / "Operation complete"
+  },
+  
+  // Error messages
+  error: {
+    invalidInput: string;             // "输入无效" / "Invalid input"
+    saveFailed: string;               // "保存失败" / "Save failed"
+    deleteFailed: string;             // "删除失败" / "Delete failed"
+    loadFailed: string;               // "加载失败" / "Load failed"
+    networkError: string;             // "网络错误" / "Network error"
+    unknownError: string;             // "未知错误，请重试" / "Unknown error, please try again"
+  },
+  
+  // Warning messages
+  warning: {
+    unsavedChanges: string;           // "有未保存的更改" / "You have unsaved changes"
+    deleteConfirm: string;            // "删除无法撤销" / "Delete cannot be undone"
+    clearData: string;                // "此操作将清除所有数据" / "This will clear all data"
+  },
+  
+  // Info messages
+  info: {
+    selectDateRange: string;          // "请选择日期范围" / "Please select a date range"
+    noTransactionsFound: string;      // "未找到交易" / "No transactions found"
+    emptyTransactionList: string;     // "交易列表为空" / "Transaction list is empty"
+  }
+}
+```
+
+---
+
+## Implementation Guidelines
+
+### Type-Safe Translation Hook
+
+The custom `useTranslation` hook provides type safety:
+
+```typescript
+// src/i18n/useTranslation.ts
+import { useTranslation as useI18nBase } from 'react-i18next';
+import { Translations } from '@/contracts/i18n';
+
+export function useTranslation() {
+  const { t, i18n } = useI18nBase();
+  return {
+    t: t as typeof translations,  // Type-safe access
+    i18n,
+    language: i18n.language
   };
-  transactions: {
-    title: string;
-    add: string;
-    fields: {
-      type: string;
-      amount: string;
-      // ...
-    };
-    categories: {
-      income: Record<string, string>;
-      expense: Record<string, string>;
-    };
-    // ...
-  };
-  // ... other namespaces
 }
 
-// Usage in components
-const { t } = useTranslation() as { t: (key: keyof Translations) => string };
+// Usage in component
+const { t } = useTranslation();
+<Text>{t('common.ok')}</Text>           // ✅ Type-checked
+<Text>{t('invalid.key')}</Text>         // ❌ TypeScript error
 ```
 
----
+### Translation Key Naming Convention
 
-## 4. Dynamic Translation Keys
+- **Dot notation**: `namespace.feature.item` (e.g., `transactions.validation.amountRequired`)
+- **Kebab-case for multi-word**: `transactions.payment_method` NOT `transactions.paymentMethod`
+- **Plural handling**: Use array index or suffix (e.g., `categories.income`, `categories.expense`)
+- **Avoid abbreviations**: `total_income` not `tot_inc`
 
-### Pluralization Example
-```json
-{
-  "transactions.count": "你有 {{count}} 笔交易",
-  "transactions.count_one": "你有 1 笔交易",
-  "transactions.count_other": "你有 {{count}} 笔交易"
-}
-```
+### Organization Principles
 
-### Interpolation Example
-```json
-{
-  "transactions.dateRange": "从 {{startDate}} 到 {{endDate}}",
-  "validation.tooLong": "最多可输入 {{max}} 个字符（当前 {{current}}）"
-}
-```
+1. **Feature-first**: Group keys by user-facing feature, not technical layer
+2. **Locality**: Related strings live in same namespace
+3. **Reusability**: Common UI labels in `common` namespace
+4. **Consistency**: Unified terminology across all screens
+   - Always use "交易" for transactions, not "交易记录"
+   - Always use "收入" for income, not "收益"
+   - Always use "支出" for expense, not "花销"
+   - Always use "分类" for category, not "类别"
 
-### Usage
-```typescript
-t('transactions.dateRange', {
-  startDate: '2025-01-01',
-  endDate: '2025-01-31'
-});
-```
+### Fallback Strategy
 
----
+- **Missing key**: Show key path (dev) or fallback to English (production)
+- **Empty value**: Show "N/A" or empty string based on context
+- **Invalid namespace**: Log warning, use English default
 
-## 5. Number & Date Formatting
+### Performance Considerations
 
-### Formatter Functions (i18n + locale)
-```typescript
-// src/i18n/formatters.ts
-
-export function formatCurrency(amount: number, locale: 'zh-CN' | 'en'): string {
-  const formatter = new Intl.NumberFormat(locale, {
-    style: 'currency',
-    currency: locale === 'zh-CN' ? 'CNY' : 'USD'
-  });
-  return formatter.format(amount);
-}
-
-export function formatDate(date: Date, locale: 'zh-CN' | 'en'): string {
-  const formatter = new Intl.DateTimeFormat(locale, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-  return formatter.format(date);
-}
-
-export function formatPercent(value: number, locale: 'zh-CN' | 'en'): string {
-  const formatter = new Intl.NumberFormat(locale, { style: 'percent' });
-  return formatter.format(value);
-}
-```
+- **Lazy loading**: Load locales on demand per screen
+- **Tree-shaking**: Unused namespaces excluded from bundle
+- **Bundle impact**: <50KB for both locales combined
+- **Caching**: i18next handles in-memory caching automatically
 
 ---
 
-## 6. Translation Keys Reference
+## Validation Checklist
 
-### Complete Key List by Namespace
+Before deploying translations:
 
-**common** (18 keys):
-- ok, cancel, close, delete, edit, save, add, back, next, previous, loading, error, success, warning, info, noData, tryAgain, confirm
-
-**transactions** (40+ keys):
-- title, add, edit, delete, view, list
-- fields: type, amount, date, category, note, paymentMethod, description
-- types: income, expense
-- categories.income: salary, bonus, investment, other
-- categories.expense: food, transport, shopping, entertainment, utilities, healthcare, education, other
-- paymentMethods: cash, creditCard, debitCard, bankTransfer, mobilePayment, other
-- messages: created, updated, deleted, deleteConfirm, emptyState
-- validation: amountRequired, amountPositive, amountDecimal, categoryRequired, dateRequired, dateInvalid, dateFuture, typeRequired
-
-**home** (15+ keys):
-- title, greeting, balance, income, expense, rate
-- sections: overview, recentTransactions, topCategories
-- messages: noTransactions, loadingFailed
-- actions: addTransaction, viewAll, viewTrends
-
-**summary** (12+ keys):
-- title, period, selectPeriod
-- periods: today, week, month, year, custom
-- metrics: totalIncome, totalExpense, balance, savingsRate
-- messages: noData, selectCustomRange
-
-**trends** (20+ keys):
-- title, viewBy
-- views: byTime, byCategory
-- granularity: daily, weekly, monthly
-- periods: last7Days, last30Days, currentMonth, last3Months, custom
-- messages: noData, selectOption
-- labels: expense, income, trend, average
-
-**validation** (6 keys):
-- required, invalid, tooLong, tooShort, pattern, network, unknown
-
-**Total Keys**: ~140 translation keys (approximately)
+- [ ] All keys exist in both zh-CN and en locales
+- [ ] No hardcoded strings remain in components
+- [ ] Validation error messages are i18n keys
+- [ ] Category names are centralized in `categories` namespace
+- [ ] Terminology is consistent (use approved Chinese/English terms)
+- [ ] No PII or sensitive data in translation keys
+- [ ] Character encoding: UTF-8 for JSON files
+- [ ] JSON syntax valid (verified via `npm run validate-i18n`)
 
 ---
 
-## 7. Migration Path for Existing Content
+## References
 
-### Step 1: Identify Hardcoded Strings
-Scan all components for hardcoded strings in UI (done in Phase 2)
-
-### Step 2: Extract to Translation Files
-Create mapping from hardcoded string → translation key
-
-### Step 3: Update Components
-Replace hardcoded strings with `t()` calls
-
-**Example Migration**:
-```typescript
-// BEFORE
-<Button title="添加交易" onPress={handleAdd} />
-
-// AFTER (with i18n)
-import { useTranslation } from 'react-i18next';
-
-export function AddButton() {
-  const { t } = useTranslation();
-  return <Button title={t('transactions.add')} onPress={handleAdd} />;
-}
-```
+- **i18next Documentation**: https://www.i18next.com/
+- **React i18next**: https://react.i18next.com/
+- **react-native-localize**: https://github.com/zoontek/react-native-localize
+- **Chinese Style Guide**: Consistent terminology for financial apps
+- **Translation Best Practices**: Keys should be descriptive, namespace organized
 
 ---
 
-## 8. Testing Strategy for i18n
+## Migration Plan (If Updating Existing Translations)
 
-### Unit Tests
-- Verify all keys exist in both zh-CN and en
-- Verify no missing interpolation variables
-- Verify key naming follows conventions
-
-### Integration Tests
-- Switch language mid-app and verify UI updates
-- Test date/currency formatting with different locales
-- Test pluralization logic with edge cases (0, 1, 2, 100 items)
-
-### Snapshot Tests
-- Form field labels and placeholders in both languages
-- Error messages rendering correctly in both languages
-- Empty states and messages in both languages
+1. **Extract**: Scan codebase for hardcoded strings using regex
+2. **Create**: Generate translation keys for all found strings
+3. **Verify**: Ensure all keys exist in both locales
+4. **Replace**: Update components to use `t()` calls
+5. **Test**: Verify language switching works
+6. **Deploy**: Release with both language variants
 
 ---
 
-## 9. Constraints & Assumptions
-
-- **Single locale per session**: No mid-session language switching (would require app reload)
-- **Supported languages**: zh-CN (Chinese Simplified) and en (English) only in MVP
-- **Character encoding**: UTF-8 for all JSON translation files
-- **Key naming**: Lowercase with dots for namespacing (e.g., `transactions.add`)
-- **No markup in translations**: Translations are plain strings (HTML/components handled in code)
-- **Right-to-left (RTL) support**: Deferred to future milestone
-
----
-
-## 10. Related Documents
-
-- **Data Model (General)**: `/data/workspace/my-tally-book/specs/001-ledger-analytics/data-model.md`
-- **Component Architecture**: `/data/workspace/my-tally-book/specs/001-ledger-analytics/component-architecture.md`
-- **Implementation Plan**: `/data/workspace/my-tally-book/specs/001-ledger-analytics/plan.md`
-- **Research Details**: `/data/workspace/my-tally-book/specs/001-ledger-analytics/research-optimization.md`
+**Next Step**: Create `src/contracts/i18n.ts` TypeScript interface matching this structure
