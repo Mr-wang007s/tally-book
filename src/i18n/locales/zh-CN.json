@@ -1,169 +1,157 @@
 {
   "common": {
-    "ok": "确定",
+    "ok": "好的",
     "cancel": "取消",
-    "close": "关闭",
+    "save": "保存",
     "delete": "删除",
     "edit": "编辑",
-    "save": "保存",
-    "add": "添加",
+    "close": "关闭",
+    "confirm": "确认",
     "back": "返回",
-    "next": "下一步",
-    "previous": "上一步",
+    "clear": "清除",
+    "add": "添加",
+    "create": "创建",
+    "update": "更新",
+    "remove": "移除",
     "loading": "加载中...",
+    "noData": "暂无数据",
     "error": "错误",
     "success": "成功",
     "warning": "警告",
-    "info": "信息",
-    "noData": "暂无数据",
-    "tryAgain": "重试",
-    "confirm": "确认"
+    "info": "信息"
   },
   "transactions": {
-    "title": "交易",
-    "add": "添加交易",
-    "edit": "编辑交易",
-    "delete": "删除交易",
-    "view": "查看交易",
-    "list": "交易列表",
-    "fields": {
-      "type": "类型",
-      "amount": "金额",
-      "date": "日期",
-      "category": "分类",
-      "note": "备注",
-      "paymentMethod": "支付方式",
-      "description": "描述"
-    },
-    "types": {
-      "income": "收入",
-      "expense": "支出"
-    },
-    "categories": {
-      "income": {
-        "salary": "工资",
-        "bonus": "奖金",
-        "investment": "投资收益",
-        "other": "其他收入"
-      },
-      "expense": {
-        "food": "食物",
-        "transport": "交通",
-        "shopping": "购物",
-        "entertainment": "娱乐",
-        "utilities": "生活费",
-        "healthcare": "医疗",
-        "education": "教育",
-        "other": "其他支出"
-      }
-    },
-    "paymentMethods": {
-      "cash": "现金",
-      "creditCard": "信用卡",
-      "debitCard": "借记卡",
-      "bankTransfer": "银行转账",
-      "mobilePayment": "移动支付",
-      "other": "其他"
-    },
-    "messages": {
-      "created": "交易已添加",
-      "updated": "交易已更新",
-      "deleted": "交易已删除",
-      "deleteConfirm": "确定要删除此交易吗？此操作无法撤销。",
-      "emptyState": "还没有交易记录，点击下方按钮开始添加"
-    },
+    "title": "交易记录",
+    "addTransaction": "添加交易",
+    "editTransaction": "编辑交易",
+    "deleteTransaction": "删除交易",
+    "income": "收入",
+    "expense": "支出",
+    "type": "类型",
+    "amount": "金额",
+    "date": "日期",
+    "category": "分类",
+    "note": "备注",
+    "paymentMethod": "支付方式",
+    "saveTransaction": "保存交易",
+    "updateTransaction": "更新交易",
+    "cancelTransaction": "取消",
+    "confirmDelete": "确认删除?",
+    "addSuccess": "交易已添加",
+    "updateSuccess": "交易已更新",
+    "deleteSuccess": "交易已删除",
     "validation": {
-      "amountRequired": "请输入金额",
-      "amountPositive": "金额必须大于 0",
-      "amountDecimal": "金额最多可以有两位小数",
-      "categoryRequired": "请选择分类",
-      "dateRequired": "请选择日期",
-      "dateInvalid": "日期无效",
-      "dateFuture": "日期不能超过今天",
-      "typeRequired": "请选择交易类型"
+      "amountRequired": "金额必填",
+      "amountPositive": "金额必须大于0",
+      "amountInvalid": "金额格式不正确",
+      "categoryRequired": "分类必选",
+      "categoryInvalid": "分类不存在",
+      "dateRequired": "日期必填",
+      "dateInvalid": "日期格式不正确",
+      "typeRequired": "类型必选",
+      "noteMaxLength": "备注不超过500字"
     }
   },
   "home": {
     "title": "首页",
-    "greeting": "你好",
     "balance": "余额",
     "income": "收入",
     "expense": "支出",
-    "rate": "储蓄率",
-    "sections": {
-      "overview": "概览",
-      "recentTransactions": "最近交易",
-      "topCategories": "分类排行"
-    },
-    "messages": {
-      "noTransactions": "暂无交易，点击下方按钮开始记账",
-      "loadingFailed": "加载失败，请重试"
-    },
-    "actions": {
-      "addTransaction": "添加交易",
-      "viewAll": "查看全部",
-      "viewTrends": "查看趋势"
-    }
+    "recentTransactions": "最近交易",
+    "insights": "洞察",
+    "topCategory": "热门分类",
+    "savingsRate": "储蓄率",
+    "spendingBreakdown": "支出分布",
+    "viewAll": "查看全部",
+    "empty": "暂无交易，点击+添加第一笔交易"
   },
   "summary": {
     "title": "统计",
     "period": "时期",
+    "totalIncome": "总收入",
+    "totalExpense": "总支出",
+    "balance": "余额",
+    "today": "今天",
+    "thisWeek": "本周",
+    "thisMonth": "本月",
+    "last7Days": "过去7天",
+    "last30Days": "过去30天",
+    "last3Months": "过去3个月",
+    "customRange": "自定义范围",
     "selectPeriod": "选择时期",
-    "periods": {
-      "today": "今天",
-      "week": "本周",
-      "month": "本月",
-      "year": "本年",
-      "custom": "自定义"
-    },
-    "metrics": {
-      "totalIncome": "总收入",
-      "totalExpense": "总支出",
-      "balance": "余额",
-      "savingsRate": "储蓄率"
-    },
-    "messages": {
-      "noData": "选定时期内暂无数据",
-      "selectCustomRange": "请选择日期范围"
-    }
+    "startDate": "开始日期",
+    "endDate": "结束日期",
+    "empty": "此时期无交易"
   },
   "trends": {
     "title": "趋势",
-    "viewBy": "查看方式",
-    "views": {
-      "byTime": "按时间",
-      "byCategory": "按分类"
+    "byTime": "按时间",
+    "byCategory": "按分类",
+    "granularity": "粒度",
+    "daily": "日",
+    "weekly": "周",
+    "monthly": "月",
+    "period": "时期",
+    "last7Days": "过去7天",
+    "last30Days": "过去30天",
+    "last3Months": "过去3个月",
+    "thisYear": "本年",
+    "totalExpense": "总支出",
+    "expenseByCategory": "按分类支出",
+    "topCategories": "热门分类",
+    "selectGranularity": "选择粒度",
+    "selectPeriod": "选择时期",
+    "empty": "此时期无数据"
+  },
+  "categories": {
+    "income": {
+      "salary": "工资",
+      "bonus": "奖金",
+      "investment": "投资收益",
+      "rental": "租金收入",
+      "freelance": "自由职业",
+      "gifts": "礼物",
+      "other": "其他收入"
     },
-    "granularity": {
-      "daily": "按天",
-      "weekly": "按周",
-      "monthly": "按月"
-    },
-    "periods": {
-      "last7Days": "最近 7 天",
-      "last30Days": "最近 30 天",
-      "currentMonth": "本月",
-      "last3Months": "最近 3 个月",
-      "custom": "自定义"
-    },
-    "messages": {
-      "noData": "所选时期内暂无数据",
-      "selectOption": "请选择查看方式"
-    },
-    "labels": {
-      "expense": "支出",
-      "income": "收入",
-      "trend": "趋势",
-      "average": "平均值"
+    "expense": {
+      "food": "食物",
+      "transportation": "交通",
+      "utilities": "公用事业",
+      "entertainment": "娱乐",
+      "shopping": "购物",
+      "healthcare": "医疗",
+      "education": "教育",
+      "housing": "住房",
+      "insurance": "保险",
+      "subscriptions": "订阅",
+      "other": "其他支出"
     }
   },
-  "validation": {
-    "required": "此字段为必填项",
-    "invalid": "此字段格式无效",
-    "tooLong": "输入过长（最多 {{max}} 个字符）",
-    "tooShort": "输入过短（至少 {{min}} 个字符）",
-    "pattern": "格式不符合要求",
-    "network": "网络连接失败，请检查并重试",
-    "unknown": "发生了一个错误，请重试"
+  "messages": {
+    "success": {
+      "transactionCreated": "交易已创建",
+      "transactionUpdated": "交易已更新",
+      "transactionDeleted": "交易已删除",
+      "dataSaved": "数据已保存",
+      "operationComplete": "操作完成"
+    },
+    "error": {
+      "invalidInput": "输入无效",
+      "saveFailed": "保存失败",
+      "deleteFailed": "删除失败",
+      "loadFailed": "加载失败",
+      "networkError": "网络错误",
+      "unknownError": "未知错误，请重试"
+    },
+    "warning": {
+      "unsavedChanges": "有未保存的更改",
+      "deleteConfirm": "删除无法撤销",
+      "clearData": "此操作将清除所有数据"
+    },
+    "info": {
+      "selectDateRange": "请选择日期范围",
+      "noTransactionsFound": "未找到交易",
+      "emptyTransactionList": "交易列表为空"
+    }
   }
 }

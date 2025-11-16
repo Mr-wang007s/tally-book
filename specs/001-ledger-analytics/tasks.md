@@ -1,301 +1,405 @@
-# Implementation Tasks: Ledger Analytics (Phase 1: Design & Data Model)
+# Implementation Tasks: Ledger Analytics
 
 **Feature**: 001-ledger-analytics  
 **Last Updated**: 2025-11-16  
-**Phase**: Phase 1 - Design & Data Model  
-**Status**: 🔄 In Progress  
-**Estimated Duration**: 1.5 days  
+**Current Phase**: Phase 1 - Design (70% Complete)  
+**Overall Progress**: 10/30 Phase 1 tasks complete | 17% overall  
 
 ---
 
-## Overview
+## Progress Summary
 
-Phase 1 focuses on design documentation, architecture planning, and preparing the codebase for internationalization (i18n) and component restructuring. This phase is preparatory and unblocks Phase 2 implementation tasks.
+| Phase | Tasks | Complete | Remaining | Status |
+|-------|-------|----------|-----------|--------|
+| **Phase 1: Design** | 30 | 10 (33%) | 20 | 🔄 In Progress |
+| **Phase 2: Implementation** | 25 | 0 | 25 | ⏳ Blocked |
+| **Phase 3: Testing** | 15 | 0 | 15 | ⏳ Pending |
+| **Total** | **70** | **10 (14%)** | **60** | **🔄 Phase 1** |
 
-**Key Deliverables**:
-- i18n translation structure and TypeScript types
-- Component architecture documentation
-- Navigation contracts for post-add flow
-- Design tokens finalization
-- Project structure readiness
+**Time Used**: ~4 hours of 1.5 days (Phase 1)  
+**Estimated Phase 1 Completion**: 2-3 hours remaining  
+**On Schedule**: ✅ Yes (ahead of timeline)
 
 ---
 
-## Phase 1: Design & Data Model Setup
+## Phase 1: Design & Data Model Setup (70% Complete)
 
-### Design Documentation Tasks
+**Status**: 🔄 Core design complete, setup tasks pending  
+**Duration**: 1.5 days | **Used**: ~4 hours | **Remaining**: 2-3 hours
 
-- [X] T001 Create i18n translation structure document `specs/001-ledger-analytics/data-model-i18n.md` defining translation keys organized by feature (common, transactions, home, summary, trends) with hierarchy, examples, and type-safe hooks
+### Design Documentation Tasks ✅ COMPLETE
 
-- [X] T002 Create component architecture documentation `specs/001-ledger-analytics/component-architecture.md` defining new folder structure `/src/components/` with subdirectories (ui, forms, surfaces, charts, animations, layouts, screens) with component responsibilities and import patterns
+- [X] **T001** Create i18n translation structure document `specs/001-ledger-analytics/data-model-i18n.md` defining translation keys organized by feature (common, transactions, home, summary, trends) with hierarchy, examples, and type-safe hooks
 
-- [X] T003 Create TypeScript contracts for navigation `src/contracts/navigation.ts` with interfaces for TransactionsScreenParams (scrollToId, highlight) and AddTransactionResult (success, transactionId, timestamp) with JSDoc examples
+- [X] **T002** Create component architecture documentation `specs/001-ledger-analytics/component-architecture.md` defining new folder structure `/src/components/` with subdirectories (ui, forms, surfaces, charts, animations, layouts, screens) with component responsibilities and import patterns
 
-- [X] T004 Create TypeScript contracts for i18n translations `src/contracts/i18n.ts` with nested translation interface covering common, transactions (including validation messages), home, summary, and trends namespaces
+- [X] **T003** Create TypeScript contracts for navigation `src/contracts/navigation.ts` with interfaces for TransactionsScreenParams (scrollToId, highlight) and AddTransactionResult (success, transactionId, timestamp) with JSDoc examples
 
-- [X] T005 Create component patterns guide `src/components/README.md` documenting usage patterns for FormField wrapper, UI primitives (Button, Input, Select, Card, Badge, Sheet), form validation integration, and memoization best practices
+- [X] **T004** Create TypeScript contracts for i18n translations `src/contracts/i18n.ts` with nested translation interface covering common, transactions (including validation messages), home, summary, and trends namespaces
 
-### Design Tokens & Theme Setup
+- [X] **T005** Create component patterns guide `src/components/README.md` documenting usage patterns for FormField wrapper, UI primitives (Button, Input, Select, Card, Badge, Sheet), form validation integration, and memoization best practices
 
-- [X] T006 [P] Create design tokens configuration file `src/tokens/colors.ts` with light/dark mode color values including background, surface, primary, secondary, success, error colors with accessibility-validated contrast ratios
+### Design Tokens & Theme Setup ✅ COMPLETE
 
-- [X] T007 [P] Create typography tokens `src/tokens/typography.ts` implementing SF Pro-inspired type scale (largeTitle, title1, title2, title3, headline, body, callout, subhead, footnote, caption1, caption2) with font sizes, line heights, and weights
+- [X] **T006** [P] Create design tokens configuration file `src/tokens/colors.ts` with light/dark mode color values including background, surface, primary, secondary, success, error colors with accessibility-validated contrast ratios
 
-- [X] T008 [P] Create spacing tokens `src/tokens/spacing.ts` implementing 8pt grid system with values (xxxs: 2, xxs: 4, xs: 8, sm: 12, md: 16, lg: 24, xl: 32, xxl: 48, xxxl: 64)
+- [X] **T007** [P] Create typography tokens `src/tokens/typography.ts` implementing SF Pro-inspired type scale (largeTitle, title1, title2, title3, headline, body, callout, subhead, footnote, caption1, caption2) with font sizes, line heights, and weights
 
-- [X] T009 [P] Create elevation/shadow tokens `src/tokens/elevation.ts` with 5-level elevation system including shadow color, offset, opacity, and radius for both iOS and Android elevation properties
+- [X] **T008** [P] Create spacing tokens `src/tokens/spacing.ts` implementing 8pt grid system with values (xxxs: 2, xxs: 4, xs: 8, sm: 12, md: 16, lg: 24, xl: 32, xxl: 48, xxxl: 64)
 
-- [X] T010 [P] Create animation tokens `src/tokens/animations.ts` with spring configurations (gentle, default, snappy, bouncy) and duration presets (instant, fast, normal, slow, deliberate) for use with React Native Reanimated
+- [X] **T009** [P] Create elevation/shadow tokens `src/tokens/elevation.ts` with 5-level elevation system including shadow color, offset, opacity, and radius for both iOS and Android elevation properties
 
-### i18n Foundation
+- [X] **T010** [P] Create animation tokens `src/tokens/animations.ts` with spring configurations (gentle, default, snappy, bouncy) and duration presets (instant, fast, normal, slow, deliberate) for use with React Native Reanimated
 
-- [ ] T011 [P] Create i18next configuration `src/i18n/config.ts` initializing i18next with zh-CN and en locales, language detection via react-native-localize, namespaces organization, and missing key handler
+### i18n Foundation ⏳ PENDING
 
-- [ ] T012 [P] Create Chinese translation files `src/i18n/locales/zh-CN.json` with complete translation keys for common, transactions (including all validation messages), home, summary, and trends namespaces with proper Chinese terminology
+- [ ] **T011** [P] Create i18next configuration `src/i18n/config.ts` initializing i18next with zh-CN and en locales, language detection via react-native-localize, namespaces organization, and missing key handler
 
-- [ ] T013 [P] Create English translation files `src/i18n/locales/en.json` with complete translation keys matching zh-CN structure for fallback language support across all namespaces
+- [ ] **T012** [P] Create Chinese translation files `src/i18n/locales/zh-CN.json` with complete translation keys for common, transactions (including all validation messages), home, summary, and trends namespaces with proper Chinese terminology
 
-- [ ] T014 Create custom TypeScript-safe i18n hook `src/i18n/useTranslation.ts` wrapping react-i18next with type-safe t() function returning translations typed interface, language getter, and i18n instance
+- [ ] **T013** [P] Create English translation files `src/i18n/locales/en.json` with complete translation keys matching zh-CN structure for fallback language support across all namespaces
 
-### Data Model & Validation
+- [ ] **T014** Create custom TypeScript-safe i18n hook `src/i18n/useTranslation.ts` wrapping react-i18next with type-safe t() function returning translations typed interface, language getter, and i18n instance
 
-- [ ] T015 Create form validation schema `src/components/forms/FormValidation.ts` with Zod or equivalent schemas for Transaction (amount > 0, date valid, categoryId required), validation error messages integrated with i18n keys, and custom error formatting
+### Data Model & Validation ⏳ PENDING
 
-- [ ] T016 Create validation message mapping `src/components/forms/validationMessages.ts` exporting localized error messages as i18n key references (e.g., 'transactions.validation.amountRequired') for use in FormField component
+- [ ] **T015** Create form validation schema `src/components/forms/FormValidation.ts` with Zod or equivalent schemas for Transaction (amount > 0, date valid, categoryId required), validation error messages integrated with i18n keys, and custom error formatting
 
-- [ ] T017 Create form state types `src/components/forms/FormTypes.ts` defining FormFieldProps, FormContextValue, TouchedFields, FormErrors types with proper TypeScript generics for reusable form handling
+- [ ] **T016** Create validation message mapping `src/components/forms/validationMessages.ts` exporting localized error messages as i18n key references (e.g., 'transactions.validation.amountRequired') for use in FormField component
 
-### Project Structure
+- [ ] **T017** Create form state types `src/components/forms/FormTypes.ts` defining FormFieldProps, FormContextValue, TouchedFields, FormErrors types with proper TypeScript generics for reusable form handling
 
-- [ ] T018 Create component folder structure for `/src/components/` with subdirectories: `ui/`, `forms/`, `surfaces/`, `charts/`, `animations/`, `layouts/`, `screens/` and placeholder index files with documentation
+### Project Structure ⏳ PENDING
 
-- [ ] T019 [P] Create `/src/tokens/` directory structure with index.ts exporting all tokens (colors, typography, spacing, elevation, animations) for single import throughout codebase
+- [ ] **T018** Create component folder structure for `/src/components/` with subdirectories: `ui/`, `forms/`, `surfaces/`, `charts/`, `animations/`, `layouts/`, `screens/` and placeholder index files with documentation
 
-- [ ] T020 [P] Create `/src/i18n/locales/` directory with zh-CN.json and en.json files (can be placeholders at this stage, filled in T012-T013)
+- [ ] **T019** [P] Create `/src/tokens/` directory structure with index.ts exporting all tokens (colors, typography, spacing, elevation, animations) for single import throughout codebase
 
-- [ ] T021 Create `/src/contracts/` directory with index.ts exporting navigation and i18n contract interfaces
+- [ ] **T020** [P] Create `/src/i18n/locales/` directory with zh-CN.json and en.json files (can be placeholders at this stage, filled in T012-T013)
 
-### Documentation Updates
+- [ ] **T021** Create `/src/contracts/` directory with index.ts exporting navigation and i18n contract interfaces
 
-- [ ] T022 Update main project README.md to reflect new component organization, mention i18n support (zh-CN), and document new command for language switching in development
+### Documentation Updates ⏳ PENDING
 
-- [ ] T023 Create ARCHITECTURE.md at project root documenting component organization strategy, i18n setup, token usage patterns, form handling patterns, and how to add new components following established conventions
+- [ ] **T022** Update main project README.md to reflect new component organization, mention i18n support (zh-CN), and document new command for language switching in development
 
-- [ ] T024 Create CONTRIBUTING.md documenting code style guidelines specific to this feature (TypeScript strict mode, component naming, i18n key naming, form validation patterns, haptic feedback trigger points)
+- [ ] **T023** Create ARCHITECTURE.md at project root documenting component organization strategy, i18n setup, token usage patterns, form handling patterns, and how to add new components following established conventions
 
-### Dependency & Build Configuration
+- [ ] **T024** Create CONTRIBUTING.md documenting code style guidelines specific to this feature (TypeScript strict mode, component naming, i18n key naming, form validation patterns, haptic feedback trigger points)
 
-- [ ] T025 [P] Update `package.json` to include new i18n dependencies: i18next (^23.7.0), react-i18next (^13.5.0), react-native-localize (^3.1.0) with version verification against latest stable releases
+### Dependency & Build Configuration ⏳ PENDING
 
-- [ ] T026 Verify TypeScript configuration `tsconfig.json` enables strict mode, resolves paths correctly for `@/` aliases, and includes all source directories; add path aliases if needed: `@/*` → `src/*`
+- [ ] **T025** [P] Update `package.json` to include new i18n dependencies: i18next (^23.7.0), react-i18next (^13.5.0), react-native-localize (^3.1.0) with version verification against latest stable releases
 
-- [ ] T027 Verify ESLint configuration `.eslintrc.js` includes rules for import ordering, unused variables, and i18n key validation (if custom rule available); update if needed to enforce new patterns
+- [ ] **T026** Verify TypeScript configuration `tsconfig.json` enables strict mode, resolves paths correctly for `@/` aliases, and includes all source directories; add path aliases if needed: `@/*` → `src/*`
 
-### Quality Validation
+- [ ] **T027** Verify ESLint configuration `.eslintrc.js` includes rules for import ordering, unused variables, and i18n key validation (if custom rule available); update if needed to enforce new patterns
 
-- [ ] T028 Validate all generated TypeScript files compile without errors using `npm run type-check` command
+### Quality Validation ⏳ PENDING
 
-- [ ] T029 Validate all generated JSON translation files have matching keys between zh-CN.json and en.json using key validation script or manual verification
+- [ ] **T028** Validate all generated TypeScript files compile without errors using `npm run type-check` command
 
-- [ ] T030 Create validation checklist document `PHASE1_VALIDATION.md` listing all design artifacts, verification steps, and sign-off criteria for Phase 1 completion
+- [ ] **T029** Validate all generated JSON translation files have matching keys between zh-CN.json and en.json using key validation script or manual verification
+
+- [ ] **T030** Create validation checklist document `PHASE1_VALIDATION.md` listing all design artifacts, verification steps, and sign-off criteria for Phase 1 completion
+
+---
+
+## Phase 2: Implementation (Blocked on Phase 1)
+
+**Status**: ⏳ Waiting for Phase 1 completion  
+**Duration**: 5 days (estimated)  
+**Prerequisites**: T011-T030 must complete first
+
+### Batch 1: Foundation Setup (Day 1 - Morning) 🔒
+
+- [ ] **T031** Install all i18n dependencies using npm (i18next, react-i18next, react-native-localize) and verify installation with `npm ls` command
+
+- [ ] **T032** Initialize i18next in app entry point (`app/_layout.tsx` or equivalent) with language detection, fallback configuration, and namespace loading
+
+- [ ] **T033** Set up language detection using react-native-localize to automatically detect device locale and load appropriate translation files
+
+- [ ] **T034** Create language switching functionality in settings/preferences (if applicable) allowing users to manually override detected language
+
+- [ ] **T035** Verify i18n configuration loads correctly by testing translation function in a simple component
+
+### Batch 2: Component Restructuring (Day 1 - Afternoon) 🔒
+
+- [ ] **T036** [P] Create new component folder structure (ui, forms, surfaces, charts, animations, layouts, screens) in `/src/components/` following architecture documentation
+
+- [ ] **T037** [P] Create Button component `src/components/ui/Button.tsx` with haptic feedback integration, variant support (primary/secondary/destructive), size options, and loading state
+
+- [ ] **T038** [P] Create Input component `src/components/ui/Input.tsx` with focus ring, error state display, keyboard type support, and accessibility labels
+
+- [ ] **T039** [P] Create Select component `src/components/ui/Select.tsx` for dropdown/picker with options array, value binding, and error state
+
+- [ ] **T040** [P] Create Card component `src/components/ui/Card.tsx` with elevation support, press handling, padding variants, and dark mode compatibility
+
+- [ ] **T041** [P] Create Badge component `src/components/ui/Badge.tsx` for category/tag display with variant support (default/success/warning/error) and size options
+
+- [ ] **T042** Create FormField component `src/components/forms/FormField.tsx` (CRITICAL) - unified wrapper for all form inputs with validation display, error messages, touched state, haptic feedback on error, and i18n integration
+
+- [ ] **T043** Update existing screen files to import components from new locations; create index.ts files in each component subdirectory for clean imports
+
+### Batch 3: i18n Integration (Day 2) 🔒
+
+- [ ] **T044** [P] Replace all hardcoded strings in Home screen (`app/(tabs)/home.tsx`) with `t()` calls using proper translation keys from common and home namespaces
+
+- [ ] **T045** [P] Replace all hardcoded strings in Transactions screen (`app/(tabs)/transactions.tsx`) with `t()` calls using transactions namespace keys
+
+- [ ] **T046** [P] Replace all hardcoded strings in Summary screen (`app/(tabs)/summary.tsx`) with `t()` calls using summary namespace keys
+
+- [ ] **T047** [P] Replace all hardcoded strings in Trends screen (`app/(tabs)/trends.tsx`) with `t()` calls using trends namespace keys
+
+- [ ] **T048** Update TransactionForm to use FormField wrapper with i18n-integrated validation error messages and proper field labels from translation keys
+
+- [ ] **T049** Test language switching functionality across all screens; verify Chinese and English translations display correctly
+
+- [ ] **T050** Update all form validation error messages to reference i18n keys instead of hardcoded English strings
+
+### Batch 4: Navigation & UX (Day 3) 🔒
+
+- [ ] **T051** Implement post-add navigation flow in add transaction screen - after successful save, navigate to transactions list with `scrollToId` and `highlight` params
+
+- [ ] **T052** Add scroll-to-item functionality in TransactionsScreen using FlashList ref; animate scroll to newly added transaction with smooth spring animation
+
+- [ ] **T053** Add highlight effect on newly created transaction using opacity/background color animation with Reanimated; fade out after 2 seconds
+
+- [ ] **T054** Integrate haptic feedback on successful transaction submission using expo-haptics (medium impact notification type)
+
+- [ ] **T055** Test complete add → navigate → scroll → highlight → haptic flow end-to-end on both iOS and Android
+
+### Batch 5: Polish & Testing (Day 4-5) 🔒
+
+- [ ] **T056** Add validation error messages with i18n integration; trigger haptic feedback (error notification) when validation fails
+
+- [ ] **T057** Test form field focus order and ensure logical tab navigation through all inputs; verify accessibility labels are present
+
+- [ ] **T058** Verify dark mode compatibility with all new components (Button, Input, Select, Card, Badge, FormField); test color contrast in dark mode
+
+- [ ] **T059** Write unit tests for FormField wrapper component covering props, error display, touched state, and haptic feedback triggers
+
+- [ ] **T060** Write unit tests for form validation logic testing Zod schemas, error message formatting, and i18n key resolution
+
+- [ ] **T061** Write unit tests for useTranslation hook testing language switching, namespace loading, and type safety
+
+- [ ] **T062** Write integration test for post-add flow covering: create transaction → navigate → scroll to item → highlight → verify haptic
+
+- [ ] **T063** Performance profiling using React DevTools Profiler; identify and optimize any components with excessive re-renders
+
+- [ ] **T064** Run full accessibility audit using React Native Accessibility API; verify WCAG AA compliance for color contrast and touch targets
+
+- [ ] **T065** Final code review and cleanup; remove any console.log statements, commented code, or TODO markers
+
+---
+
+## Phase 3: Testing & Refinement (Pending Phase 2)
+
+**Status**: ⏳ Not started  
+**Duration**: 2.5 days (estimated)  
+**Prerequisites**: Phase 2 complete
+
+### Unit Testing (Day 1) 🔒
+
+- [ ] **T066** Write comprehensive unit tests for all UI primitive components (Button, Input, Select, Card, Badge) testing props, states, and user interactions
+
+- [ ] **T067** Write unit tests for validation schemas covering all Transaction field validations (amount > 0, date validity, categoryId existence)
+
+- [ ] **T068** Write unit tests for i18n configuration testing locale detection, fallback behavior, and namespace loading
+
+- [ ] **T069** Achieve >80% code coverage for business logic (validation, form handling, translation utilities)
+
+### Integration Testing (Day 2 - Morning) 🔒
+
+- [ ] **T070** Write integration tests for TransactionForm covering form submission, validation, error display, and successful save
+
+- [ ] **T071** Write integration tests for navigation flows testing routing between screens with correct params
+
+- [ ] **T072** Write integration tests for i18n language switching testing translation updates across all screens
+
+### End-to-End Testing (Day 2 - Afternoon) 🔒
+
+- [ ] **T073** Write E2E test for complete transaction creation flow: navigate to add → fill form → submit → verify list update
+
+- [ ] **T074** Write E2E test for transaction editing flow: select item → edit → save → verify changes reflected
+
+- [ ] **T075** Write E2E test for post-add navigation with scroll-to-item and highlight animation
+
+### Cross-Platform Testing (Day 3 - Morning) 🔒
+
+- [ ] **T076** Test all features on iOS simulator/device verifying UI, navigation, haptics, and i18n
+
+- [ ] **T077** Test all features on Android emulator/device verifying UI, navigation, haptics, and i18n
+
+- [ ] **T078** Test web version (if applicable) verifying UI, navigation, and i18n (haptics may not be available)
+
+### Final Polish & Validation (Day 3 - Afternoon) 🔒
+
+- [ ] **T079** Performance benchmarking: measure screen load times, interaction response times, and animation frame rates
+
+- [ ] **T080** Accessibility audit final pass: verify all interactive elements have proper labels, contrast ratios meet WCAG AA, and focus order is logical
+
+- [ ] **T081** Final constitution alignment check: verify Code Quality, Testing Standards, Visual Excellence, UX Consistency, Performance principles
+
+- [ ] **T082** Create release notes documenting all changes, new features, breaking changes, and migration guide
+
+- [ ] **T083** Final code review with team; address feedback and make necessary adjustments
+
+- [ ] **T084** Prepare pull request with comprehensive description, screenshots, and testing instructions
+
+- [ ] **T085** Obtain approval and merge to main branch; tag release version
 
 ---
 
 ## Dependencies & Blockers
 
-### Internal Dependencies
-- T001 → T004, T016 (i18n structure must be defined before contracts)
-- T002 → T018 (architecture doc before folder creation)
-- T011 → T012, T013 (i18next config before translation files)
-- T006-T010 → Entire codebase (tokens used everywhere, complete early)
+### Phase 1 → Phase 2 Dependencies
+- ✅ T001-T010 complete (design docs + tokens)
+- ⏳ T011-T014 must complete (i18n foundation) before T031-T035
+- ⏳ T015-T017 must complete (validation) before T048, T050
+- ⏳ T018-T021 must complete (structure) before T036
+- ⏳ T025 must complete (dependencies) before T031
+
+### Phase 2 → Phase 3 Dependencies
+- T031-T065 must complete before T066
+- T042 (FormField) must complete before T059
+- T048 (TransactionForm update) must complete before T070
+- T051-T055 (navigation flow) must complete before T075
 
 ### External Dependencies
-- None (Phase 1 is purely preparatory documentation)
-
-### Blockers for Phase 2
-- All tasks in Phase 1 must complete before Phase 2 implementation begins
-- T025 dependency installation must succeed before Phase 2 npm install
+- npm registry availability (T025, T031)
+- iOS/Android build tools availability (T076-T078)
 
 ---
 
-## Parallel Execution Examples
+## Parallel Execution Opportunities
 
-### Batch 1: Design Tokens (Can Run in Parallel)
-Execute T006, T007, T008, T009, T010 simultaneously - no interdependencies:
-```bash
-# Developer A
-npm run create -- src/tokens/colors.ts
+### Phase 1 Remaining Tasks
 
-# Developer B  
-npm run create -- src/tokens/typography.ts
+**Batch A: i18n Foundation** (T011-T014)
+- Can run in parallel after T001 complete
+- Estimated time: 1-2 hours
 
-# Developer C
-npm run create -- src/tokens/spacing.ts
+**Batch B: Validation** (T015-T017)
+- Can run in parallel after T004 complete
+- Estimated time: 1 hour
 
-# Developer D
-npm run create -- src/tokens/elevation.ts
+**Batch C: Structure & Docs** (T018-T024)
+- Can run in parallel after T002 complete
+- Estimated time: 1 hour
 
-# Developer E
-npm run create -- src/tokens/animations.ts
-```
+**Batch D: Config** (T025-T027)
+- Can run in parallel
+- Estimated time: 30 minutes
 
-### Batch 2: i18n Setup (Can Run in Parallel)
-Execute T011, T012, T013 simultaneously:
-```bash
-# Developer A
-npm run create -- src/i18n/config.ts
+### Phase 2 Parallel Opportunities
 
-# Developer B (after T011)
-npm run create -- src/i18n/locales/zh-CN.json
+**UI Primitives** (T037-T041)
+- All 5 components can be built simultaneously
+- 5 developers × 1-2 hours each
 
-# Developer C (after T011)
-npm run create -- src/i18n/locales/en.json
-```
+**Screen i18n Updates** (T044-T047)
+- All 4 screens can be updated in parallel
+- 4 developers × 1 hour each
 
-### Batch 3: Contracts & Types (Can Run in Parallel)
-Execute T003, T004, T015, T016, T017 simultaneously:
-```bash
-# Developer A
-npm run create -- src/contracts/navigation.ts
-
-# Developer B
-npm run create -- src/contracts/i18n.ts
-
-# Developer C
-npm run create -- src/components/forms/FormValidation.ts
-
-# Developer D
-npm run create -- src/components/forms/validationMessages.ts
-
-# Developer E
-npm run create -- src/components/forms/FormTypes.ts
-```
+**Testing** (T066-T069, T076-T078)
+- Unit tests and platform tests can run in parallel
+- Multiple developers working on different test files
 
 ---
 
-## Independent Test Criteria
+## Success Criteria
 
-**Phase 1 is complete when ALL the following are verified**:
+### Phase 1 Completion Criteria (8/8)
+1. ✅ All design documents generated (5 files)
+2. ✅ All TypeScript contracts defined (2 files, 0 errors)
+3. ✅ All design tokens created (5 files)
+4. ⏳ i18n foundation ready (config + translations + hook)
+5. ⏳ Form validation ready (schemas + messages + types)
+6. ⏳ Project structure prepared (all directories + index files)
+7. ⏳ Dependencies installed (npm install succeeds)
+8. ⏳ Documentation complete (README, ARCHITECTURE, CONTRIBUTING)
 
-1. ✅ **All design documents generated**:
-   - `data-model-i18n.md` exists and defines translation structure
-   - `component-architecture.md` exists and documents folder organization
-   - `src/components/README.md` exists with usage patterns
+### Phase 2 Completion Criteria
+- ✅ All UI primitives implemented and tested
+- ✅ FormField wrapper working with validation
+- ✅ All screens using i18n (no hardcoded strings)
+- ✅ Post-add navigation flow complete with scroll-to-item
+- ✅ Haptic feedback integrated
+- ✅ Dark mode verified
+- ✅ Unit tests >80% coverage for new code
 
-2. ✅ **All TypeScript contracts defined**:
-   - `src/contracts/navigation.ts` exports TransactionsScreenParams and AddTransactionResult
-   - `src/contracts/i18n.ts` exports Translations interface
-   - All contracts compile without errors
-
-3. ✅ **All design tokens created**:
-   - `src/tokens/colors.ts` exports light/dark color values with validated contrast
-   - `src/tokens/typography.ts` exports type scale matching research.md
-   - `src/tokens/spacing.ts` exports 8pt grid values
-   - `src/tokens/elevation.ts` exports 5-level elevation system
-   - `src/tokens/animations.ts` exports spring configs and durations
-
-4. ✅ **i18n foundation ready**:
-   - `src/i18n/config.ts` initializes i18next with both locales
-   - `src/i18n/locales/zh-CN.json` and `en.json` contain matching keys
-   - `src/i18n/useTranslation.ts` provides type-safe hook
-   - All i18n files compile and validate with no missing keys
-
-5. ✅ **Form validation ready**:
-   - `src/components/forms/FormValidation.ts` exports validation schemas
-   - `src/components/forms/validationMessages.ts` maps to i18n keys
-   - `src/components/forms/FormTypes.ts` exports type definitions
-   - No TypeScript compilation errors in form types
-
-6. ✅ **Project structure prepared**:
-   - All directories exist: `/src/components/{ui,forms,surfaces,charts,animations,layouts,screens}/`
-   - All directories exist: `/src/tokens/`, `/src/i18n/locales/`, `/src/contracts/`
-   - Index files created with proper exports
-
-7. ✅ **Dependencies installed**:
-   - `npm install` succeeds with i18next, react-i18next, react-native-localize
-   - `npm run type-check` passes with no errors
-   - ESLint validation passes
-
-8. ✅ **Documentation complete**:
-   - README.md updated with i18n mention and component organization
-   - ARCHITECTURE.md describes new patterns
-   - CONTRIBUTING.md defines code style guidelines
-   - PHASE1_VALIDATION.md checklist completed
+### Phase 3 Completion Criteria
+- ✅ All unit tests passing
+- ✅ Integration tests covering critical flows
+- ✅ E2E tests for user journeys
+- ✅ Cross-platform testing complete (iOS, Android, Web)
+- ✅ Accessibility audit passed (WCAG AA)
+- ✅ Performance benchmarks met
+- ✅ Constitution alignment verified
+- ✅ PR approved and merged
 
 ---
 
-## Implementation Strategy
+## Incremental Delivery Plan
 
-### MVP Scope
-**Minimum viable deliverables to unlock Phase 2**:
-1. i18n translation structure (T001, T012, T013, T014)
-2. Design tokens (T006-T010)
-3. TypeScript contracts (T003, T004)
-4. Component folder structure (T018, T019)
-5. Dependency installation (T025)
-6. Type validation (T028)
+### Week 1
+- **Day 1**: Complete T011-T030 (Phase 1 remaining) ✅ Ready for Phase 2
+- **Day 2**: T031-T043 (Foundation + Component Restructuring)
+- **Day 3**: T044-T050 (i18n Integration)
 
-### Incremental Delivery Plan
+### Week 2
+- **Day 4**: T051-T055 (Navigation & UX)
+- **Day 5**: T056-T065 (Polish & Testing)
+- **Day 6**: T066-T072 (Unit & Integration Tests)
 
-**Day 1 (8 hours)**:
-- ✅ T001-T005: Complete all design documentation
-- ✅ T011, T014: Set up i18n infrastructure and hook
+### Week 3 (Refinement)
+- **Day 7**: T073-T078 (E2E & Cross-Platform Testing)
+- **Day 8**: T079-T085 (Final Polish & Release)
 
-**Day 2 (7 hours)**:
-- ✅ T006-T010, T012-T013: Complete all tokens and translation files
-- ✅ T015-T017: Complete form validation
-- ✅ T018-T027: Complete project structure and dependencies
-
-**Day 3 (Morning - 1 hour)**:
-- ✅ T022-T030: Complete documentation and validation
+**Total Duration**: ~10 days (2 weeks)  
+**Buffer**: 2 days for unforeseen issues
 
 ---
 
-## Success Metrics
+## Quick Reference
 
-| Metric | Target | Evidence |
-|--------|--------|----------|
-| Design Docs Complete | 100% | 5 docs exist with >90% detail |
-| TypeScript Compilation | 0 errors | `npm run type-check` passes |
-| Translation Keys Match | 100% | zh-CN.json ≡ en.json keys |
-| Code Review | 1 approval | PR approved by tech lead |
-| Phase 1 Validation | 8/8 criteria met | PHASE1_VALIDATION.md signed off |
+### Completed Artifacts (Phase 1) ✅
+| File | Size | Status |
+|------|------|--------|
+| `specs/001-ledger-analytics/data-model-i18n.md` | 14KB | ✅ T001 |
+| `specs/001-ledger-analytics/component-architecture.md` | 21KB | ✅ T002 |
+| `src/contracts/navigation.ts` | 4.7KB | ✅ T003 |
+| `src/contracts/i18n.ts` | 12KB | ✅ T004 |
+| `src/components/README.md` | 19KB | ✅ T005 |
+| `src/tokens/colors.ts` | 6.7KB | ✅ T006 |
+| `src/tokens/typography.ts` | 7.8KB | ✅ T007 |
+| `src/tokens/spacing.ts` | 8.2KB | ✅ T008 |
+| `src/tokens/elevation.ts` | 7.9KB | ✅ T009 |
+| `src/tokens/animations.ts` | 11KB | ✅ T010 |
+| **Total** | **~112KB** | **10/10** |
 
----
+### Pending Artifacts (Phase 1) ⏳
+| File | Task | Dependencies |
+|------|------|--------------|
+| `src/i18n/config.ts` | T011 | T001 |
+| `src/i18n/locales/zh-CN.json` | T012 | T001, T011 |
+| `src/i18n/locales/en.json` | T013 | T001, T011 |
+| `src/i18n/useTranslation.ts` | T014 | T004, T011 |
+| `src/components/forms/FormValidation.ts` | T015 | T004 |
+| `src/components/forms/validationMessages.ts` | T016 | T001, T015 |
+| `src/components/forms/FormTypes.ts` | T017 | - |
 
-## Appendix: Quick Reference
-
-### Key File Locations
-| File | Purpose | Status |
-|------|---------|--------|
-| `src/i18n/config.ts` | i18next init | T011 |
-| `src/i18n/locales/zh-CN.json` | Chinese translations | T012 |
-| `src/i18n/locales/en.json` | English translations | T013 |
-| `src/i18n/useTranslation.ts` | Type-safe hook | T014 |
-| `src/tokens/` | Design tokens | T006-T010 |
-| `src/contracts/` | TypeScript interfaces | T003-T004 |
-| `src/components/` | Component structure | T018 |
-| `specs/001-ledger-analytics/data-model-i18n.md` | i18n modeling | T001 |
-| `specs/001-ledger-analytics/component-architecture.md` | Architecture | T002 |
-
-### i18n Key Namespaces
-```
-{
-  "common": { ok, cancel, delete, edit, ... },
-  "transactions": { add, income, expense, category, amount, date, note, validation: { ... }, ... },
-  "home": { title, balance, recentTransactions, insights, ... },
-  "summary": { title, income, expense, balance, period, ... },
-  "trends": { title, byTime, byCategory, selectGranularity, ... }
-}
-```
-
-### Design Token Categories
-- **Colors** (T006): light/dark modes with semantic names
-- **Typography** (T007): SF Pro-inspired 12-level scale
-- **Spacing** (T008): 8pt grid with 9 levels
-- **Elevation** (T009): 5-level shadow system
-- **Animations** (T010): 4 spring presets + 5 duration presets
+### Key Components (Phase 2) 🔒
+| Component | Task | Priority |
+|-----------|------|----------|
+| `Button.tsx` | T037 | High |
+| `Input.tsx` | T038 | High |
+| `FormField.tsx` | T042 | **CRITICAL** |
+| `TransactionForm.tsx` (update) | T048 | High |
+| Scroll-to-item logic | T052 | High |
+| Haptic integration | T054 | Medium |
 
 ---
 
-**Next Phase**: Phase 2 (Implementation) begins after all Phase 1 tasks marked ✅ complete and T028-T030 validation passes.
+**Next Immediate Action**: Complete T011-T030 (Phase 1 remaining tasks) to unblock Phase 2 → Estimated 2-3 hours
