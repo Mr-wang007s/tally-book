@@ -63,6 +63,8 @@
 - FR10 Home Dashboard: System MUST provide a Home tab displaying current balance, recent transactions (last 5), quick insights (top spending category, savings rate), and spending breakdown (top 4 categories).
 - FR11 Haptic Feedback: System MUST provide haptic feedback on all platforms (Web, iOS, Android) using identical feedback patterns for button presses, swipe gestures, form validation errors, and navigation events.
 - FR12 Theme System: System MUST support light and dark color modes with true black background (#000000) for dark mode; automatically detect and apply system theme preference; allow users to override theme preference in settings.
+- FR13 Language Support: System MUST support Chinese (中文) as the primary UI language; all form labels, buttons, messages, and transaction categories MUST be in Chinese.
+- FR14 Post-Add Navigation: After successfully adding a transaction, system MUST navigate user to the Transactions list showing the newly created transaction.
 
 ### Non‑Functional Requirements
 - NFR1 Usability: Flows for add/edit/delete MUST be completable in under 15 seconds by a first‑time user.
@@ -116,6 +118,10 @@
 - Destructive actions require confirmation with clear consequences.
 - Home dashboard provides at-a-glance financial overview with quick access to key features.
 - Haptic feedback provides tactile confirmation for key user actions and state changes.
+- Module/component organization MUST be restructured using shadcn + tailwind for improved layout clarity, spacing consistency, and component hierarchy.
+- Forms and dialogs MUST use shadcn components (Input, Select, Button, Dialog, etc.) with tailwind utilities for consistent visual language.
+- Transaction list, summary cards, and trend cards MUST use unified shadcn card layout with consistent padding, borders, and hover states.
+- Navigation transitions MUST be smooth and provide visual feedback; tab switching SHOULD NOT cause layout shifts.
 
 ### Data & Entities (Conceptual)
 - Transaction: id, type (income/expense), amount, date, categoryId, note?, paymentMethod?
@@ -153,3 +159,6 @@ This specification MUST adhere to the following updated principles:
 - Q: How should Skia-based charts be deployed across the app? → A: Use Skia only for trends/analytics screens with animations; keep existing charts for simpler dashboard/summary widgets
 - Q: How should animations respect accessibility needs (reduced motion)? → A: Respect reduced motion preferences by disabling all non-essential animations; show static content instead with instant transitions
 - Q: What is the dark mode strategy for the app? → A: True black dark mode (#000000) with automatic system detection + manual override in settings
+- Q: What is the required language support for the app? → A: Chinese (中文) only
+- Q: After adding a transaction, where should the user navigate to? → A: Return to Transactions list
+- Q: What are the priority UX/interaction improvements for shadcn+tailwind optimization? → A: Overall module layout and component organization restructuring (rather than isolated micro-interactions)
