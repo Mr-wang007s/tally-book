@@ -1,71 +1,29 @@
 /**
- * Border Radius System
- * Consistent corner rounding for UI elements
+ * Border Radius Constants - iOS 18 Inspired
+ * Standardized rounded corner values
  */
 
-export const radius = {
-  /**
-   * Extra small radius
-   * Usage: Small buttons, tags
-   */
+export const borderRadius = {
+  // Small (buttons, badges)
   xs: 4,
-
-  /**
-   * Small radius
-   * Usage: Input fields, small cards
-   */
+  
+  // Input fields, small cards
   sm: 8,
-
-  /**
-   * Medium radius
-   * Usage: Standard cards, containers
-   */
+  
+  // Standard cards, modals
   md: 12,
-
-  /**
-   * Large radius
-   * Usage: Large cards, prominent containers
-   */
+  
+  // Large elevated surfaces
   lg: 16,
-
-  /**
-   * Extra large radius
-   * Usage: Hero cards, special containers
-   */
+  
+  // Extra large cards
   xl: 20,
-
-  /**
-   * Full radius (pill shape)
-   * Usage: Pills, FAB, circular buttons
-   */
+  
+  // Circular elements (FAB, profile pics)
   full: 9999,
 } as const;
 
-/**
- * Helper function to get border radius
- */
-export function getRadius(size: keyof typeof radius): number {
-  return radius[size];
-}
+// Type-safe radius values
+export type BorderRadiusKey = keyof typeof borderRadius;
 
-/**
- * Create rounded corners for specific sides
- */
-export function getRoundedCorners(options: {
-  topLeft?: keyof typeof radius;
-  topRight?: keyof typeof radius;
-  bottomLeft?: keyof typeof radius;
-  bottomRight?: keyof typeof radius;
-}): {
-  borderTopLeftRadius?: number;
-  borderTopRightRadius?: number;
-  borderBottomLeftRadius?: number;
-  borderBottomRightRadius?: number;
-} {
-  return {
-    borderTopLeftRadius: options.topLeft ? radius[options.topLeft] : undefined,
-    borderTopRightRadius: options.topRight ? radius[options.topRight] : undefined,
-    borderBottomLeftRadius: options.bottomLeft ? radius[options.bottomLeft] : undefined,
-    borderBottomRightRadius: options.bottomRight ? radius[options.bottomRight] : undefined,
-  };
-}
+export default borderRadius;

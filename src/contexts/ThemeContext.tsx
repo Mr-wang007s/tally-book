@@ -3,7 +3,7 @@
  * Manages app theme (light/dark/auto) and provides color palette
  */
 
-import React, { createContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useState, ReactNode } from 'react';
 import { useColorScheme as useSystemColorScheme } from 'react-native';
 import { getColors, ColorPalette } from '@/theme/colors';
 

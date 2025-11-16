@@ -3,7 +3,7 @@
  * Core design constants for spacing, typography, and visual hierarchy
  */
 
-import { lightColors, darkColors } from './colors';
+import { lightColors } from './colors';
 
 // Re-export colors for backward compatibility
 export const colors = lightColors;

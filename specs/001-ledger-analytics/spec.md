@@ -12,6 +12,8 @@
 - View spending trends: by time (daily/weekly/monthly), by category, and overall.
 - Basic categorization: default categories for income and expense; users can assign categories per transaction.
 - Multi‑platform parity: functional and UX consistency across Web, iOS, Android.
+- Home dashboard: centralized overview screen showing balance, recent transactions, quick insights, and spending breakdown.
+- Haptic feedback: tactile feedback for button presses, swipe gestures, form interactions, and navigation events.
 
 ### Out‑of‑Scope (for this feature)
 - User authentication and multi‑device account sync.
@@ -43,6 +45,10 @@
   - Given an existing transaction
   - When the user deletes it and confirms
   - Then it is removed from lists and aggregates recalculate
+- Scenario 6: View home dashboard
+  - Given the user opens the app
+  - When they navigate to the Home tab
+  - Then they see current balance, last 5 transactions, top spending category, and spending breakdown
 
 ### Functional Requirements
 - FR1 Transaction creation: Users MUST create expense or income with fields: type, amount (positive), date, category, note (optional), payment method (optional).
@@ -54,25 +60,34 @@
 - FR7 Categories: System MUST provide a default set of categories for income and expense; users MUST be able to assign categories per transaction.
 - FR8 Data validation: Amount MUST be > 0; date MUST be valid and within reasonable bounds; category MUST be required.
 - FR9 Multi‑platform parity: The above capabilities MUST be available with consistent behavior on Web, iOS, and Android.
+- FR10 Home Dashboard: System MUST provide a Home tab displaying current balance, recent transactions (last 5), quick insights (top spending category, savings rate), and spending breakdown (top 4 categories).
+- FR11 Haptic Feedback: System MUST provide haptic feedback on all platforms (Web, iOS, Android) using identical feedback patterns for button presses, swipe gestures, form validation errors, and navigation events.
+- FR12 Theme System: System MUST support light and dark color modes with true black background (#000000) for dark mode; automatically detect and apply system theme preference; allow users to override theme preference in settings.
 
 ### Non‑Functional Requirements
 - NFR1 Usability: Flows for add/edit/delete MUST be completable in under 15 seconds by a first‑time user.
 - NFR2 Reliability: All aggregates and trends MUST be accurate within 100% of computed totals; edits/deletes MUST reflect within the current view.
-- NFR3 Accessibility: Visual elements MUST meet contrast and focus visibility standards; charts MUST provide readable legends/labels.
-- NFR4 Performance: Primary screens (list, summary, trends) SHOULD render visible content within 1.5 seconds for typical datasets (<= 5,000 transactions) and interactions respond within 150 ms perceived latency.
+- NFR3 Accessibility: Visual elements MUST meet contrast and focus visibility standards; charts MUST provide readable legends/labels; non-essential animations MUST be disabled when reduced motion preference is enabled.
+- NFR4 Performance: Primary screens (list, summary, trends, home) SHOULD render visible content within 1.5 seconds for typical datasets (<= 5,000 transactions) and interactions respond within 150 ms perceived latency.
 - NFR5 Consistency: Terminology, navigation, empty states, and error messages MUST be consistent across platforms.
+- NFR6 Haptic Consistency: Haptic feedback patterns MUST be consistent across Web, iOS, and Android platforms using standardized intensity levels (light, medium, heavy) and notification types (success, warning, error).
+- NFR7 Motion Accessibility: System MUST respect user's reduced motion preference (prefers-reduced-motion media query on web, UIAccessibility.isReduceMotionEnabled on iOS, AccessibilityManager on Android); non-essential animations MUST be disabled with instant static transitions shown instead.
 
 ### Assumptions
 - Default currency is the device/locale currency; currency symbol formatting follows locale.
 - Data persists locally to the device; no account login or cross‑device sync in this feature.
 - Trend time ranges: last 7 days, last 30 days, current month, last 3 months, custom range.
+- Haptic feedback uses browser Vibration API on web, expo-haptics on native platforms.
+- Dark mode uses true black (#000000) for OLED optimization; automatically follows system preference with user override available in settings.
+- Theme preference persists to local storage for cross-session consistency.
 
 ### Success Criteria
 - SC1 Users complete a first expense entry in ≤ 30 seconds without help.
 - SC2 Monthly summary totals equal the sum of underlying transactions for the period (100% match).
 - SC3 Trends view switches granularity or range and updates in ≤ 1.0 second for ≤ 5,000 transactions.
-- SC4 95% of users can locate “Add Transaction” and “Trends” within 3 clicks/taps.
+- SC4 95% of users can locate "Add Transaction" and "Trends" within 3 clicks/taps.
 - SC5 Terminology and behaviors are consistent across Web, iOS, Android in primary flows (add, list, summary, trends).
+- SC6 Home dashboard loads within 1.0 second and displays current balance accurately.
 
 ### Edge Cases
 - EC1 Editing a transaction to change type (income⇄expense) updates all aggregates correctly.
@@ -80,6 +95,8 @@
 - EC3 Very small/large amounts display with correct locale formatting and precision.
 - EC4 Multiple transactions on the same timestamp remain stably ordered (deterministic tie‑break).
 - EC5 Category deleted or renamed (future feature) does not break trends; shows fallback labeling.
+- EC6 Haptic feedback fails gracefully on platforms/browsers without vibration support (no error, silent fallback).
+- EC7 Reduced motion preference enabled: all spring animations, stagger delays, and entrance animations are replaced with instant static transitions; skeleton loaders and essential feedback remain visible.
 
 ### Decisions from Research
 - Categories customization: Use default categories only in this phase; no create/rename/hide.
@@ -89,7 +106,7 @@
 ## 2. Design
 
 ### Information Architecture
-- Tabs/sections: Transactions, Summary, Trends.
+- Tabs/sections: Home, Transactions, Summary, Trends.
 - Filters: period selectors available across relevant views; category filters in Transactions and Trends.
 
 ### User Experience (WHAT, not HOW)
@@ -97,6 +114,8 @@
 - Trend visualizations present clear labeling and legends; users can switch granularity and ranges.
 - Empty states explain how to add transactions and provide quick actions.
 - Destructive actions require confirmation with clear consequences.
+- Home dashboard provides at-a-glance financial overview with quick access to key features.
+- Haptic feedback provides tactile confirmation for key user actions and state changes.
 
 ### Data & Entities (Conceptual)
 - Transaction: id, type (income/expense), amount, date, categoryId, note?, paymentMethod?
@@ -110,6 +129,8 @@
 - Verify filters affect lists, summaries, and trends consistently.
 - Verify accessibility basics: focus order, labels, contrast.
 - Verify cross‑platform parity by executing the same flows across Web, iOS, Android with consistent outcomes.
+- Verify home dashboard aggregates (balance, recent transactions, insights) match underlying data.
+- Verify haptic feedback triggers on all supported platforms for defined interaction patterns.
 
 ## 3. Constitution Alignment
 This specification MUST adhere to the following updated principles:
@@ -118,3 +139,17 @@ This specification MUST adhere to the following updated principles:
 - Visual Excellence: Consistent design tokens for spacing/typography/colors; clear states; accessible contrast.
 - UX Consistency: Shared terminology (Income, Expense, Balance, Trends); consistent navigation and feedback patterns.
 - Performance: Meet screen load and interaction SLOs; avoid regressions in aggregates/trends calculations.
+
+### Chart Implementation Strategy
+- Trends screen: Use Skia-based GPU-accelerated charts for animated time-series and category distributions.
+- Dashboard & Summary: Use existing lightweight chart components for static/simple visualizations.
+- Rationale: Skia adds ~500KB bundle size; selective use optimizes performance vs. bundle trade-off.
+
+## Clarifications
+
+### Session 2025-11-16
+- Q: How should the home dashboard integrate with existing navigation (Transactions, Summary, Trends tabs)? → A: Home dashboard is an additional 4th tab alongside Transactions, Summary, and Trends
+- Q: How should haptic feedback behave across different platforms (Web, iOS, Android)? → A: Haptic feedback on all platforms using identical patterns
+- Q: How should Skia-based charts be deployed across the app? → A: Use Skia only for trends/analytics screens with animations; keep existing charts for simpler dashboard/summary widgets
+- Q: How should animations respect accessibility needs (reduced motion)? → A: Respect reduced motion preferences by disabling all non-essential animations; show static content instead with instant transitions
+- Q: What is the dark mode strategy for the app? → A: True black dark mode (#000000) with automatic system detection + manual override in settings
