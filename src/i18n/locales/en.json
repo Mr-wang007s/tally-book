@@ -18,7 +18,9 @@
     "error": "Error",
     "success": "Success",
     "warning": "Warning",
-    "info": "Info"
+    "info": "Info",
+    "to": "to",
+    "select": "Please select"
   },
   "transactions": {
     "title": "Transactions",
@@ -40,6 +42,41 @@
     "addSuccess": "Transaction added",
     "updateSuccess": "Transaction updated",
     "deleteSuccess": "Transaction deleted",
+    "types": {
+      "income": "Income",
+      "expense": "Expense"
+    },
+    "fields": {
+      "amount": "Amount",
+      "date": "Date",
+      "note": "Note",
+      "category": "Category"
+    },
+    "categories": {
+      "income": {
+        "salary": "Salary",
+        "bonus": "Bonus",
+        "investment": "Investment Returns",
+        "other": "Other Income"
+      },
+      "expense": {
+        "food": "Food",
+        "transportation": "Transportation",
+        "shopping": "Shopping",
+        "entertainment": "Entertainment",
+        "utilities": "Utilities",
+        "healthcare": "Healthcare",
+        "education": "Education",
+        "other": "Other Expense"
+      }
+    },
+    "paymentMethods": {
+      "cash": "Cash",
+      "creditCard": "Credit Card",
+      "debitCard": "Debit Card",
+      "bankTransfer": "Bank Transfer",
+      "mobilePayment": "Mobile Payment"
+    },
     "validation": {
       "amountRequired": "Amount is required",
       "amountPositive": "Amount must be greater than 0",

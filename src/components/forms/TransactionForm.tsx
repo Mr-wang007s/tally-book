@@ -5,8 +5,8 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import * as Haptics from 'expo-haptics';
-import { useTranslation } from '@/src/i18n/useTranslation';
-import FormField from './FormField';
+import { useTranslation } from '@/i18n/useTranslation';
+import { FormField } from './FormField';
 import Button from '../ui/Button';
 import Select, { SelectOption } from '../ui/Select';
 import { validateAmount, validateDate, validateCategory, validateType } from './FormValidation';
@@ -40,20 +40,20 @@ export function TransactionForm({
 
   const categoryOptions: SelectOption[] = type === 'income'
     ? [
-        { label: t('transactions.categories.income.salary'), value: 'salary' },
-        { label: t('transactions.categories.income.bonus'), value: 'bonus' },
-        { label: t('transactions.categories.income.investment'), value: 'investment' },
-        { label: t('transactions.categories.income.other'), value: 'other' }
+        { label: t('categories.income.salary'), value: 'salary' },
+        { label: t('categories.income.bonus'), value: 'bonus' },
+        { label: t('categories.income.investment'), value: 'investment' },
+        { label: t('categories.income.other'), value: 'other' }
       ]
     : [
-        { label: t('transactions.categories.expense.food'), value: 'food' },
-        { label: t('transactions.categories.expense.transport'), value: 'transport' },
-        { label: t('transactions.categories.expense.shopping'), value: 'shopping' },
-        { label: t('transactions.categories.expense.entertainment'), value: 'entertainment' },
-        { label: t('transactions.categories.expense.utilities'), value: 'utilities' },
-        { label: t('transactions.categories.expense.healthcare'), value: 'healthcare' },
-        { label: t('transactions.categories.expense.education'), value: 'education' },
-        { label: t('transactions.categories.expense.other'), value: 'other' }
+        { label: t('categories.expense.food'), value: 'food' },
+        { label: t('categories.expense.transportation'), value: 'transportation' },
+        { label: t('categories.expense.shopping'), value: 'shopping' },
+        { label: t('categories.expense.entertainment'), value: 'entertainment' },
+        { label: t('categories.expense.utilities'), value: 'utilities' },
+        { label: t('categories.expense.healthcare'), value: 'healthcare' },
+        { label: t('categories.expense.education'), value: 'education' },
+        { label: t('categories.expense.other'), value: 'other' }
       ];
 
   const paymentOptions: SelectOption[] = [

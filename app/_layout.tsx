@@ -1,6 +1,7 @@
 import React from 'react';
 import { Stack } from 'expo-router';
 import { ThemeProvider } from '../src/contexts/ThemeContext';
+import '@/i18n/config'; // Initialize i18n
 
 /**
  * Root Layout
@@ -8,7 +9,7 @@ import { ThemeProvider } from '../src/contexts/ThemeContext';
  * Wraps the entire application with:
  * - ThemeProvider for dark/light mode support
  * - Expo Router Stack for navigation
- * - i18n context (to be added in Phase 3)
+ * - i18n initialized via config import
  */
 export default function RootLayout() {
   return (

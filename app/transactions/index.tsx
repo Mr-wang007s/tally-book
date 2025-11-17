@@ -3,25 +3,63 @@
  * Displays all transactions sorted by date (latest first)
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
-import { useRouter, useFocusEffect } from 'expo-router';
+import { useRouter, useFocusEffect, useLocalSearchParams } from 'expo-router';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSequence,
+  withDelay,
+} from 'react-native-reanimated';
 import { Transaction } from '@/models/transaction';
 import { Category } from '@/models/category';
 import { loadTransactions, loadCategories } from '@/services/transactions';
 import { colors, typography, spacing } from '@/theme/tokens';
 import { buttonA11y, formatCurrencyA11y, formatDateA11y } from '@/components/A11y';
+import { useTranslation } from '@/i18n/useTranslation';
 
 export default function TransactionsListScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
+  const params = useLocalSearchParams<{ scrollToId?: string; highlight?: string }>();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [highlightedId, setHighlightedId] = useState<string | null>(null);
+  const flatListRef = useRef<FlatList<Transaction>>(null);
 
   useFocusEffect(
     useCallback(() => {
       loadData();
     }, [])
   );
+
+  // Handle scroll to newly added transaction
+  useEffect(() => {
+    if (params.scrollToId && transactions.length > 0) {
+      const index = transactions.findIndex((t) => t.id === params.scrollToId);
+      if (index !== -1) {
+        // Scroll to the item
+        setTimeout(() => {
+          flatListRef.current?.scrollToIndex({
+            index,
+            animated: true,
+            viewPosition: 0.5, // Center in viewport
+          });
+        }, 100);
+
+        // Set highlight if requested
+        if (params.highlight === 'true') {
+          setHighlightedId(params.scrollToId);
+          // Clear highlight after 2 seconds
+          setTimeout(() => {
+            setHighlightedId(null);
+          }, 2000);
+        }
+      }
+    }
+  }, [params.scrollToId, params.highlight, transactions]);
 
   const loadData = async () => {
     try {
@@ -37,25 +75,131 @@ export default function TransactionsListScreen() {
 
   const getCategoryName = (categoryId: string): string => {
     const category = categories.find((c) => c.id === categoryId);
-    return category?.name || 'Unknown';
+    return category?.name || t('common.noData');
   };
 
   const renderTransaction = ({ item }: { item: Transaction }) => {
     const date = new Date(item.date);
     const isIncome = item.type === 'income';
+    const isHighlighted = highlightedId === item.id;
 
     return (
-      <TouchableOpacity
-        style={styles.transactionItem}
+      <AnimatedTransactionItem
+        item={item}
+        isIncome={isIncome}
+        isHighlighted={isHighlighted}
+        date={date}
+        categoryName={getCategoryName(item.categoryId)}
         onPress={() => router.push(`/transactions/${item.id}/edit`)}
-        accessible={true}
-        accessibilityLabel={`${isIncome ? 'Income' : 'Expense'} of ${formatCurrencyA11y(
+        accessibilityLabel={`${isIncome ? t('transactions.income') : t('transactions.expense')} of ${formatCurrencyA11y(
           item.amount
         )} on ${formatDateA11y(date)} in ${getCategoryName(item.categoryId)} category`}
-        accessibilityRole="button"
+      />
+    );
+  };
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        ref={flatListRef}
+        data={transactions}
+        renderItem={renderTransaction}
+        keyExtractor={(item) => item.id}
+        onScrollToIndexFailed={(info) => {
+          // Handle scroll failure gracefully
+          const wait = new Promise((resolve) => setTimeout(resolve, 500));
+          wait.then(() => {
+            flatListRef.current?.scrollToIndex({
+              index: info.index,
+              animated: true,
+              viewPosition: 0.5,
+            });
+          });
+        }}
+        ListEmptyComponent={
+          <View style={styles.empty}>
+            <Text style={styles.emptyText}>{t('messages.info.noTransactionsFound')}</Text>
+            <Text style={styles.emptyHint}>{t('home.empty')}</Text>
+          </View>
+        }
+        contentContainerStyle={transactions.length === 0 ? styles.emptyContainer : undefined}
+      />
+      <TouchableOpacity
+        style={styles.fab}
+        onPress={() => router.push('/transactions/add')}
+        {...buttonA11y(t('transactions.addTransaction'), t('transactions.addTransaction'))}
       >
+        <Text style={styles.fabText}>+</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+/**
+ * Animated Transaction Item Component
+ * Handles highlight animation for newly added transactions
+ */
+interface AnimatedTransactionItemProps {
+  item: Transaction;
+  isIncome: boolean;
+  isHighlighted: boolean;
+  date: Date;
+  categoryName: string;
+  onPress: () => void;
+  accessibilityLabel: string;
+}
+
+function AnimatedTransactionItem({
+  item,
+  isIncome,
+  isHighlighted,
+  date,
+  categoryName,
+  onPress,
+  accessibilityLabel,
+}: AnimatedTransactionItemProps) {
+  const highlightOpacity = useSharedValue(0);
+
+  // Trigger highlight animation when item is highlighted
+  useEffect(() => {
+    if (isHighlighted) {
+      highlightOpacity.value = withSequence(
+        withTiming(1, { duration: 300 }),
+        withDelay(1400, withTiming(0, { duration: 300 }))
+      );
+    }
+  }, [isHighlighted]);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      backgroundColor: colors.surface,
+      opacity: 1 - highlightOpacity.value * 0.3,
+    };
+  });
+
+  const highlightOverlayStyle = useAnimatedStyle(() => {
+    return {
+      opacity: highlightOpacity.value,
+    };
+  });
+
+  return (
+    <TouchableOpacity onPress={onPress} accessible={true} accessibilityLabel={accessibilityLabel} accessibilityRole="button">
+      <Animated.View style={[styles.transactionItem, animatedStyle]}>
+        {isHighlighted && (
+          <Animated.View
+            style={[
+              StyleSheet.absoluteFill,
+              {
+                backgroundColor: colors.primary,
+                borderRadius: 0,
+              },
+              highlightOverlayStyle,
+            ]}
+          />
+        )}
         <View style={styles.transactionLeft}>
-          <Text style={styles.category}>{getCategoryName(item.categoryId)}</Text>
+          <Text style={styles.category}>{categoryName}</Text>
           <Text style={styles.date}>{date.toLocaleDateString()}</Text>
           {item.note && <Text style={styles.note}>{item.note}</Text>}
         </View>
@@ -64,32 +208,8 @@ export default function TransactionsListScreen() {
             {isIncome ? '+' : '-'}${item.amount.toFixed(2)}
           </Text>
         </View>
-      </TouchableOpacity>
-    );
-  };
-
-  return (
-    <View style={styles.container}>
-      <FlatList
-        data={transactions}
-        renderItem={renderTransaction}
-        keyExtractor={(item) => item.id}
-        ListEmptyComponent={
-          <View style={styles.empty}>
-            <Text style={styles.emptyText}>No transactions yet</Text>
-            <Text style={styles.emptyHint}>Tap the + button to add your first transaction</Text>
-          </View>
-        }
-        contentContainerStyle={transactions.length === 0 ? styles.emptyContainer : undefined}
-      />
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={() => router.push('/transactions/add')}
-        {...buttonA11y('Add Transaction', 'Add a new transaction')}
-      >
-        <Text style={styles.fabText}>+</Text>
-      </TouchableOpacity>
-    </View>
+      </Animated.View>
+    </TouchableOpacity>
   );
 }
 

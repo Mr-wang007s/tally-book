@@ -16,8 +16,10 @@ import { Period } from '@/models/summary';
 import { loadTransactions, loadCategories } from '@/services/transactions';
 import { calculateTimeSeries, calculateCategoryBreakdown } from '@/services/aggregates';
 import { colors, spacing, typography } from '@/theme/tokens';
+import { useTranslation } from '@/i18n/useTranslation';
 
 export default function TrendsScreen() {
+  const { t } = useTranslation();
   const [granularity, setGranularity] = useState<Granularity>('month');
   const [trendData, setTrendData] = useState<TrendPoint[]>([]);
   const [categoryData, setCategoryData] = useState<CategoryBreakdown[]>([]);
@@ -73,13 +75,13 @@ export default function TrendsScreen() {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>Spending Trends</Text>
+        <Text style={styles.title}>{t('trends.title')}</Text>
 
         {!hasTransactions ? (
           <EmptyState
-            title="No Transactions"
-            message="Start by adding transactions to see your spending trends and insights"
-            actionLabel="Go to Transactions"
+            title={t('messages.info.noTransactionsFound')}
+            message={t('home.empty')}
+            actionLabel={t('transactions.title')}
             onAction={() => {}}
           />
         ) : (
@@ -90,24 +92,24 @@ export default function TrendsScreen() {
             />
 
             <ChartContainer
-              title="Expense Over Time"
-              subtitle={`Showing last 6 months by ${granularity}`}
-              accessibilityLabel="Expense trends over time chart"
+              title={t('trends.totalExpense')}
+              subtitle={`${t('trends.last3Months')} ${t('trends.byTime')} ${granularity === 'month' ? t('trends.monthly') : granularity === 'weekly' ? t('trends.weekly') : t('trends.daily')}`}
+              accessibilityLabel={t('trends.totalExpense')}
             >
               <TimeSeries data={trendData} type="expense" />
             </ChartContainer>
 
             <ChartContainer
-              title="Category Breakdown"
-              subtitle="Expense distribution by category"
-              accessibilityLabel="Category breakdown chart"
+              title={t('trends.expenseByCategory')}
+              subtitle={t('trends.byCategory')}
+              accessibilityLabel={t('trends.expenseByCategory')}
             >
               <CategoryPie data={categoryData} type="expense" />
             </ChartContainer>
 
             <View style={styles.periodInfo}>
               <Text style={styles.periodText}>
-                Showing data from {new Date(period.start).toLocaleDateString()} to{' '}
+                {t('trends.period')}: {new Date(period.start).toLocaleDateString()} {t('common.to')}{' '}
                 {new Date(period.end).toLocaleDateString()}
               </Text>
             </View>

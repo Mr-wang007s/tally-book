@@ -13,8 +13,10 @@ import { Summary, Period } from '@/models/summary';
 import { loadTransactions } from '@/services/transactions';
 import { calculateSummary } from '@/services/aggregates';
 import { colors, spacing, typography } from '@/theme/tokens';
+import { useTranslation } from '@/i18n/useTranslation';
 
 export default function SummaryScreen() {
+  const { t } = useTranslation();
   const [summary, setSummary] = useState<Summary | null>(null);
   const [period, setPeriod] = useState<Period>(() => {
     const now = new Date();
@@ -56,15 +58,15 @@ export default function SummaryScreen() {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>Financial Summary</Text>
+        <Text style={styles.title}>{t('summary.title')}</Text>
 
         <PeriodFilter onPeriodChange={handlePeriodChange} initialType="month" />
 
         {!hasTransactions ? (
           <EmptyState
-            title="No Transactions"
-            message="Start by adding your first transaction to see your financial summary"
-            actionLabel="Go to Transactions"
+            title={t('messages.info.noTransactionsFound')}
+            message={t('home.empty')}
+            actionLabel={t('transactions.title')}
             onAction={() => {}}
           />
         ) : summary ? (
@@ -72,15 +74,15 @@ export default function SummaryScreen() {
             <SummaryCards summary={summary} />
             <View style={styles.periodInfo}>
               <Text style={styles.periodText}>
-                Period: {new Date(period.start).toLocaleDateString()} -{' '}
+                {t('summary.period')}: {new Date(period.start).toLocaleDateString()} -{' '}
                 {new Date(period.end).toLocaleDateString()}
               </Text>
             </View>
           </>
         ) : (
           <EmptyState
-            title="No Data for This Period"
-            message="Try selecting a different period or add transactions for this time range"
+            title={t('summary.empty')}
+            message={t('summary.empty')}
           />
         )}
       </View>

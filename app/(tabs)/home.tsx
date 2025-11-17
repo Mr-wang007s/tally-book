@@ -19,8 +19,10 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useTheme } from '../../src/hooks/useTheme';
 import { useResponsive } from '../../src/hooks/useResponsive';
+import { useTranslation } from '@/i18n/useTranslation';
 
 export default function HomeScreen() {
+  const { t } = useTranslation();
   const { theme } = useTheme();
   const { screenWidth } = useResponsive();
   const [isRefreshing, setIsRefreshing] = useState(false);

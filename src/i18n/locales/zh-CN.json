@@ -18,7 +18,9 @@
     "error": "错误",
     "success": "成功",
     "warning": "警告",
-    "info": "信息"
+    "info": "信息",
+    "to": "至",
+    "select": "请选择"
   },
   "transactions": {
     "title": "交易记录",
@@ -40,6 +42,41 @@
     "addSuccess": "交易已添加",
     "updateSuccess": "交易已更新",
     "deleteSuccess": "交易已删除",
+    "types": {
+      "income": "收入",
+      "expense": "支出"
+    },
+    "fields": {
+      "amount": "金额",
+      "date": "日期",
+      "note": "备注",
+      "category": "分类"
+    },
+    "categories": {
+      "income": {
+        "salary": "工资",
+        "bonus": "奖金",
+        "investment": "投资收益",
+        "other": "其他收入"
+      },
+      "expense": {
+        "food": "食物",
+        "transportation": "交通",
+        "shopping": "购物",
+        "entertainment": "娱乐",
+        "utilities": "公用事业",
+        "healthcare": "医疗",
+        "education": "教育",
+        "other": "其他支出"
+      }
+    },
+    "paymentMethods": {
+      "cash": "现金",
+      "creditCard": "信用卡",
+      "debitCard": "借记卡",
+      "bankTransfer": "银行转账",
+      "mobilePayment": "移动支付"
+    },
     "validation": {
       "amountRequired": "金额必填",
       "amountPositive": "金额必须大于0",

@@ -210,3 +210,53 @@ export function formatValidationError(error: z.ZodError): Record<string, string>
   
   return formatted;
 }
+
+/**
+ * Validation helpers for individual fields
+ * These return { isValid: boolean; error?: string } format
+ */
+
+export function validateType(type: string): { isValid: boolean; error?: string } {
+  try {
+    z.enum(['income', 'expense']).parse(type);
+    return { isValid: true };
+  } catch {
+    return { isValid: false, error: 'transactions.validation.typeRequired' };
+  }
+}
+
+export function validateAmount(amount: string): { isValid: boolean; error?: string } {
+  if (!amount || amount.trim() === '') {
+    return { isValid: false, error: 'transactions.validation.amountRequired' };
+  }
+  
+  const numAmount = Number(amount);
+  if (isNaN(numAmount)) {
+    return { isValid: false, error: 'transactions.validation.amountInvalid' };
+  }
+  
+  if (numAmount <= 0) {
+    return { isValid: false, error: 'transactions.validation.amountPositive' };
+  }
+  
+  return { isValid: true };
+}
+
+export function validateDate(date: Date | string): { isValid: boolean; error?: string } {
+  try {
+    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    if (isNaN(dateObj.getTime())) {
+      return { isValid: false, error: 'transactions.validation.dateInvalid' };
+    }
+    return { isValid: true };
+  } catch {
+    return { isValid: false, error: 'transactions.validation.dateInvalid' };
+  }
+}
+
+export function validateCategory(categoryId: string): { isValid: boolean; error?: string } {
+  if (!categoryId || categoryId.trim() === '') {
+    return { isValid: false, error: 'transactions.validation.categoryRequired' };
+  }
+  return { isValid: true };
+}
